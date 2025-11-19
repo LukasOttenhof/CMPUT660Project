@@ -5,16 +5,17 @@ from datetime import datetime
 import sys
 
 # --- CONFIG ---
-API_KEY = "rl_FvkLZcXVovTGcbe86uHGt6adk"  # replace with your real key
+
 FILTER_WITH_BODY = "!9_bDDxJY5"
 SLEEP_TIME = 1
 
 
 class StackExchangeUserCollector:
-    def __init__(self, user_id=None, username=None, site="stackoverflow", page_size=100):
+    def __init__(self, user_id=None, username=None, site="stackoverflow", api_key="", page_size=100):
         if not user_id and not username:
             raise ValueError("You must provide either a user_id or username.")
 
+        self.api_key = api_key
         self.site = site
         self.page_size = page_size
         self.records = []
@@ -33,7 +34,7 @@ class StackExchangeUserCollector:
 
     def _resolve_user_id_from_name(self, username):
         url = "https://api.stackexchange.com/2.3/users"
-        params = {"site": self.site, "inname": username, "key": API_KEY, "pagesize": 1}
+        params = {"site": self.site, "inname": username, "key": self.api_key, "pagesize": 1}
         resp = requests.get(url, params=params)
         if resp.status_code != 200:
             print("⚠️ Failed to resolve username.")
@@ -104,7 +105,6 @@ class StackExchangeUserCollector:
             time.sleep(SLEEP_TIME)
 
     def run(self, save_path=None):
-        save_path = "Developer_Analysis/data/" + save_path if save_path else None
         for endpoint, item_type in [("questions", "question"), ("answers", "answer"), ("comments", "comment")]:
             print(f"\n=== Fetching {item_type}s ===")
             self._fetch_items(endpoint, item_type)
@@ -114,11 +114,11 @@ class StackExchangeUserCollector:
         df = pd.DataFrame(self.records)
         if save_path:
             df.to_csv(save_path, index=False)
-            print(f"💾 Saved to {save_path}")
+            print(f"Saved to {save_path}")
         return df
 
 
 if __name__ == "__main__":
-    collector = StackExchangeUserCollector(username="Jon Skeet", site="stackoverflow")
+    collector = StackExchangeUserCollector(username="Jon Skeet", site="stackoverflow", api_key="da_key")
     df = collector.run(save_path="stackexchange_user_posts.csv")
     print(df.head())

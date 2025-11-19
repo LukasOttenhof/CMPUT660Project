@@ -175,7 +175,7 @@ class DeveloperTextCollector:
 
     # ------------------ MAIN EXECUTION ------------------
     def run(self, save_path=None):
-        save_path = "Developer_Analysis/data/" + save_path
+        save_path = save_path
         print(f"Using token index {self.current_token_index}/{len(self.tokens)-1}")
         print(f"\nCollecting text data for {self.repo_name} from {self.start_date.date()} to {self.end_date.date()}...\n")
 
@@ -194,11 +194,7 @@ class DeveloperTextCollector:
 
 if __name__ == "__main__":
     tokens = [
-        "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",
-        "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",
-        "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",
-        "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",
-        "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"
+        "token"
     ]
 
     collector = DeveloperTextCollector(
