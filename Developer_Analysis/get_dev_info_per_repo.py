@@ -4,11 +4,10 @@ import pandas as pd
 
 from numeric_repo_analysis import DeveloperAnalyzer as NumericAnalyzer
 from text_repo_analysis import DeveloperTextCollector as TextAnalyzer
-from stachOverflow_author_text_retrival import StackExchangeUserCollector
-
+from datetime import datetime, timezone
 
 class UnifiedDeveloperAnalyzer:
-    def __init__(self, tokens, stack_api_key, repo_name, start_date, end_date, max_workers=5):
+    def __init__(self, tokens, repo_name, start_date, end_date, max_workers=5):
         """
         Combine numeric, text, and StackOverflow-based developer data collection.
         """
@@ -17,7 +16,7 @@ class UnifiedDeveloperAnalyzer:
         self.start_date = start_date
         self.end_date = end_date
         self.max_workers = max_workers
-        self.stack_api_key = stack_api_key
+  
 
         # Sub-analyzers
 
@@ -39,7 +38,7 @@ class UnifiedDeveloperAnalyzer:
         )
         print("Text analyzer analyzed")
 
-        self.stackoverflow_records = [] 
+  
         print("Analysis class intitialized")
 
     # ------------------ AUTHOR EXTRACTION ------------------
@@ -74,25 +73,6 @@ class UnifiedDeveloperAnalyzer:
 
         return sorted(authors)
 
-    # ------------------ STACKOVERFLOW RETRIEVAL ------------------
-    def fetch_stackoverflow_data(self, authors, save_path=None):
-        """
-        Attempt to find each author's StackOverflow activity using their username.
-        """
-        dfs = []
-        for author in authors:
-            try:
-                print(f"\n🔍 Attempting StackOverflow retrieval for '{author}'...")
-                collector = StackExchangeUserCollector(username=author)
-                df = collector.run(save_path=f"stackoverflow_{author}.csv" if save_path else None)
-                df["author"] = author
-                dfs.append(df)
-            except Exception as e:
-                print(f"⚠️ Could not retrieve data for {author}: {e}")
-        if dfs:
-            return pd.concat(dfs, ignore_index=True)
-        return pd.DataFrame(columns=["author", "type", "title", "body", "date"])
-
     # ------------------ MAIN EXECUTION ------------------
     def run(self, save_path_prefix=None):
         """
@@ -121,40 +101,49 @@ class UnifiedDeveloperAnalyzer:
 
         print("\n Repository developer analysis complete!")
         return numeric_df, text_df, stack_df
-if __name__ == "__main__":
-    
 
+
+if __name__ == "__main__":
     # --- CONFIGURATION ---
-    GITHUB_TOKENS = ["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",
-                     "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",
-                     "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"]  # Add one or more tokens for load balancing
-    STACK_API_KEY = "rl_FvkLZcXVovTGcbe86uHGt6adk"    # Optional, can be empty
-    REPO_NAME = "microsoft/AI"
+    GITHUB_TOKENS = [
+        "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",
+        "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",
+        "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"
+    ]
+    STACK_API_KEY = "rl_FvkLZcXVovTGcbe86uHGt6adk"  # Optional, can be empty
 
     START_DATE = datetime(1970, 9, 1, tzinfo=timezone.utc)
     END_DATE = datetime(2024, 9, 30, tzinfo=timezone.utc)
 
     SAVE_PREFIX = "Developer_Analysis/data/"
 
-    # --- RUN PIPELINE ---
-    analyzer = UnifiedDeveloperAnalyzer(
-        tokens=GITHUB_TOKENS,
-        stack_api_key=STACK_API_KEY,
-        repo_name=REPO_NAME,
-        start_date=START_DATE,
-        end_date=END_DATE,
-        max_workers=5,
-    )
+    # --- Read repo list from TXT file ---
+    repo_file = "top_agent_repos.txt"
+    with open(repo_file, "r", encoding="utf-8") as f:
+        # Extract the full_name (first column before '|') from each line
+        repo_list = [line.split("|")[0].strip() for line in f.readlines()]
 
-    numeric_df, text_df, stack_df = analyzer.run(save_path_prefix=SAVE_PREFIX)
+    # --- RUN PIPELINE FOR EACH REPO ---
+    for repo_name in repo_list:
+        print(f"\nProcessing repository: {repo_name}")
+        analyzer = UnifiedDeveloperAnalyzer(
+            tokens=GITHUB_TOKENS,
+            repo_name=repo_name,
+            start_date=START_DATE,
+            end_date=END_DATE,
+            max_workers=5,
+        )
 
+        numeric_df, text_df, stack_df = analyzer.run(save_path_prefix=SAVE_PREFIX)
 
-    print("\n Summary of results:")
-    print(f"Numeric records: {len(numeric_df)}")
-    print(f"Text records: {len(text_df)}")
-    print(f"StackOverflow records: {len(stack_df)}")
+        print(f"\nSummary of results for {repo_name}:")
+        print(f"  Numeric records: {len(numeric_df)}")
+        print(f"  Text records: {len(text_df)}")
+        print(f"  StackOverflow records: {len(stack_df)}")
 
-    print("\n Files saved:")
-    print(f"  - {SAVE_PREFIX}_numeric.csv")
-    print(f"  - {SAVE_PREFIX}_text.csv")
-    print(f"  - {SAVE_PREFIX}_stackoverflow_<author>.csv (individual per author)")
+        print(f"Files saved for {repo_name}:")
+        print(f"  - {SAVE_PREFIX}_numeric.csv")
+        print(f"  - {SAVE_PREFIX}_text.csv")
+        print(f"  - {SAVE_PREFIX}_stackoverflow_<author>.csv (individual per author)")
+        break
+
