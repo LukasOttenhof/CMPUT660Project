@@ -19,7 +19,7 @@ class TextAnalyzer:
     def __init__(self, api_key, text_type, file_path):
         self.api_key = api_key
         self.text_type = text_type
-        self.file_path = file_path
+        self.file_path = file_path 
         self.df = pd.read_csv(file_path)
 
         if "text" not in self.df.columns:
