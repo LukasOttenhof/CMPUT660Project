@@ -155,7 +155,7 @@ class DeveloperAnalyzerTopContributors:
         return df_numeric, df_text
 
 if __name__ == "__main__":
-    repo_file = r"/Users/lukas./Desktop/CMPUT660Project/repos_min1000pr.txt"
+    repo_file = r"/Users/lukas./Desktop/CMPUT660Project/repos_min1000pr.txt" # path of list of repos
     with open(repo_file, "r", encoding="utf-8") as f:
         # Extract the full_name (first column before '|') from each line
         repo_list = [line.split("|")[0].strip() for line in f.readlines()]
@@ -172,7 +172,7 @@ if __name__ == "__main__":
         os.makedirs(repo_folder, exist_ok=True)
 
         analyzer = DeveloperAnalyzerTopContributors(
-            token="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",  # add your GitHub token
+            token="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", 
             repo_name=repo_name,
             start_date=start_date,
             end_date=end_date,
