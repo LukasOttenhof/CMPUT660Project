@@ -57,7 +57,7 @@ from pydriller import Repository
 
 REPO_LIST_TXT = "filtered_repos_3year100star.txt"
 CLONE_DIR = "repos"
-OUTPUT_DIR = "outputs"
+OUTPUT_DIR = "inputs/processed"
 
 START_DATE = datetime(1970, 1, 1, tzinfo=timezone.utc)
 END_DATE   = datetime(2025, 12, 31, tzinfo=timezone.utc)
@@ -908,7 +908,7 @@ def main():
         print(f"✔ Finished {repo_name}")
 
 
-    # ---- write outputs ----
+    # ---- write parquets ----
     def to_parquet(rows: List[Dict[str, Any]], path: str):
         df = pd.DataFrame(rows)
         if len(df) == 0:
@@ -953,7 +953,7 @@ def main():
     to_parquet(discussion_comments_before, os.path.join(OUTPUT_DIR, "discussion_comments_before.parquet"))
     to_parquet(discussion_comments_after,  os.path.join(OUTPUT_DIR, "discussion_comments_after.parquet"))
 
-    print("🎉 Done. Outputs are in ./outputs/")
+    print("🎉 Done. Parquets are in ./inputs/processed/")
 
 
 if __name__ == "__main__":
