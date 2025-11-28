@@ -1,0 +1,4 @@
+lang_type,mean_len,median_len,count,period
+static,0.8238573021181717,0.0,897,before
+dynamic,0.2857142857142857,0.0,7,after
+static,7.373259052924791,0.0,718,after
