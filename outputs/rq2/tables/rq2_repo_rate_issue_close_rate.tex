@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq2 Repo Rate Issue Close Rate}
-\label{tab:rq2_repo_rate_issue_close_rate}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-0.372650 & 0.270426 & -0.102224 \\
-0.139724 & 0.000000 & -0.139724 \\
-0.000000 & 0.000000 & 0.000000 \\
-0.891496 & 0.500000 & -0.391496 \\
-0.183735 & 0.187026 & 0.003291 \\
-0.428644 & 0.432465 & 0.003821 \\
-26.000000 & 29.000000 & 3.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 9.689 & 26.000 & 0.373 & 0.140 & 0.000 & 0.891 & 0.184 & 0.429 \\
+after & 7.842 & 29.000 & 0.270 & 0.000 & 0.000 & 0.500 & 0.187 & 0.432 \\
+diff & -1.847 & 3.000 & -0.102 & -0.140 & 0.000 & -0.391 & 0.003 & 0.004 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq2_repo_rate_issue_close_rate.}\label{tab:rq2_repo_rate_issue_close_rate}
 \end{table}

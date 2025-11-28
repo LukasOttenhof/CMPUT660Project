@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq2 Dev Rate Issues Per Commit}
-\label{tab:rq2_dev_rate_issues_per_commit}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-0.249328 & 0.075275 & -0.174053 \\
-0.000000 & 0.000000 & 0.000000 \\
-0.000000 & 0.000000 & 0.000000 \\
-0.058757 & 0.000000 & -0.058757 \\
-0.679418 & 0.120851 & -0.558567 \\
-0.824268 & 0.347636 & -0.476632 \\
-192.000000 & 60.000000 & -132.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 47.871 & 192.000 & 0.249 & 0.000 & 0.000 & 0.059 & 0.679 & 0.824 \\
+after & 4.517 & 60.000 & 0.075 & 0.000 & 0.000 & 0.000 & 0.121 & 0.348 \\
+diff & -43.354 & -132.000 & -0.174 & 0.000 & 0.000 & -0.059 & -0.559 & -0.477 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq2_dev_rate_issues_per_commit.}\label{tab:rq2_dev_rate_issues_per_commit}
 \end{table}

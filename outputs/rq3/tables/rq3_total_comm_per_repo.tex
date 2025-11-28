@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq3 Total Comm Per Repo}
-\label{tab:rq3_total_comm_per_repo}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-181.545455 & 352.103448 & 170.557994 \\
-29.000000 & 195.000000 & 166.000000 \\
-4.500000 & 142.000000 & 137.500000 \\
-118.500000 & 376.000000 & 257.500000 \\
-155397.688312 & 95572.310345 & -59825.377967 \\
-394.205135 & 309.147716 & -85.057419 \\
-22.000000 & 29.000000 & 7.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 3994.000 & 22.000 & 181.545 & 29.000 & 4.500 & 118.500 & 155397.688 & 394.205 \\
+after & 10211.000 & 29.000 & 352.103 & 195.000 & 142.000 & 376.000 & 95572.310 & 309.148 \\
+diff & 6217.000 & 7.000 & 170.558 & 166.000 & 137.500 & 257.500 & -59825.378 & -85.057 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq3_total_comm_per_repo.}\label{tab:rq3_total_comm_per_repo}
 \end{table}

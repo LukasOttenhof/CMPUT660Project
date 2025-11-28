@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq2 Repo Rate Issues Per Commit}
-\label{tab:rq2_repo_rate_issues_per_commit}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-0.059462 & 0.015298 & -0.044165 \\
-0.012236 & 0.000000 & -0.012236 \\
-0.000000 & 0.000000 & 0.000000 \\
-0.064727 & 0.002584 & -0.062143 \\
-0.017570 & 0.002241 & -0.015329 \\
-0.132551 & 0.047341 & -0.085210 \\
-26.000000 & 29.000000 & 3.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 1.546 & 26.000 & 0.059 & 0.012 & 0.000 & 0.065 & 0.018 & 0.133 \\
+after & 0.444 & 29.000 & 0.015 & 0.000 & 0.000 & 0.003 & 0.002 & 0.047 \\
+diff & -1.102 & 3.000 & -0.044 & -0.012 & 0.000 & -0.062 & -0.015 & -0.085 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq2_repo_rate_issues_per_commit.}\label{tab:rq2_repo_rate_issues_per_commit}
 \end{table}

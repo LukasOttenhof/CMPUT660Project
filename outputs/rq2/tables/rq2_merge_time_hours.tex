@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq2 Merge Time Hours}
-\label{tab:rq2_merge_time_hours}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-98.205302 & 5.534516 & -92.670786 \\
-1.609167 & 0.006389 & -1.602778 \\
-0.217361 & 0.003056 & -0.214306 \\
-19.882778 & 0.045278 & -19.837500 \\
-300321.230736 & 7514.745583 & -292806.485153 \\
-548.015721 & 86.687632 & -461.328089 \\
-1359.000000 & 8265.000000 & 6906.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 133461.005 & 1359.000 & 98.205 & 1.609 & 0.217 & 19.883 & 300321.231 & 548.016 \\
+after & 45742.773 & 8265.000 & 5.535 & 0.006 & 0.003 & 0.045 & 7514.746 & 86.688 \\
+diff & -87718.232 & 6906.000 & -92.671 & -1.603 & -0.214 & -19.837 & -292806.485 & -461.328 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq2_merge_time_hours.}\label{tab:rq2_merge_time_hours}
 \end{table}

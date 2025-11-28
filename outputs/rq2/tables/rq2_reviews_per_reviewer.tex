@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq2 Reviews Per Reviewer}
-\label{tab:rq2_reviews_per_reviewer}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-27.181818 & 36.250000 & 9.068182 \\
-6.000000 & 4.000000 & -2.000000 \\
-2.000000 & 1.000000 & -1.000000 \\
-35.000000 & 9.000000 & -26.000000 \\
-1851.028409 & 5845.250000 & 3994.221591 \\
-43.023580 & 76.454235 & 33.430655 \\
-33.000000 & 20.000000 & -13.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 897.000 & 33.000 & 27.182 & 6.000 & 2.000 & 35.000 & 1851.028 & 43.024 \\
+after & 725.000 & 20.000 & 36.250 & 4.000 & 1.000 & 9.000 & 5845.250 & 76.454 \\
+diff & -172.000 & -13.000 & 9.068 & -2.000 & -1.000 & -26.000 & 3994.222 & 33.431 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq2_reviews_per_reviewer.}\label{tab:rq2_reviews_per_reviewer}
 \end{table}
