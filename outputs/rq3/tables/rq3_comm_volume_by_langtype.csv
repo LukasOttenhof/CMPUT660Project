@@ -1,0 +1,16 @@
+lang_type,count,period,source
+dynamic,41,before,issue_bodies
+other,29,before,issue_bodies
+static,1281,before,issue_bodies
+dynamic,6,after,issue_bodies
+static,434,after,issue_bodies
+static,897,before,review_comments
+dynamic,7,after,review_comments
+static,718,after,review_comments
+dynamic,8,before,pr_bodies
+other,50,before,pr_bodies
+static,1688,before,pr_bodies
+dynamic,2053,after,pr_bodies
+other,1842,after,pr_bodies
+static,5009,after,pr_bodies
+unknown,142,after,pr_bodies
