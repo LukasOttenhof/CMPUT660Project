@@ -1,0 +1,10 @@
+Developer Activity Ratios (Before vs After Agents):
+
+           Metric Before (Ratio) After (Ratio)
+          commits          0.694         0.508
+      prs_created          0.089         0.229
+       prs_merged          0.069         0.209
+reviews_submitted          0.046         0.018
+  review_comments          0.046         0.018
+    issues_opened          0.031         0.009
+    issues_closed          0.025         0.008
