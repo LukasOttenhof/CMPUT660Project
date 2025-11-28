@@ -8,79 +8,108 @@ from pathlib import Path
 
 
 # ----------------------------------------------------------------------
-# BEFORE/AFTER SUMMARY TABLE
+# BEFORE/AFTER SUMMARY TABLE  (with numerator & denominator counts)
 # ----------------------------------------------------------------------
+
+STATS = ["mean", "median", "p25", "p75", "variance", "std"]
+
+def compute_stats(series: pd.Series) -> dict:
+    """Compute descriptive stats for a distribution."""
+    if series.empty:
+        return {s: np.nan for s in STATS}
+
+    return {
+        "mean": series.mean(),
+        "median": series.median(),
+        "p25": series.quantile(0.25),
+        "p75": series.quantile(0.75),
+        "variance": series.var(),
+        "std": series.std(),
+    }
+
+
 def summarize_before_after(before: pd.Series, after: pd.Series) -> pd.DataFrame:
-    before = pd.Series(before).dropna()
-    after = pd.Series(after).dropna()
+    """
+    Produces a table with rows: before / after / diff
+    Columns:
+        n_numerator (sum of values)
+        n_denominator (number of items)
+        mean, median, p25, p75, variance, std
+    """
 
-    def stats(x: pd.Series):
-        return pd.Series({
-            "mean": x.mean(),
-            "median": x.median(),
-            "q1": x.quantile(0.25),
-            "q3": x.quantile(0.75),
-            "variance": x.var(),
-            "std": x.std(),
-            "count": len(x),
-        })
+    # Safeguard: convert to numeric
+    before = pd.to_numeric(before, errors='coerce').dropna()
+    after = pd.to_numeric(after, errors='coerce').dropna()
 
-    df = pd.DataFrame({
-        "before": stats(before),
-        "after": stats(after)
-    })
+    # Counts auto-derived from series
+    num_before = before.sum()
+    num_after = after.sum()
+    denom_before = before.count()
+    denom_after = after.count()
 
-    df["diff"] = df["after"] - df["before"]
+    # Compute descriptive stats
+    stats_b = compute_stats(before)
+    stats_a = compute_stats(after)
+    stats_d = {k: stats_a[k] - stats_b[k] for k in STATS}
+
+    # Assemble rows
+    before_row = {
+        "n_numerator": num_before,
+        "n_denominator": denom_before,
+        **stats_b
+    }
+
+    after_row = {
+        "n_numerator": num_after,
+        "n_denominator": denom_after,
+        **stats_a
+    }
+
+    diff_row = {
+        "n_numerator": num_after - num_before,
+        "n_denominator": denom_after - denom_before,
+        **stats_d
+    }
+
+    df = pd.DataFrame(
+        [before_row, after_row, diff_row],
+        index=["before", "after", "diff"]
+    )
 
     return df
 
 # ----------------------------------------------------------------------
 # SAVE TABLES (CSV + LaTeX ACM STYLE)
 # ----------------------------------------------------------------------
-def save_table(df: pd.DataFrame, name: str, outdir: Path) -> None:
-    r"""
-    Save a DataFrame as:
-      - CSV   (unmodified)
-      - LaTeX (ACM-style using booktabs)
-
-    Parameters
-    ----------
-    df : pandas DataFrame
-    name : str
-        Base filename (no extension)
-    outdir : Path
-        Directory to save into (e.g., ROOT/outputs/tables)
-    """
-    if df is None or df.empty:
-        print(f"[table_utils] Skipping empty table: {name}")
-        return
-
+def save_table(df: pd.DataFrame, name: str, outdir: Path):
     outdir.mkdir(parents=True, exist_ok=True)
+    path = outdir / f"{name}.csv"
+    df.to_csv(path, float_format="%.4f")
+    print(f"[table_utils] Saved table → {name}")
+    path = outdir / f"{name}.tex"
 
-    csv_path = outdir / f"{name}.csv"
-    tex_path = outdir / f"{name}.tex"
-
-    # --- Save CSV ---
-    df.to_csv(csv_path, index=False)
-
-    # --- Save LaTeX (ACM style) ---
-    latex = df.to_latex(
-        index=False,
-        escape=False,
-        column_format="lrrrrr",  # left, right, right, right, right, right
-        longtable=False,
-        caption=f"{name.replace('_', ' ').title()}",
-        label=f"tab:{name}",
-        bold_rows=False,
-        multicolumn=False,
+    # Format floats for LaTeX
+    df_fmt = df.copy()
+    df_fmt = df_fmt.applymap(
+        lambda x: f"{x:.3f}" if isinstance(x, (float, int)) else x
     )
 
-    # Insert booktabs manually if needed
-    latex = latex.replace("\\toprule", "\\hline")
-    latex = latex.replace("\\midrule", "\\hline")
-    latex = latex.replace("\\bottomrule", "\\hline")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\\begin{table}[h]\n")
+        f.write("\\centering\n")
+        f.write("\\begin{tabular}{l" + "r" * len(df.columns) + "}\n")
+        f.write("\\toprule\n")
 
-    with open(tex_path, "w", encoding="utf-8") as f:
-        f.write(latex)
+        f.write("Period & " + " & ".join(df.columns) + " \\\\\n")
+        f.write("\\midrule\n")
 
-    print(f"[table_utils] Saved table → {name}")
+        for idx, row in df_fmt.iterrows():
+            f.write(f"{idx} & " + " & ".join(row.values) + " \\\\\n")
+
+        f.write("\\bottomrule\n")
+        f.write("\\end{tabular}\n")
+        f.write(f"\\caption{{Statistical summary for {name}.}}")
+        f.write(f"\\label{{tab:{name}}}\n")
+        f.write("\\end{table}\n")
+
+    print(f"[table_utils] Saved LaTeX table → {name}.tex")

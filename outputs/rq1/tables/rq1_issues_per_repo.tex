@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq1 Issues Per Repo}
-\label{tab:rq1_issues_per_repo}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-36.352941 & 40.111111 & 3.758170 \\
-11.000000 & 5.000000 & -6.000000 \\
-4.000000 & 2.000000 & -2.000000 \\
-38.000000 & 24.000000 & -14.000000 \\
-5012.992647 & 5531.861111 & 518.868464 \\
-70.802490 & 74.376482 & 3.573992 \\
-17.000000 & 9.000000 & -8.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 618.000 & 17.000 & 36.353 & 11.000 & 4.000 & 38.000 & 5012.993 & 70.802 \\
+after & 361.000 & 9.000 & 40.111 & 5.000 & 2.000 & 24.000 & 5531.861 & 74.376 \\
+diff & -257.000 & -8.000 & 3.758 & -6.000 & -2.000 & -14.000 & 518.868 & 3.574 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq1_issues_per_repo.}\label{tab:rq1_issues_per_repo}
 \end{table}

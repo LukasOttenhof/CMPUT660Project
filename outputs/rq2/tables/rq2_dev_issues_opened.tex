@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq2 Dev Issues Opened}
-\label{tab:rq2_dev_issues_opened}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-3.218750 & 6.016667 & 2.797917 \\
-0.000000 & 0.000000 & 0.000000 \\
-0.000000 & 0.000000 & 0.000000 \\
-1.000000 & 1.000000 & 0.000000 \\
-159.145615 & 949.270904 & 790.125289 \\
-12.615293 & 30.810240 & 18.194947 \\
-192.000000 & 60.000000 & -132.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 618.000 & 192.000 & 3.219 & 0.000 & 0.000 & 1.000 & 159.146 & 12.615 \\
+after & 361.000 & 60.000 & 6.017 & 0.000 & 0.000 & 1.000 & 949.271 & 30.810 \\
+diff & -257.000 & -132.000 & 2.798 & 0.000 & 0.000 & 0.000 & 790.125 & 18.195 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq2_dev_issues_opened.}\label{tab:rq2_dev_issues_opened}
 \end{table}

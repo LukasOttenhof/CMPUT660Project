@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq2 Dev Rate Reviews Per Pr}
-\label{tab:rq2_dev_rate_reviews_per_pr}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-0.374436 & 0.424879 & 0.050443 \\
-0.000000 & 0.000000 & 0.000000 \\
-0.000000 & 0.000000 & 0.000000 \\
-0.000000 & 0.003657 & 0.003657 \\
-1.932954 & 5.488096 & 3.555142 \\
-1.390307 & 2.342669 & 0.952362 \\
-192.000000 & 60.000000 & -132.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 71.892 & 192.000 & 0.374 & 0.000 & 0.000 & 0.000 & 1.933 & 1.390 \\
+after & 25.493 & 60.000 & 0.425 & 0.000 & 0.000 & 0.004 & 5.488 & 2.343 \\
+diff & -46.399 & -132.000 & 0.050 & 0.000 & 0.000 & 0.004 & 3.555 & 0.952 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq2_dev_rate_reviews_per_pr.}\label{tab:rq2_dev_rate_reviews_per_pr}
 \end{table}

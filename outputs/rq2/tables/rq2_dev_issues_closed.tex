@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq2 Dev Issues Closed}
-\label{tab:rq2_dev_issues_closed}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-2.526042 & 5.533333 & 3.007292 \\
-0.000000 & 0.000000 & 0.000000 \\
-0.000000 & 0.000000 & 0.000000 \\
-1.000000 & 1.000000 & 0.000000 \\
-122.910313 & 936.592090 & 813.681777 \\
-11.086492 & 30.603792 & 19.517300 \\
-192.000000 & 60.000000 & -132.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 485.000 & 192.000 & 2.526 & 0.000 & 0.000 & 1.000 & 122.910 & 11.086 \\
+after & 332.000 & 60.000 & 5.533 & 0.000 & 0.000 & 1.000 & 936.592 & 30.604 \\
+diff & -153.000 & -132.000 & 3.007 & 0.000 & 0.000 & 0.000 & 813.682 & 19.517 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq2_dev_issues_closed.}\label{tab:rq2_dev_issues_closed}
 \end{table}

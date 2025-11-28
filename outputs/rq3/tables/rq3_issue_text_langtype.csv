@@ -1,6 +1,6 @@
-lang_type,mean_len,median_len,count,period
-dynamic,24.21951219512195,18.0,41,before
-other,27.79310344827586,8.0,29,before
-static,38.01951600312256,12.0,1281,before
-dynamic,12.0,13.5,6,after
-static,118.01382488479263,57.5,434,after
+,lang_type,mean_len,median_len,count,period
+0,dynamic,24.2195,18.0000,41,before
+1,other,27.7931,8.0000,29,before
+2,static,38.0195,12.0000,1281,before
+3,dynamic,12.0000,13.5000,6,after
+4,static,118.0138,57.5000,434,after

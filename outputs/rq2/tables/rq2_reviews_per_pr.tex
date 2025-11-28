@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq2 Reviews Per Pr}
-\label{tab:rq2_reviews_per_pr}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-2.110588 & 1.734450 & -0.376138 \\
-1.000000 & 1.000000 & 0.000000 \\
-1.000000 & 1.000000 & 0.000000 \\
-2.000000 & 2.000000 & 0.000000 \\
-9.235383 & 3.624758 & -5.610625 \\
-3.038977 & 1.903880 & -1.135098 \\
-425.000000 & 418.000000 & -7.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 897.000 & 425.000 & 2.111 & 1.000 & 1.000 & 2.000 & 9.235 & 3.039 \\
+after & 725.000 & 418.000 & 1.734 & 1.000 & 1.000 & 2.000 & 3.625 & 1.904 \\
+diff & -172.000 & -7.000 & -0.376 & 0.000 & 0.000 & 0.000 & -5.611 & -1.135 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq2_reviews_per_pr.}\label{tab:rq2_reviews_per_pr}
 \end{table}

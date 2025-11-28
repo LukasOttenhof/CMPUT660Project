@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq1 Prs Per Repo}
-\label{tab:rq1_prs_per_repo}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-97.000000 & 311.931034 & 214.931034 \\
-22.500000 & 193.000000 & 170.500000 \\
-2.250000 & 142.000000 & 139.750000 \\
-125.250000 & 318.000000 & 192.750000 \\
-24025.529412 & 72996.780788 & 48971.251376 \\
-155.001708 & 270.179164 & 115.177456 \\
-18.000000 & 29.000000 & 11.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 1746.000 & 18.000 & 97.000 & 22.500 & 2.250 & 125.250 & 24025.529 & 155.002 \\
+after & 9046.000 & 29.000 & 311.931 & 193.000 & 142.000 & 318.000 & 72996.781 & 270.179 \\
+diff & 7300.000 & 11.000 & 214.931 & 170.500 & 139.750 & 192.750 & 48971.251 & 115.177 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq1_prs_per_repo.}\label{tab:rq1_prs_per_repo}
 \end{table}

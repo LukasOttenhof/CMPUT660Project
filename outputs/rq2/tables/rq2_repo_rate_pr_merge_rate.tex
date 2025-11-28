@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq2 Repo Rate Pr Merge Rate}
-\label{tab:rq2_repo_rate_pr_merge_rate}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-0.443872 & 0.909836 & 0.465964 \\
-0.345238 & 0.951087 & 0.605849 \\
-0.000000 & 0.915094 & 0.915094 \\
-0.887663 & 0.977199 & 0.089536 \\
-0.194132 & 0.010982 & -0.183149 \\
-0.440604 & 0.104796 & -0.335808 \\
-26.000000 & 29.000000 & 3.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 11.541 & 26.000 & 0.444 & 0.345 & 0.000 & 0.888 & 0.194 & 0.441 \\
+after & 26.385 & 29.000 & 0.910 & 0.951 & 0.915 & 0.977 & 0.011 & 0.105 \\
+diff & 14.845 & 3.000 & 0.466 & 0.606 & 0.915 & 0.090 & -0.183 & -0.336 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq2_repo_rate_pr_merge_rate.}\label{tab:rq2_repo_rate_pr_merge_rate}
 \end{table}

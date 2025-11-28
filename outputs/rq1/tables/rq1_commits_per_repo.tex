@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq1 Commits Per Repo}
-\label{tab:rq1_commits_per_repo}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-523.807692 & 692.517241 & 168.709549 \\
-225.500000 & 416.000000 & 190.500000 \\
-42.750000 & 257.000000 & 214.250000 \\
-691.500000 & 877.000000 & 185.500000 \\
-529416.241538 & 480958.830049 & -48457.411489 \\
-727.609952 & 693.511954 & -34.097998 \\
-26.000000 & 29.000000 & 3.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 13619.000 & 26.000 & 523.808 & 225.500 & 42.750 & 691.500 & 529416.242 & 727.610 \\
+after & 20083.000 & 29.000 & 692.517 & 416.000 & 257.000 & 877.000 & 480958.830 & 693.512 \\
+diff & 6464.000 & 3.000 & 168.710 & 190.500 & 214.250 & 185.500 & -48457.411 & -34.098 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq1_commits_per_repo.}\label{tab:rq1_commits_per_repo}
 \end{table}

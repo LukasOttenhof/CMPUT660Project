@@ -1,17 +1,13 @@
-\begin{table}
-\caption{Rq2 Dev Commits}
-\label{tab:rq2_dev_commits}
-\begin{tabular}{lrrrrr}
-\hline
-before & after & diff \\
-\hline
-70.932292 & 334.716667 & 263.784375 \\
-1.000000 & 5.000000 & 4.000000 \\
-0.000000 & 0.000000 & 0.000000 \\
-8.000000 & 372.500000 & 364.500000 \\
-90665.037276 & 365637.731921 & 274972.694645 \\
-301.106355 & 604.679859 & 303.573504 \\
-192.000000 & 60.000000 & -132.000000 \\
-\hline
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Period & n_numerator & n_denominator & mean & median & p25 & p75 & variance & std \\
+\midrule
+before & 13619.000 & 192.000 & 70.932 & 1.000 & 0.000 & 8.000 & 90665.037 & 301.106 \\
+after & 20083.000 & 60.000 & 334.717 & 5.000 & 0.000 & 372.500 & 365637.732 & 604.680 \\
+diff & 6464.000 & -132.000 & 263.784 & 4.000 & 0.000 & 364.500 & 274972.695 & 303.574 \\
+\bottomrule
 \end{tabular}
+\caption{Statistical summary for rq2_dev_commits.}\label{tab:rq2_dev_commits}
 \end{table}
