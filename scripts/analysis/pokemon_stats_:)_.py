@@ -146,7 +146,7 @@ def main():
     plot_radar(
         before, after,
         "Developer Activity Before vs After Agents (Ratios)",
-        "rq2_radar_developer_activity_ratios.png"
+        "rq2_radar_developer_activity_ratioss.png"
     )
 
     # Print ratios as table
