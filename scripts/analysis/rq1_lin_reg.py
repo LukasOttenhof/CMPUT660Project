@@ -125,7 +125,7 @@ def main():
 
     print("\n================ METRIC VELOCITY (Last 3 Years) =================\n")
     
-    pd.options.display.float_format = '{:.4f}'.format
+    #pd.options.display.float_format = '{:.4f}'.format
     pd.options.display.max_columns = 10
     pd.options.display.width = 1000
     
