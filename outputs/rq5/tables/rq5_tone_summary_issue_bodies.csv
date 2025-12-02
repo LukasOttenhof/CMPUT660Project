@@ -1,0 +1,7 @@
+group,sentiment_cat,count,share
+after,negative,116,0.2636363636363636
+after,neutral,97,0.22045454545454546
+after,positive,227,0.5159090909090909
+before,negative,223,0.16506291635825315
+before,neutral,655,0.4848260547742413
+before,positive,473,0.35011102886750556
