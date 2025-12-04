@@ -1,0 +1,934 @@
+text,date,clean,time,topic_label,w_feature_development,w_ui___ux,w_bug_fixing_and_debugging,w_testing_and_ci,w_refactoring_and_cleanup,w_documentation_and_communication,w_deployment,w_code_review_and_collaboration,group,emoji_count,emoji_density
+The problem appears to be the OS oversleeping. I have added code to detect this.  Can you update and see if this addresses the issue? (It does on my Win 10),2017-05-30 10:08:44+00:00,the problem appears to be the os oversleeping i have added code to detect this can you update and see if this addresses the issue it does on my win 10,2017-05-30 10:08:44+00:00,Bug Fixing & Debugging,0.11058008,0.13447191,0.17221159,0.13380541,0.1040809,0.10460001,0.11482148,0.12542862,before,0,0.0
+"Thanks for the patch; as we add new functionality, I'd like to make sure that unit tests are in place that cover both the pre- and post-java9 code paths.
+Otherwise, looks good.",2017-08-31 08:08:03+00:00,thanks for the patch as we add new functionality i d like to make sure that unit tests are in place that cover both the pre and post java9 code paths otherwise looks good,2017-08-31 08:08:03+00:00,Testing & CI,0.106947996,0.101271085,0.10811689,0.16822349,0.09581905,0.14463316,0.1460341,0.12895426,before,0,0.0
+Failing test when run on java8,2017-08-31 10:21:44+00:00,failing test when run on java8,2017-08-31 10:21:44+00:00,Testing & CI,0.08642915,0.078634046,0.19359314,0.2648337,0.09936689,0.088415764,0.099490516,0.08923675,before,0,0.0
+Great!,2018-05-30 18:45:50+00:00,great,2018-05-30 18:45:50+00:00,Code Review & Collaboration,0.13165858,0.12289023,0.11186094,0.100723594,0.13356829,0.13725889,0.12151517,0.14052434,before,0,0.0
+LGTM,2018-06-05 17:27:46+00:00,lgtm,2018-06-05 17:27:46+00:00,Refactoring & Cleanup,0.115179464,0.1394654,0.14623089,0.1065589,0.14700052,0.11577477,0.10233896,0.1274511,before,0,0.0
+LGTM,2018-06-05 17:28:28+00:00,lgtm,2018-06-05 17:28:28+00:00,Refactoring & Cleanup,0.115179464,0.1394654,0.14623089,0.1065589,0.14700052,0.11577477,0.10233896,0.1274511,before,0,0.0
+"LGTM and AvalonStudio still works, what was the issue this fixed?",2019-03-23 02:23:08+00:00,lgtm and avalonstudio still works what was the issue this fixed,2019-03-23 02:23:08+00:00,Bug Fixing & Debugging,0.09731731,0.10585218,0.17929007,0.12909496,0.1042225,0.114580244,0.13054468,0.13909805,before,0,0.0
+Avalonia.Desktop needs to be updated too.,2019-10-01 16:24:37+00:00,avalonia desktop needs to be updated too,2019-10-01 16:24:37+00:00,Deployment,0.091643825,0.13321316,0.126258,0.0940473,0.101540565,0.14623545,0.19193986,0.11512179,before,0,0.0
+"I'll change just a couple of minor things to clean up a bit, as for the code looks ok for me.",2019-11-18 21:11:45+00:00,i ll change just a couple of minor things to clean up a bit as for the code looks ok for me,2019-11-18 21:11:45+00:00,UI / UX,0.1460891,0.16270992,0.12590645,0.087855056,0.1466341,0.119897306,0.10026827,0.11063977,before,0,0.0
+nice,2019-12-16 09:51:20+00:00,nice,2019-12-16 09:51:20+00:00,Feature Development,0.14074785,0.12792319,0.11363469,0.10561456,0.12893252,0.13290788,0.12158729,0.12865204,before,0,0.0
+Nice one!,2021-10-19 22:53:02+00:00,nice one,2021-10-19 22:53:02+00:00,Refactoring & Cleanup,0.12806292,0.12104139,0.14107445,0.10971142,0.14255168,0.12789021,0.11075925,0.11890868,before,0,0.0
+Looks good to me,2021-10-26 10:01:19+00:00,looks good to me,2021-10-26 10:01:19+00:00,UI / UX,0.114744954,0.15733638,0.13564083,0.105280824,0.15177484,0.118498966,0.096822195,0.11990098,before,0,0.0
+excellent,2021-11-05 02:39:10+00:00,excellent,2021-11-05 02:39:10+00:00,Documentation & Communication,0.13301417,0.117988355,0.11160693,0.09920237,0.13678749,0.14281492,0.12115939,0.13742636,before,0,0.0
+"the expression simplification (!(d <= WHOLE_NUMBER / factor)) changes behaviour
+
+The rest of the changes look OK but I don't think there is value in going after Sonar minor warnings",2021-12-15 00:07:38+00:00,the expression simplification d whole number factor changes behaviour the rest of the changes look ok but i don t think there is value in going after sonar minor warnings,2021-12-15 00:07:38+00:00,Refactoring & Cleanup,0.08944296,0.09922006,0.16611058,0.12158183,0.16620786,0.122291304,0.11743408,0.11771132,before,0,0.0
+Begrudgingly approving ;),2021-12-21 20:23:48+00:00,begrudgingly approving,2021-12-21 20:23:48+00:00,Code Review & Collaboration,0.1140532,0.10402489,0.12592727,0.11075056,0.122822605,0.12183059,0.10543715,0.19515374,before,0,0.0
+please document that this library IS NOT thread-safe!,2021-12-23 08:44:32+00:00,please document that this library is not thread safe,2021-12-23 08:44:32+00:00,Bug Fixing & Debugging,0.10635334,0.083634324,0.19677249,0.1152427,0.11071922,0.14092422,0.12115389,0.12519975,before,0,0.0
+Agree we should deprecate but don't we normally remove in current + 2 i.e. x.24?,2022-01-03 22:16:00+00:00,agree we should deprecate but don t we normally remove in current 2 i e x 24,2022-01-03 22:16:00+00:00,Refactoring & Cleanup,0.11285632,0.11456749,0.11184372,0.110806376,0.16319312,0.12131054,0.11805752,0.14736488,before,0,0.0
+"I can see the reasoning behind this, but it does concern me that we will most likely just ignore this exception and leave the resources open when it's thrown because we always use `closeQuietly`. I wonder if this is the correct approach?
+
+It feels like it could end up being the source of flakiness or bugs.",2022-01-05 22:55:19+00:00,i can see the reasoning behind this but it does concern me that we will most likely just ignore this exception and leave the resources open when it s thrown because we always use i wonder if this is the correct approach it feels like it could end up being the source of flakiness or bugs,2022-01-05 22:55:19+00:00,Bug Fixing & Debugging,0.11405063,0.09350232,0.16554725,0.1575342,0.0981235,0.1254818,0.12816522,0.11759508,before,0,0.0
+Sounds reasonable but would want @peter-lawrey to sign off too,2022-03-25 07:49:07+00:00,sounds reasonable but would want peter lawrey to sign off too,2022-03-25 07:49:07+00:00,Code Review & Collaboration,0.13496749,0.10570908,0.11056122,0.10346149,0.13183594,0.12121812,0.108272605,0.18397403,before,0,0.0
+Smallest PR ever?,2022-04-13 07:14:33+00:00,smallest pr ever,2022-04-13 07:14:33+00:00,Code Review & Collaboration,0.092114456,0.109997384,0.14503178,0.13118583,0.11327693,0.12236663,0.11569883,0.17032817,before,0,0.0
+"Generally, we should move logger functionality from the Jvm class. It has nothing to do with the JVM and is a separate concern.",2022-04-20 06:59:38+00:00,generally we should move logger functionality from the jvm class it has nothing to do with the jvm and is a separate concern,2022-04-20 06:59:38+00:00,Feature Development,0.15299673,0.095960714,0.12167582,0.13243766,0.12659672,0.12060266,0.1282385,0.121491194,before,0,0.0
+"My opinions on re-ordering code without good reason are well known, but I'd make a reluctant approval on this because it's only POM files and we rarely need to do archaeology/cherry-picks on them.",2022-05-10 02:02:10+00:00,my opinions on re ordering code without good reason are well known but i d make a reluctant approval on this because it s only pom files and we rarely need to do archaeology on them,2022-05-10 02:02:10+00:00,Refactoring & Cleanup,0.096776016,0.1018009,0.10039158,0.12259236,0.1930872,0.109175,0.13923283,0.13694414,before,0,0.0
+I think we need a bit more detail - will PM you,2022-05-31 22:17:10+00:00,i think we need a bit more detail will pm you,2022-05-31 22:17:10+00:00,Feature Development,0.16066132,0.12019066,0.12167135,0.10956253,0.1177087,0.11980521,0.114277996,0.13612221,before,0,0.0
+approved but please take a look at the comments!,2022-06-10 06:16:32+00:00,approved but please take a look at the comments,2022-06-10 06:16:32+00:00,Code Review & Collaboration,0.12635021,0.106081694,0.11747263,0.09131015,0.11501052,0.14764465,0.1060769,0.19005325,before,0,0.0
+perfect!,2022-06-20 07:32:29+00:00,perfect,2022-06-20 07:32:29+00:00,Refactoring & Cleanup,0.11798639,0.13527748,0.1260561,0.10059605,0.145193,0.12873685,0.114081636,0.13207251,before,0,0.0
+Great!,2022-06-21 22:32:03+00:00,great,2022-06-21 22:32:03+00:00,Code Review & Collaboration,0.13165858,0.12289023,0.11186094,0.100723594,0.13356829,0.13725889,0.12151517,0.14052434,before,0,0.0
+please check the mac build,2022-07-25 09:36:07+00:00,please check the mac build,2022-07-25 09:36:07+00:00,Bug Fixing & Debugging,0.09220985,0.123033114,0.1555687,0.13879502,0.09494651,0.13642883,0.13771893,0.12129903,before,0,0.0
+failing on mac,2022-07-25 09:36:41+00:00,failing on mac,2022-07-25 09:36:41+00:00,Bug Fixing & Debugging,0.0810832,0.09264113,0.2652388,0.14322078,0.11259353,0.10396282,0.10307133,0.09818837,before,0,0.0
+"Significant improvements, and highlighted the need to document some unclear behaviour.",2022-09-02 14:00:07+00:00,significant improvements and highlighted the need to document some unclear behaviour,2022-09-02 14:00:07+00:00,Code Review & Collaboration,0.10561003,0.09537527,0.11810817,0.1060207,0.11423628,0.16801117,0.09069385,0.2019445,before,0,0.0
+These changes look like a good improvement,2022-09-06 12:29:50+00:00,these changes look like a good improvement,2022-09-06 12:29:50+00:00,Code Review & Collaboration,0.10350159,0.15510605,0.10052747,0.098752536,0.14689083,0.12387917,0.10693576,0.16440655,before,0,0.0
+LGTM but would prefer @peter-lawrey review,2022-09-26 21:39:24+00:00,lgtm but would prefer peter lawrey review,2022-09-26 21:39:24+00:00,Code Review & Collaboration,0.11714344,0.12480226,0.10919901,0.11118916,0.110939704,0.14391866,0.10017395,0.18263382,before,0,0.0
+Doesn't look like functioning preserved,2022-12-05 08:05:23+00:00,doesn t look like functioning preserved,2022-12-05 08:05:23+00:00,Bug Fixing & Debugging,0.09974569,0.11026541,0.1950588,0.14576638,0.10716738,0.10809976,0.11921815,0.11467839,before,0,0.0
+Should we also define these in TC config?,2022-12-08 10:58:41+00:00,should we also define these in tc config,2022-12-08 10:58:41+00:00,Feature Development,0.16306597,0.112373516,0.08384606,0.14303257,0.10100409,0.12710948,0.14741361,0.122154675,before,0,0.0
+LGTM but I would prefer if @peter-lawrey could also check,2023-02-21 02:38:10+00:00,lgtm but i would prefer if peter lawrey could also check,2023-02-21 02:38:10+00:00,Code Review & Collaboration,0.11435042,0.11342302,0.12493682,0.13515164,0.12030205,0.12958716,0.10342695,0.15882193,before,0,0.0
+"Agree 100%. We should never be catching Throwable and only logging at debug level. Once we have some more approvals, can we create an issue to document the change for release notes?",2023-03-29 06:29:40+00:00,agree 100 we should never be catching throwable and only logging at debug level once we have some more approvals can we create an issue to document the change for release notes,2023-03-29 06:29:40+00:00,Code Review & Collaboration,0.097230576,0.07868528,0.13550048,0.15126869,0.093847856,0.13108362,0.11957104,0.19281252,before,0,0.0
+gave feedback on the phone,2023-06-19 16:25:26+00:00,gave feedback on the phone,2023-06-19 16:25:26+00:00,Code Review & Collaboration,0.11578204,0.10605126,0.13456012,0.12017248,0.10830395,0.12431542,0.08468804,0.2061267,before,0,0.0
+"We should add a note somewhere that if there is a bug that only shows up in production, this will result in a resource leak.",2023-06-22 13:00:08+00:00,we should add a note somewhere that if there is a bug that only shows up in production this will result in a resource leak,2023-06-22 13:00:08+00:00,Testing & CI,0.106984824,0.093658306,0.13156031,0.1671319,0.09853649,0.12979244,0.14651464,0.12582113,before,0,0.0
+"This one concerns me a bit because I fear if we accidentally leave it off, tests will no longer break when we're not managing resources properly. We need to be sure to turn this on in the tests in every repo.",2023-06-23 00:25:06+00:00,this one concerns me a bit because i fear if we accidentally leave it off tests will no longer break when we re not managing resources properly we need to be sure to turn this on in the tests in every repo,2023-06-23 00:25:06+00:00,Testing & CI,0.09542646,0.077184714,0.090525,0.28168243,0.08248477,0.110136785,0.14515938,0.11740048,before,0,0.0
+Looks like an improvement,2023-07-08 05:33:12+00:00,looks like an improvement,2023-07-08 05:33:12+00:00,Refactoring & Cleanup,0.105594605,0.14262298,0.12948833,0.10024037,0.14653486,0.11832966,0.11778828,0.13940088,before,0,0.0
+Approved but maybe add a comment explaining why we do this,2023-07-14 22:59:55+00:00,approved but maybe add a comment explaining why we do this,2023-07-14 22:59:55+00:00,Code Review & Collaboration,0.15673576,0.10301,0.096125305,0.09854457,0.11430862,0.14577417,0.105213135,0.18028842,before,0,0.0
+Approved subject to one additional change (to a comment) required. Good to hear that Safepoint.force works on Java 8 too,2023-10-19 21:11:40+00:00,approved subject to one additional change to a comment required good to hear that safepoint force works on java 8 too,2023-10-19 21:11:40+00:00,Code Review & Collaboration,0.107285805,0.08967344,0.1266782,0.11435276,0.101641625,0.1427785,0.13529058,0.18229908,before,0,0.0
+"Please undo the MetaUtilsHelper changes.  Breaking Those methods up into a separate class just for the purpose of breaking them up does not make sense.  If there is a smart grouping of those method that would be considered, i.e. ReflectionUtils, etc, but breaking them up into a class with basically the same name does not make sense.  The Convention should also stay.  As we start to add in more Convention checks on arguments and state we want to group those in that class.",2023-11-27 16:47:08+00:00,please undo the metautilshelper changes breaking those methods up into a separate class just for the purpose of breaking them up does not make sense if there is a smart grouping of those method that would be considered i e reflectionutils etc but breaking them up into a class with basically the same name does not make sense the convention should also stay as we start to add in more convention checks on arguments and state we want to group those in that class,2023-11-27 16:47:08+00:00,Refactoring & Cleanup,0.13011487,0.12327572,0.13441956,0.10868408,0.17166607,0.13124238,0.09044169,0.110155664,before,0,0.0
+Ok,2023-11-29 22:55:58+00:00,ok,2023-11-29 22:55:58+00:00,Code Review & Collaboration,0.1336523,0.11689144,0.12206179,0.092792645,0.13385981,0.14429757,0.10814721,0.14829728,before,0,0.0
+"Can you fix the extended leases.txt file fix I mentioned and let me know, then I can merge the PR.",2023-12-13 00:40:28+00:00,can you fix the extended leases txt file fix i mentioned and let me know then i can merge the pr,2023-12-13 00:40:28+00:00,Code Review & Collaboration,0.083395824,0.10245741,0.15027432,0.10156934,0.12597093,0.14276622,0.12742823,0.1661377,before,0,0.0
+Hi Yevgen - approved but note there are test failures,2024-02-14 11:55:11+00:00,hi yevgen approved but note there are test failures,2024-02-14 11:55:11+00:00,Testing & CI,0.10948007,0.082367055,0.12413604,0.18644606,0.092820264,0.1264513,0.12627384,0.1520254,before,0,0.0
+This is great - thanks @peter-lawrey,2024-03-28 21:00:33+00:00,this is great thanks peter lawrey,2024-03-28 21:00:33+00:00,Documentation & Communication,0.13175824,0.1256264,0.107069775,0.10030104,0.12403647,0.15984944,0.12206691,0.12929179,before,0,0.0
+LGTM!,2024-04-09 21:34:19+00:00,lgtm,2024-04-09 21:34:19+00:00,Refactoring & Cleanup,0.115179464,0.1394654,0.14623089,0.1065589,0.14700052,0.11577477,0.10233896,0.1274511,before,0,0.0
+"For AI training purposes, better to split dedicated functionality changes to different commits",2024-05-10 10:31:09+00:00,for training purposes better to split dedicated functionality changes to different commits,2024-05-10 10:31:09+00:00,Code Review & Collaboration,0.12833275,0.090987645,0.08680886,0.147991,0.12320041,0.12054418,0.12666406,0.17547107,before,0,0.0
+approved with 1 comment,2024-05-13 08:50:49+00:00,approved with 1 comment,2024-05-13 08:50:49+00:00,Code Review & Collaboration,0.10537906,0.08807732,0.123518735,0.1002088,0.10491675,0.14533822,0.115419246,0.21714184,before,0,0.0
+Lets fix CI before review,2024-07-06 11:44:57+00:00,lets fix ci before review,2024-07-06 11:44:57+00:00,Code Review & Collaboration,0.07982833,0.07701417,0.15031186,0.18589658,0.10814171,0.08845011,0.104381785,0.20597544,before,0,0.0
+CMAKE_BUILD_TYPE is not expected for Multi-Config generators,2024-09-17 15:24:27+00:00,cmake build type is not expected for multi config generators,2024-09-17 15:24:27+00:00,Deployment,0.10396582,0.107652165,0.12740739,0.13786414,0.099764965,0.11545214,0.1898523,0.11804103,before,0,0.0
+Just need to check the suppress warnings empty method on interfaces to see if required,2024-09-21 06:59:33+00:00,just need to check the suppress warnings empty method on interfaces to see if required,2024-09-21 06:59:33+00:00,Feature Development,0.16463529,0.09434457,0.13193156,0.1475414,0.11213348,0.13242446,0.11835437,0.098634884,before,0,0.0
+consider consolidating matrix types,2024-10-13 08:39:00+00:00,consider consolidating matrix types,2024-10-13 08:39:00+00:00,Refactoring & Cleanup,0.14782724,0.1327291,0.110298276,0.1050482,0.17338917,0.109690346,0.09857336,0.1224444,before,0,0.0
+"Perfect, fixes pending test resolves the root cause",2024-10-29 11:28:32+00:00,perfect fixes pending test resolves the root cause,2024-10-29 11:28:32+00:00,Testing & CI,0.05405868,0.08937387,0.20457074,0.23468824,0.0843941,0.08993626,0.11126646,0.1317116,before,0,0.0
+"Looks good.
+TestBooleanOperator also requires same fix.
+Rebase",2024-10-29 19:56:59+00:00,looks good testbooleanoperator also requires same fix rebase,2024-10-29 19:56:59+00:00,Testing & CI,0.094725184,0.104380965,0.14991204,0.22411494,0.0885485,0.10057307,0.12526292,0.11248241,before,0,0.0
+"double doesn't cover higher precision, and a_rational can't handle irrationals. None of offered solutions works in 100% scenarios. 
+ IMPLEMENT is better to mark places which not implemented universally.
+ IsRational polymorphic method is required to handle this scenario properly.",2024-12-05 21:15:06+00:00,double doesn t cover higher precision and a rational can t handle irrationals none of offered solutions works in 100 scenarios implement is better to mark places which not implemented universally isrational polymorphic method is required to handle this scenario properly,2024-12-05 21:15:06+00:00,Bug Fixing & Debugging,0.1372004,0.09707026,0.17561933,0.13620014,0.12515472,0.10307241,0.099788144,0.1258946,before,0,0.0
+Rebase and see the comments,2025-01-10 09:41:21+00:00,rebase and see the comments,2025-01-10 09:41:21+00:00,Code Review & Collaboration,0.09203159,0.09160758,0.136593,0.11312639,0.11458189,0.14774261,0.1087556,0.19556132,after,0,0.0
+Try rebase-origin-main target,2025-01-11 19:33:34+00:00,try rebase origin main target,2025-01-11 19:33:34+00:00,Bug Fixing & Debugging,0.087164104,0.10817197,0.19413275,0.14255692,0.10224214,0.10388228,0.14405279,0.117797025,after,0,0.0
+"# Technical Review Findings
+
+## Code Quality Issues
+
+1. Missing Test Coverage:
+- No test suite for QuantumRegister class
+- No validation of quantum operations
+- No integration tests with math framework
+- Critical for quantum computing implementation
+
+2. Incomplete Implementation:
+- Only implements basic controlled phase rotation
+- Missing essential quantum operations (measurement, other gates)
+- Placeholder comments indicate unfinished work
+- No quantum state validation
+
+3. Documentation Gaps:
+- Insufficient API documentation
+- Missing quantum state operation details
+- No performance considerations documented
+- No integration guidelines with math framework
+
+4. Error Handling Improvements Needed:
+- Basic validation for qubit indices
+- No handling of quantum decoherence
+- Minimal numerical stability checks
+- No error recovery strategies
+
+## Implementation Concerns
+
+1. State Vector Management:
+```cpp
+explicit QuantumRegister(size_t num_qubits)
+    : num_qubits(num_qubits), state_vector(1ULL << num_qubits) {
+    state_vector[0] = std::complex<double>(1.0, 0.0);
+}
+```
+- Only handles |0...0⟩ initial state
+- No support for arbitrary state initialization
+- Missing state validation
+
+2. Normalization Implementation:
+```cpp
+void QuantumRegister::normalize() {
+    double norm = 0.0;
+    const double epsilon = 1e-10;
+    // ...
+}
+```
+- Fixed epsilon value may not be suitable for all cases
+- No handling of near-zero normalization
+- Performance optimization opportunities missed
+
+3. Phase Rotation:
+```cpp
+void QuantumRegister::apply_controlled_phase(size_t control, size_t target, double angle)
+```
+- Limited to two-qubit operations
+- No optimization for sparse state vectors
+- Missing common quantum gates
+
+## Build Integration
+
+1. CMake Configuration:
+```cmake
+lib(math)
+```
+- Minimal CMake integration
+- No dependency management
+- Missing version requirements
+- No platform-specific optimizations
+
+## Recommendations
+
+1. Testing Requirements:
+- Add comprehensive test suite
+- Include quantum state validation tests
+- Add performance benchmarks
+- Implement integration tests
+
+2. Implementation Completeness:
+- Complete essential quantum operations
+- Add measurement capabilities
+- Implement common quantum gates
+- Add state preparation methods
+
+3. Documentation:
+- Add detailed API documentation
+- Include quantum operation specifications
+- Document performance characteristics
+- Add integration guidelines
+
+4. Build System:
+- Enhance CMake configuration
+- Add proper dependency management
+- Include platform optimizations
+- Add version requirements
+
+## Additional Notes
+- PR scope differs significantly from description (MSVC flag vs quantum implementation)
+- Implementation appears to be work-in-progress
+- Core quantum computing features missing
+- Integration with math framework unclear
+
+Please address these issues before proceeding with the PR review. The implementation requires significant work to meet production standards.",2025-01-12 10:45:57+00:00,technical review findings code quality issues 1 missing test coverage no test suite for quantumregister class no validation of quantum operations no integration tests with math framework critical for quantum computing implementation 2 incomplete implementation only implements basic controlled phase rotation missing essential quantum operations measurement other gates placeholder comments indicate unfinished work no quantum state validation 3 documentation gaps insufficient api documentation missing quantum state operation details no performance considerations documented no integration guidelines with math framework 4 error handling improvements needed basic validation for qubit indices no handling of quantum decoherence minimal numerical stability checks no error recovery strategies implementation concerns 1 state vector management only handles 0 0 initial state no support for arbitrary state initialization missing state validation 2 normalization implementation fixed epsilon value may not be suitable for all cases no handling of near zero normalization performance optimization opportunities missed 3 phase rotation limited to two qubit operations no optimization for sparse state vectors missing common quantum gates build integration 1 cmake configuration minimal cmake integration no dependency management missing version requirements no platform specific optimizations recommendations 1 testing requirements add comprehensive test suite include quantum state validation tests add performance benchmarks implement integration tests 2 implementation completeness complete essential quantum operations add measurement capabilities implement common quantum gates add state preparation methods 3 documentation add detailed api documentation include quantum operation specifications document performance characteristics add integration guidelines 4 build system enhance cmake configuration add proper dependency management include platform optimizations add version requirements additional notes pr scope differs significantly from description msvc flag vs quantum implementation implementation appears to be work in progress core quantum computing features missing integration with math framework unclear please address these issues before proceeding with the pr review the implementation requires significant work to meet production standards,2025-01-12 10:45:57+00:00,Code Review & Collaboration,0.13201307,0.09255818,0.13012893,0.14142276,0.10747779,0.11827347,0.128883,0.14924276,after,0,0.0
+"# Technical Review
+
+## Code Organization
+ Clean separation of concerns:
+- Interface moved to SumOrderComparator.h
+- Implementation moved to SumOrderComparator.cpp
+- Minimal header dependencies
+- Proper include guards
+
+## Implementation Analysis
+ Functionality preserved:
+- Type ordering logic maintained exactly
+- Same type comparison behavior unchanged
+- Antisymmetry property preserved in comparisons
+- Error handling retained
+
+## Type System Integration
+ Proper type handling:
+- Complete type order array preserved
+- Correct handling of special cases (Sum, Product)
+- Proper delegation to IsComesBefore
+- Consistent type comparison logic
+
+## Code Quality
+ Good practices followed:
+- Clear namespace usage
+- Const correctness maintained
+- Static type order array optimization
+- Descriptive error messages
+
+## Build Integration
+ Clean build system changes:
+- Proper header inclusion in dependent files
+- No unnecessary dependencies
+- Maintains existing build structure
+
+## Testing Impact
+ Test coverage maintained:
+- Existing type ordering tests still valid
+- No behavioral changes to test
+- Error conditions preserved
+
+## Recommendations
+The refactoring is clean and maintains all existing functionality while improving code organization. Recommend approval with following minor suggestions:
+
+1. Consider adding explicit tests for SumOrderComparator in a separate test file
+2. Document the type ordering rationale in header file
+3. Add examples of usage in header documentation
+
+The PR represents a good example of clean refactoring - improving code organization while maintaining exact functionality and test coverage.",2025-01-12 10:47:56+00:00,technical review code organization clean separation of concerns interface moved to sumordercomparator h implementation moved to sumordercomparator cpp minimal header dependencies proper include guards implementation analysis functionality preserved type ordering logic maintained exactly same type comparison behavior unchanged antisymmetry property preserved in comparisons error handling retained type system integration proper type handling complete type order array preserved correct handling of special cases sum product proper delegation to iscomesbefore consistent type comparison logic code quality good practices followed clear namespace usage const correctness maintained static type order array optimization descriptive error messages build integration clean build system changes proper header inclusion in dependent files no unnecessary dependencies maintains existing build structure testing impact test coverage maintained existing type ordering tests still valid no behavioral changes to test error conditions preserved recommendations the refactoring is clean and maintains all existing functionality while improving code organization recommend approval with following minor suggestions 1 consider adding explicit tests for sumordercomparator in a separate test file 2 document the type ordering rationale in header file 3 add examples of usage in header documentation the pr represents a good example of clean refactoring improving code organization while maintaining exact functionality and test coverage,2025-01-12 10:47:56+00:00,Refactoring & Cleanup,0.13111119,0.099390574,0.13620095,0.13115828,0.16651069,0.10695643,0.10070605,0.12796582,after,0,0.0
+"The changes to Sum::sq() with OptimizeOff are causing unintended side effects in Integer comparison logic. Specifically:
+
+1. Integer comparison tests are failing with:
+   - Comparing equal numbers returns NaN (e.g., -10<-10, 3<3)
+   - Incorrect comparison results for negative numbers
+   - Test failures in logic.cpp showing optimization issues
+
+2. While the OptimizeOff scope in Sum::sq() aims to prevent recursive optimization during square calculations, it's affecting the core comparison logic. This suggests that:
+   - The optimization state is being propagated incorrectly
+   - Integer comparisons may be relying on optimization states they shouldn't
+   - The fix needs to be more targeted to Sum::sq() without affecting Integer operations
+
+3. Recommendations:
+   - Consider using a more targeted approach to prevent recursive optimization
+   - Add test coverage specifically for Sum::sq() optimization cases
+   - Ensure Integer comparison logic remains independent of Sum optimization states
+   - Document the optimization dependencies between Sum and Integer classes
+
+Please address these issues before proceeding with the PR. The core Integer comparison functionality needs to be preserved while optimizing Sum::sq() performance.",2025-01-12 11:51:47+00:00,the changes to sum sq with optimizeoff are causing unintended side effects in integer comparison logic specifically 1 integer comparison tests are failing with comparing equal numbers returns nan e g 10 10 3 3 incorrect comparison results for negative numbers test failures in logic cpp showing optimization issues 2 while the optimizeoff scope in sum sq aims to prevent recursive optimization during square calculations it s affecting the core comparison logic this suggests that the optimization state is being propagated incorrectly integer comparisons may be relying on optimization states they shouldn t the fix needs to be more targeted to sum sq without affecting integer operations 3 recommendations consider using a more targeted approach to prevent recursive optimization add test coverage specifically for sum sq optimization cases ensure integer comparison logic remains independent of sum optimization states document the optimization dependencies between sum and integer classes please address these issues before proceeding with the pr the core integer comparison functionality needs to be preserved while optimizing sum sq performance,2025-01-12 11:51:47+00:00,Testing & CI,0.10183986,0.09401607,0.16376399,0.17647456,0.13524279,0.09974397,0.10406698,0.12485178,after,0,0.0
+"## Implementation Review
+
+The implementation looks solid with good test coverage and clean code. However, there are two required changes:
+
+1. Please restore the LOG_AND_IMPLEMENT line in Valuable.cpp:
+```cpp
+LOG_AND_IMPLEMENT(*this << "" IsModSimplifiable "" << value);
+```
+
+2. Consider adding test cases for:
+- Very large integers (near max_int)
+- Chained modulo operations
+- Performance benchmarks
+
+Overall good work, but the logging line needs to be restored before merging.",2025-01-12 11:54:56+00:00,implementation review the implementation looks solid with good test coverage and clean code however there are two required changes 1 please restore the log and implement line in valuable cpp 2 consider adding test cases for very large integers near max int chained modulo operations performance benchmarks overall good work but the logging line needs to be restored before merging,2025-01-12 11:54:56+00:00,Refactoring & Cleanup,0.13817327,0.098783575,0.1437255,0.12835552,0.14564773,0.10822874,0.09529879,0.14178686,after,0,0.0
+"### Technical Review Findings
+
+1. Description/Implementation Mismatch:
+   - PR description claims MSVC flag changes (/ZI to /Zi)
+   - Actual changes implement new quantum register functionality
+   - No MSVC flag changes found in CMakeLists.txt files
+   - Branch name suggests quantum register fixes
+
+2. Implementation Issues:
+   - Incomplete implementation with PLACEHOLDER comments
+   - Only controlled phase gate implemented
+   - Basic state vector initialization
+   - Missing essential quantum operations (measurement, other gates)
+   - No validation of quantum state integrity beyond normalization
+
+3. Missing Components:
+   - Test suite for quantum operations
+   - API documentation
+   - Error handling strategy
+   - State validation
+   - Performance considerations
+
+4. Process Concerns:
+   - Mixed unrelated changes (build flags + quantum implementation)
+   - Description does not match actual changes
+   - Branch name suggests different purpose
+
+Recommendations:
+1. Split into separate PRs:
+   - One PR for MSVC build flag fixes (if needed)
+   - Another PR for quantum register implementation with:
+     * Complete implementation
+     * Test coverage
+     * API documentation
+     * Proper description",2025-01-14 21:46:37+00:00,technical review findings 1 description mismatch pr description claims msvc flag changes to actual changes implement new quantum register functionality no msvc flag changes found in cmakelists txt files branch name suggests quantum register fixes 2 implementation issues incomplete implementation with placeholder comments only controlled phase gate implemented basic state vector initialization missing essential quantum operations measurement other gates no validation of quantum state integrity beyond normalization 3 missing components test suite for quantum operations api documentation error handling strategy state validation performance considerations 4 process concerns mixed unrelated changes build flags quantum implementation description does not match actual changes branch name suggests different purpose recommendations 1 split into separate prs one pr for msvc build flag fixes if needed another pr for quantum register implementation with complete implementation test coverage api documentation proper description,2025-01-14 21:46:37+00:00,Code Review & Collaboration,0.111002415,0.0823069,0.11662921,0.15757355,0.10008101,0.1247249,0.12824053,0.17944151,after,0,0.0
+Rebase,2025-01-18 11:19:46+00:00,rebase,2025-01-18 11:19:46+00:00,Refactoring & Cleanup,0.09931464,0.09367881,0.14318311,0.12651144,0.15672694,0.107328765,0.14408687,0.12916939,after,0,0.0
+See review comments,2025-01-18 13:06:20+00:00,see review comments,2025-01-18 13:06:20+00:00,Code Review & Collaboration,0.10921599,0.094483584,0.090929866,0.09957538,0.09607471,0.14124165,0.07811046,0.29036844,after,0,0.0
+You should understand code before modifying it. Especially current semantic scopes. SurdIsReducible is a boolean lambda that returns true if it is possible to transform equation to eliminate a principal surd. The transformation is happening in calling code.,2025-01-18 16:16:11+00:00,you should understand code before modifying it especially current semantic scopes surdisreducible is a boolean lambda that returns true if it is possible to transform equation to eliminate a principal surd the transformation is happening in calling code,2025-01-18 16:16:11+00:00,Refactoring & Cleanup,0.12114398,0.11100937,0.14888272,0.1114411,0.17993395,0.114743605,0.10873875,0.10410655,after,0,0.0
+Rebase,2025-01-19 14:52:16+00:00,rebase,2025-01-19 14:52:16+00:00,Refactoring & Cleanup,0.09931464,0.09367881,0.14318311,0.12651144,0.15672694,0.107328765,0.14408687,0.12916939,after,0,0.0
+These looks really random and not required,2025-01-19 17:38:32+00:00,these looks really random and not required,2025-01-19 17:38:32+00:00,Documentation & Communication,0.11543513,0.14296108,0.1246715,0.11193437,0.13615894,0.14429449,0.109716535,0.11482801,after,0,0.0
+"Doesn't look correct: do not modify tests.
+Rebase.
+Remove unnecessary changes",2025-01-19 17:45:45+00:00,doesn t look correct do not modify tests rebase remove unnecessary changes,2025-01-19 17:45:45+00:00,Testing & CI,0.06699997,0.087743096,0.15264647,0.25553128,0.113580644,0.10285214,0.11207769,0.10856869,after,0,0.0
+Remove unnecessary changes and rebase,2025-01-19 17:47:30+00:00,remove unnecessary changes and rebase,2025-01-19 17:47:30+00:00,Refactoring & Cleanup,0.07010384,0.09136825,0.13594466,0.1188049,0.20432621,0.10983945,0.14659944,0.123013176,after,0,0.0
+Rebase. Remove gdb file or make it common. Breakpoints are not recommended to share there unless disabled.,2025-01-20 23:06:41+00:00,rebase remove gdb file or make it common breakpoints are not recommended to share there unless disabled,2025-01-20 23:06:41+00:00,Bug Fixing & Debugging,0.0926916,0.09115727,0.1678605,0.153011,0.1386796,0.10487883,0.13649052,0.11523074,after,0,0.0
+Logarithm parsing is out of the scope,2025-01-22 22:49:04+00:00,logarithm parsing is out of the scope,2025-01-22 22:49:04+00:00,Bug Fixing & Debugging,0.1137989,0.08487699,0.20635127,0.097214915,0.18057291,0.1094221,0.095016025,0.1127469,after,0,0.0
+Split each branch modification to own PR,2025-01-22 22:58:04+00:00,split each branch modification to own pr,2025-01-22 22:58:04+00:00,Code Review & Collaboration,0.10924776,0.09071005,0.08418481,0.11634947,0.13353524,0.11445661,0.14813891,0.20337719,after,0,0.0
+Rebase,2025-01-23 18:35:25+00:00,rebase,2025-01-23 18:35:25+00:00,Refactoring & Cleanup,0.09931464,0.09367881,0.14318311,0.12651144,0.15672694,0.107328765,0.14408687,0.12916939,after,0,0.0
+Rebase and split to per-branch PRs,2025-01-23 19:22:26+00:00,rebase and split to per branch prs,2025-01-23 19:22:26+00:00,Code Review & Collaboration,0.10950414,0.08913804,0.0985126,0.12443758,0.1435093,0.103006214,0.13434032,0.19755176,after,0,0.0
+Rebase and check review comments,2025-01-24 18:09:03+00:00,rebase and check review comments,2025-01-24 18:09:03+00:00,Code Review & Collaboration,0.08485083,0.08318549,0.11786483,0.113815784,0.113615796,0.121854596,0.10212021,0.2626924,after,0,0.0
+"Lets use _1, _2 instead of left, right",2025-02-09 22:49:14+00:00,lets use 1 2 instead of left right,2025-02-09 22:49:14+00:00,Bug Fixing & Debugging,0.12638102,0.14301987,0.16004556,0.08203337,0.15479131,0.12316114,0.09392101,0.116646744,after,0,0.0
+Line 13 misalignment,2025-02-13 10:28:04+00:00,line 13 misalignment,2025-02-13 10:28:04+00:00,Bug Fixing & Debugging,0.072346196,0.15354969,0.23060545,0.102028236,0.12897006,0.10936443,0.09422734,0.10890864,after,0,0.0
+Add supporting test to demonstrate the scenario which became fixed with this your introduced change,2025-02-15 21:19:29+00:00,add supporting test to demonstrate the scenario which became fixed with this your introduced change,2025-02-15 21:19:29+00:00,Testing & CI,0.113221966,0.09264214,0.14611855,0.23044907,0.08598235,0.10234235,0.10504588,0.12419776,after,0,0.0
+None of introduced test support introduced changes,2025-02-15 21:59:27+00:00,none of introduced test support introduced changes,2025-02-15 21:59:27+00:00,Testing & CI,0.08768854,0.08979447,0.10427909,0.24279997,0.07709871,0.13200752,0.13276637,0.13356537,after,0,0.0
+See comments and Add test,2025-02-20 11:36:34+00:00,see comments and add test,2025-02-20 11:36:34+00:00,Testing & CI,0.13843657,0.07856133,0.11565078,0.20669311,0.099843875,0.14621343,0.079189986,0.1354109,after,0,0.0
+See comments,2025-02-20 11:36:58+00:00,see comments,2025-02-20 11:36:58+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+See comments,2025-02-20 11:39:40+00:00,see comments,2025-02-20 11:39:40+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+See comments,2025-02-20 13:09:14+00:00,see comments,2025-02-20 13:09:14+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+See comments,2025-02-20 13:38:59+00:00,see comments,2025-02-20 13:38:59+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+"Looks like for all integer n and k: k(x^n) mod x = k mod x
+This should be also implemented in Modulo::optimize",2025-02-20 14:04:26+00:00,looks like for all integer n and k k x n mod x k mod x this should be also implemented in modulo optimize,2025-02-20 14:04:26+00:00,Refactoring & Cleanup,0.13727269,0.1182707,0.13510454,0.12405631,0.14366779,0.10789783,0.12499326,0.108736925,after,0,0.0
+See comments,2025-02-20 14:07:05+00:00,see comments,2025-02-20 14:07:05+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+See comments,2025-02-20 16:52:30+00:00,see comments,2025-02-20 16:52:30+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+See comments,2025-02-20 17:33:10+00:00,see comments,2025-02-20 17:33:10+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+PR per class,2025-02-20 17:36:55+00:00,pr per class,2025-02-20 17:36:55+00:00,Code Review & Collaboration,0.12136133,0.11352772,0.10849688,0.13373992,0.11712276,0.11794348,0.11064098,0.17716685,after,0,0.0
+Move to cpp,2025-02-20 17:43:37+00:00,move to cpp,2025-02-20 17:43:37+00:00,Refactoring & Cleanup,0.11309471,0.100252055,0.12396442,0.11827589,0.18095815,0.12700225,0.12380459,0.11264792,after,0,0.0
+Move to cpp,2025-02-20 17:44:26+00:00,move to cpp,2025-02-20 17:44:26+00:00,Refactoring & Cleanup,0.11309471,0.100252055,0.12396442,0.11827589,0.18095815,0.12700225,0.12380459,0.11264792,after,0,0.0
+"Lets just parse, optimize (-sqrt((-1944*(y^2) + -888*(z^2) + 1728*z*y + -5280*z + 7344*y + -8952))-(-18*y + -6*z + -204))/42 with timeout",2025-02-20 20:59:35+00:00,lets just parse optimize sqrt 1944 y 2 888 z 2 1728 z y 5280 z 7344 y 8952 18 y 6 z 204 with timeout,2025-02-20 20:59:35+00:00,Refactoring & Cleanup,0.12197014,0.09026814,0.1490493,0.12314274,0.18605211,0.10807337,0.12613052,0.09531372,after,0,0.0
+See comments,2025-02-21 09:28:06+00:00,see comments,2025-02-21 09:28:06+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+"Introduced test, enabled or not, should be the only change in commit and PR",2025-02-21 10:48:53+00:00,introduced test enabled or not should be the only change in commit and pr,2025-02-21 10:48:53+00:00,Testing & CI,0.09729758,0.07731301,0.09390962,0.26945645,0.077632576,0.10520801,0.124368675,0.1548141,after,0,0.0
+New overload for const Product& expected,2025-02-21 13:08:59+00:00,new overload for const product expected,2025-02-21 13:08:59+00:00,Bug Fixing & Debugging,0.103252724,0.10188942,0.18133917,0.117768146,0.15294315,0.10682449,0.122482575,0.113500334,after,0,0.0
+"a(), ca() are about to become deprecated",2025-02-23 09:22:10+00:00,a ca are about to become deprecated,2025-02-23 09:22:10+00:00,Documentation & Communication,0.11729463,0.08450724,0.11952576,0.11411869,0.1271264,0.14941128,0.14238103,0.14563496,after,0,0.0
+See comments,2025-02-23 22:07:57+00:00,see comments,2025-02-23 22:07:57+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+"Memory Allocation Management Issues Found:
+
+The changes introduce consistent use of `DefaultAllocSize` across multiple files, but there are several concerns:
+
+1. In `ValuableDescendantContract.h`:
+```cpp
+// Constructor allocation
+ths->setAllocSize(DefaultAllocSize);  // Changed from sizeof(Chld)
+
+// Clone operation
+auto* clone = new Chld(*CPtr());
+clone->setAllocSize(DefaultAllocSize);
+
+// Move operation
+auto* moved = new Chld(std::move(*Ptr()));
+moved->setAllocSize(DefaultAllocSize);
+```
+
+2. In `Integer.h`:
+```cpp
+// Multiple constructors adding:
+setAllocSize(DefaultAllocSize);
+```
+
+3. In `Exponentiation.h`:
+```cpp
+// Constructor adding:
+this->setAllocSize(DefaultAllocSize);
+```
+
+Concerns:
+1. Size verification is inconsistent - only done in DepSz constructor via assert
+2. No compile-time verification that DefaultAllocSize is sufficient for each type
+3. Risk of memory corruption if DefaultAllocSize is insufficient
+4. No documentation of minimum required DefaultAllocSize value
+
+Recommendations:
+1. Add compile-time checks using static_assert where possible
+2. Extend runtime verification to all allocation points
+3. Consider template specialization for DefaultAllocSize per type
+4. Document the minimum required DefaultAllocSize value
+5. Add size verification in Move/Clone operations",2025-02-23 22:08:44+00:00,memory allocation management issues found the changes introduce consistent use of across multiple files but there are several concerns 1 in 2 in 3 in concerns 1 size verification is inconsistent only done in depsz constructor via assert 2 no compile time verification that defaultallocsize is sufficient for each type 3 risk of memory corruption if defaultallocsize is insufficient 4 no documentation of minimum required defaultallocsize value recommendations 1 add compile time checks using static assert where possible 2 extend runtime verification to all allocation points 3 consider template specialization for defaultallocsize per type 4 document the minimum required defaultallocsize value 5 add size verification in move operations,2025-02-23 22:08:44+00:00,Refactoring & Cleanup,0.11298323,0.111330174,0.1158865,0.109365486,0.15497708,0.13383876,0.1468071,0.11481168,after,0,0.0
+"{
+    ""body"": ""Several code quality concerns found across the changes:\n\n1. Debug Logging Issues:\n- Current implementation uses direct cout statements which should be avoided in production code\n- Debug output is not conditional on build type or debug flags\n- No log levels for controlling verbosity\n\nRecommendation: Use a proper logging framework with configurable levels and conditional compilation.\n\n2. Test Organization:\n- `Quadratic_coefficient_test` is disabled with unclear requirements\n- Comment only mentions 'Enable after implementing MultiplyIfSimplifiable' without explaining why\n- No tracking issue linked for the missing implementation\n\nRecommendation: Either implement the missing functionality, remove the test, or add detailed documentation about requirements.\n\n3. Performance Considerations:\n- Multiple calls to `p.size()` in coefficient handling logic\n- Nested conditionals could be simplified\n- Debug output in critical path could impact performance\n\nRecommendation: Cache size checks and consider moving debug output behind preprocessor guards."",
+    ""commit_id"": ""8f5a87ba1fe163ac9cc7cfa5952dbf0a2890e6c6"",
+    ""path"": ""omnn/math/System.cpp"",
+    ""line"": 274,
+    ""side"": ""RIGHT""
+}",2025-02-24 04:42:46+00:00,body several code quality concerns found across the changes n n1 debug logging issues n current implementation uses direct cout statements which should be avoided in production code n debug output is not conditional on build type or debug flags n no log levels for controlling verbosity n nrecommendation use a proper logging framework with configurable levels and conditional compilation n n2 test organization n is disabled with unclear requirements n comment only mentions enable after implementing multiplyifsimplifiable without explaining why n no tracking issue linked for the missing implementation n nrecommendation either implement the missing functionality remove the test or add detailed documentation about requirements n n3 performance considerations n multiple calls to in coefficient handling logic n nested conditionals could be simplified n debug output in critical path could impact performance n nrecommendation cache size checks and consider moving debug output behind preprocessor guards commit id path omnn line 274 side right,2025-02-24 04:42:46+00:00,Refactoring & Cleanup,0.12639391,0.07785193,0.14344852,0.14104427,0.14711443,0.11858808,0.10481213,0.14074674,after,0,0.0
+"{
+    ""body"": ""# Code Review Feedback\n\n## 1. Debug Logging Issues in System.cpp\nLocation: `System.cpp:271-276`\n```cpp\nstd::cout << \""Solving system for variable \"" << va << std::endl;\nstd::cout << \""System equations: \"" << *this << std::endl;\n```\n- Direct use of std::cout for debugging is not maintainable\n- No conditional compilation for debug output\n- Debug statements in performance-critical path\n\nRecommendation:\n```cpp\n#ifdef DEBUG_SYSTEM_SOLVE\n    log.debug(\""Solving system for variable {}\"", va);\n#endif\n```\n\n## 2. Performance Optimization in Sum.cpp\nLocation: `Sum.cpp:2114-2137`\n```cpp\n} else if (c.IsProduct()) {\n    auto& p = c.as<Product>();\n    if (p.size() == 2) {\n        auto it = p.begin();\n        if (*it == -1) {\n            // ... nested checks\n        }\n    }\n}\n```\nRecommendations:\n1. Cache size check result to avoid multiple calls\n2. Flatten nested conditionals\n3. Document the special case handling\n\nImproved version:\n```cpp\n} else if (c.IsProduct()) {\n    auto& p = c.as<Product>();\n    const auto size = p.size();\n    if (size != 2) return false;\n    \n    auto it = p.begin();\n    if (*it != -1) return false;\n    \n    auto next = std::next(it);\n    if (!next->IsUnivariable()) return false;\n    \n    auto& var = next->as<Variable>();\n    if (var == va) {\n        isNormalizedPolynomial = true;\n        return true;\n    }\n    return false;\n}\n```\n\n## 3. Test Organization in Product_test.cpp\nLocation: `Product_test.cpp:121-156`\n```cpp\nBOOST_AUTO_TEST_CASE(Quadratic_coefficient_test\n    , *disabled() // Enable after implementing MultiplyIfSimplifiable\n)\n```\nIssues:\n- Test disabled without clear tracking\n- Missing documentation about requirements\n- No link to implementation ticket\n\nRecommendation:\n```cpp\n/**\n * Test for quadratic coefficient normalization\n * Prerequisites:\n * - MultiplyIfSimplifiable implementation\n * - Coefficient normalization support\n * \n * Test verifies:\n * 1. Proper normalization of 9l^2 terms\n * 2. Correct handling of negative coefficients\n * 3. Accurate cube root computation\n * \n * @see Issue #XXX: Implement MultiplyIfSimplifiable\n */\nBOOST_AUTO_TEST_CASE(Quadratic_coefficient_test)\n```\n\nPlease address these issues to improve code maintainability, performance, and test clarity."",
+    ""commit_id"": ""4176db84f6ccf65a74e3b94b1bf2edc0ab3301d5"",
+    ""path"": ""omnn/math/System.cpp"",
+    ""line"": 271
+}",2025-02-24 04:43:42+00:00,body code review feedback n n 1 debug logging issues in system cpp nlocation n n direct use of std cout for debugging is not maintainable n no conditional compilation for debug output n debug statements in performance critical path n nrecommendation n n n 2 performance optimization in sum cpp nlocation n nrecommendations n1 cache size check result to avoid multiple calls n2 flatten nested conditionals n3 document the special case handling n nimproved version n n n 3 test organization in product test cpp nlocation n nissues n test disabled without clear tracking n missing documentation about requirements n no link to implementation ticket n nrecommendation n n nplease address these issues to improve code maintainability performance and test clarity commit id path omnn line 271,2025-02-24 04:43:42+00:00,Testing & CI,0.111994304,0.07040413,0.15067624,0.16917105,0.13992387,0.11273929,0.10113037,0.14396074,after,0,0.0
+Everything looks good!,2025-02-24 04:44:15+00:00,everything looks good,2025-02-24 04:44:15+00:00,UI / UX,0.101269916,0.1780493,0.13895759,0.10812114,0.121269256,0.123358786,0.09837284,0.1306012,after,0,0.0
+I think you really should think twice before fixing things that works,2025-02-25 13:26:00+00:00,i think you really should think twice before fixing things that works,2025-02-25 13:26:00+00:00,Bug Fixing & Debugging,0.09522107,0.111298524,0.22979209,0.14611465,0.114007175,0.088829756,0.0938195,0.12091725,after,0,0.0
+"**Python Bindings Implementation Review**
+
+I've reviewed the Python bindings implementation for the Valuable and Variable classes. The implementation provides good coverage of arithmetic operations and type conversions, but there are a few issues that should be addressed:
+
+1. **CMake Configuration**: The `omnn/variable/CMakeLists.txt` file is missing a closing `endif()` statement after the Python bindings configuration block. This could cause build failures on platforms with strict CMake syntax checking.
+
+2. **Code Organization**: The arithmetic operations in `omnn/variable/valuable.cpp` contain significant duplication. Consider using templates or helper functions to reduce redundancy and improve maintainability.
+
+3. **Error Handling**: The error handling in the Python bindings is inconsistent. Some operations throw generic exceptions while others provide detailed error messages. A consistent approach to error handling would improve the user experience.
+
+Overall, the Python bindings implementation is a valuable addition to the project, providing Python developers with access to the Valuable and Variable classes. Addressing these issues will improve the quality and maintainability of the code.",2025-02-26 16:52:24+00:00,python bindings implementation review i ve reviewed the python bindings implementation for the valuable and variable classes the implementation provides good coverage of arithmetic operations and type conversions but there are a few issues that should be addressed 1 cmake configuration the file is missing a closing statement after the python bindings configuration block this could cause build failures on platforms with strict cmake syntax checking 2 code organization the arithmetic operations in contain significant duplication consider using templates or helper functions to reduce redundancy and improve maintainability 3 error handling the error handling in the python bindings is inconsistent some operations throw generic exceptions while others provide detailed error messages a consistent approach to error handling would improve the user experience overall the python bindings implementation is a valuable addition to the project providing python developers with access to the valuable and variable classes addressing these issues will improve the quality and maintainability of the code,2025-02-26 16:52:24+00:00,Refactoring & Cleanup,0.13667381,0.0935615,0.12959386,0.13019486,0.13699315,0.11747149,0.13202263,0.12348868,after,0,0.0
+The test must be fixed instead of being disabled,2025-02-28 08:44:14+00:00,the test must be fixed instead of being disabled,2025-02-28 08:44:14+00:00,Testing & CI,0.08085191,0.08093592,0.19642432,0.27858374,0.09065757,0.07836309,0.09999418,0.0941893,after,0,0.0
+I like constexpr.h more. I could fix it and move to another folder if you require it. What is the particular scenario where you need it?,2025-02-28 09:25:03+00:00,i like constexpr h more i could fix it and move to another folder if you require it what is the particular scenario where you need it,2025-02-28 09:25:03+00:00,Refactoring & Cleanup,0.10807167,0.10258861,0.14669243,0.10576705,0.1790399,0.12549244,0.13368827,0.09865967,after,0,0.0
+See comments,2025-02-28 22:36:49+00:00,see comments,2025-02-28 22:36:49+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+CI actions must pass successfully,2025-03-01 12:29:32+00:00,ci actions must pass successfully,2025-03-01 12:29:32+00:00,Testing & CI,0.124959424,0.06914975,0.123957016,0.23180333,0.08405322,0.09111572,0.14223975,0.13272186,after,0,0.0
+Everything looks good!,2025-03-01 17:44:10+00:00,everything looks good,2025-03-01 17:44:10+00:00,UI / UX,0.101269916,0.1780493,0.13895759,0.10812114,0.121269256,0.123358786,0.09837284,0.1306012,after,0,0.0
+See comments,2025-03-05 15:44:28+00:00,see comments,2025-03-05 15:44:28+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+Everything looks good! The changes to support interface libraries in the APPLY_TARGET_COMMONS macro are well-structured and follow good CMake practices.,2025-03-06 13:22:54+00:00,everything looks good the changes to support interface libraries in the apply target commons macro are well structured and follow good cmake practices,2025-03-06 13:22:54+00:00,Deployment,0.1145919,0.11334523,0.09026711,0.12317247,0.10221527,0.14733568,0.18818635,0.12088595,after,0,0.0
+Everything looks good!,2025-03-07 09:12:38+00:00,everything looks good,2025-03-07 09:12:38+00:00,UI / UX,0.101269916,0.1780493,0.13895759,0.10812114,0.121269256,0.123358786,0.09837284,0.1306012,after,0,0.0
+Everything looks good! The interface visibility changes are well-structured and consistent throughout the codebase.,2025-03-07 09:20:13+00:00,everything looks good the interface visibility changes are well structured and consistent throughout the codebase,2025-03-07 09:20:13+00:00,UI / UX,0.13380912,0.19153456,0.08168163,0.099121645,0.1115587,0.13712262,0.11463762,0.13053411,after,0,0.0
+See comments,2025-03-07 10:36:31+00:00,see comments,2025-03-07 10:36:31+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+See comments,2025-03-07 18:35:25+00:00,see comments,2025-03-07 18:35:25+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+Use boost::redis,2025-03-07 18:36:55+00:00,use boost redis,2025-03-07 18:36:55+00:00,Deployment,0.12913404,0.107843526,0.103564754,0.14551927,0.10980262,0.11657166,0.16142075,0.12614335,after,0,0.0
+"These changes are irrelevant to the task. 
+Start from adding a label to indicate that new issues are being processed.",2025-03-08 12:01:34+00:00,these changes are irrelevant to the task start from adding a label to indicate that new issues are being processed,2025-03-08 12:01:34+00:00,Code Review & Collaboration,0.10510631,0.098673284,0.102205835,0.11230509,0.11407956,0.13947871,0.14789076,0.1802604,after,0,0.0
+"Everything looks good! The changes correctly add the missing repository checkout step, necessary permissions, and issue labeling. This will fix the 'fatal: not a git repository' error when commenting on issues.",2025-03-08 12:04:08+00:00,everything looks good the changes correctly add the missing repository checkout step necessary permissions and issue labeling this will fix the fatal not a git repository error when commenting on issues,2025-03-08 12:04:08+00:00,Code Review & Collaboration,0.087707005,0.09585842,0.12226307,0.11353662,0.09110983,0.1640507,0.15505439,0.17042002,after,0,0.0
+Everything looks good!,2025-03-09 01:07:25+00:00,everything looks good,2025-03-09 01:07:25+00:00,UI / UX,0.101269916,0.1780493,0.13895759,0.10812114,0.121269256,0.123358786,0.09837284,0.1306012,after,0,0.0
+"The PR title mentions fixing the Less comparator, but the implementation of Less in both Integer.cpp and Valuable.cpp remains unchanged. The PR only renames IsNegativeThan to IsNegativeOf and adds tests. Please clarify what specific fix was intended for the Less comparator.",2025-03-09 07:54:25+00:00,the pr title mentions fixing the less comparator but the implementation of less in both integer cpp and valuable cpp remains unchanged the pr only renames isnegativethan to isnegativeof and adds tests please clarify what specific fix was intended for the less comparator,2025-03-09 07:54:25+00:00,Bug Fixing & Debugging,0.08867862,0.11137002,0.16845363,0.11278757,0.13636932,0.11533691,0.11275754,0.15424636,after,0,0.0
+"Everything looks good! The PR successfully implements the IsNegativeOf method in Integer class and renames IsNegativeThan to IsNegativeOf throughout the codebase with appropriate test coverage. The only issue is that the PR title mentions fixing the Less comparator, but no changes were made to the Less implementation.",2025-03-09 07:54:45+00:00,everything looks good the pr successfully implements the isnegativeof method in integer class and renames isnegativethan to isnegativeof throughout the codebase with appropriate test coverage the only issue is that the pr title mentions fixing the less comparator but no changes were made to the less implementation,2025-03-09 07:54:45+00:00,Bug Fixing & Debugging,0.09885624,0.09917883,0.1677863,0.15395738,0.13672648,0.10661147,0.0942042,0.14267908,after,0,0.0
+"Disable broken polyfit tests, 0/0=nan",2025-03-09 12:55:38+00:00,disable broken polyfit tests 0,2025-03-09 12:55:38+00:00,Testing & CI,0.08111795,0.094579324,0.17831732,0.271405,0.095831685,0.07138443,0.10982266,0.09754163,after,0,0.0
+Specify original issue number in the PR message,2025-03-11 10:35:10+00:00,specify original issue number in the pr message,2025-03-11 10:35:10+00:00,Code Review & Collaboration,0.10548579,0.09194904,0.1122943,0.09820075,0.11345538,0.14196555,0.14709365,0.18955559,after,0,0.0
+The issue heading mentioned different yml,2025-03-11 11:49:11+00:00,the issue heading mentioned different yml,2025-03-11 11:49:11+00:00,Bug Fixing & Debugging,0.10280805,0.114294045,0.15024945,0.10601429,0.11021215,0.1497028,0.14943112,0.11728807,after,0,0.0
+Out of scope file modified,2025-03-11 11:56:38+00:00,out of scope file modified,2025-03-11 11:56:38+00:00,Refactoring & Cleanup,0.08486406,0.08807266,0.16373505,0.10179076,0.16964589,0.11850721,0.14612842,0.1272559,after,0,0.0
+https://github.com/ohhmm/openmind/issues/946 Request is about existing yml to change,2025-03-11 13:55:52+00:00,request is about existing yml to change,2025-03-11 13:55:52+00:00,Deployment,0.14253098,0.113502346,0.09348716,0.09241395,0.12852712,0.14465727,0.15317425,0.13170695,after,0,0.0
+Fix CI issues,2025-03-11 20:19:05+00:00,fix ci issues,2025-03-11 20:19:05+00:00,Testing & CI,0.07887144,0.08181637,0.18388212,0.21034464,0.09639147,0.09225275,0.13728957,0.11915158,after,0,0.0
+"Resolve issues that linting detects, like Error:   122:58 syntax error: could not find expected ':' (syntax)",2025-03-11 20:29:00+00:00,resolve issues that linting detects like error 122 58 syntax error could not find expected syntax,2025-03-11 20:29:00+00:00,Bug Fixing & Debugging,0.11341754,0.07789631,0.21505268,0.14320952,0.16561061,0.10386268,0.089064464,0.0918862,after,0,0.0
+Fix detected issue in ▼ ./.github/workflows/pr-review-comment-reaction.yml,2025-03-11 21:04:55+00:00,fix detected issue in,2025-03-11 21:04:55+00:00,Bug Fixing & Debugging,0.07965595,0.09016345,0.30958545,0.12638503,0.11063858,0.095410556,0.08967665,0.09848428,after,0,0.0
+Everything looks good!,2025-03-13 14:04:13+00:00,everything looks good,2025-03-13 14:04:13+00:00,UI / UX,0.101269916,0.1780493,0.13895759,0.10812114,0.121269256,0.123358786,0.09837284,0.1306012,after,0,0.0
+"I've reviewed the changes to cmake/bins.cmake and found a few minor issues with unused variables. I've added inline comments to the specific lines. Overall, the changes to add C++23 module support with /experimental:module and /std:c++latest flags are good improvements, but the unused variables should be addressed.",2025-03-13 15:47:05+00:00,i ve reviewed the changes to cmake and found a few minor issues with unused variables i ve added inline comments to the specific lines overall the changes to add c 23 module support with and flags are good improvements but the unused variables should be addressed,2025-03-13 15:47:05+00:00,Deployment,0.097107366,0.10297943,0.11220401,0.11889181,0.10274804,0.13408917,0.17628661,0.15569355,after,0,0.0
+Add tests for COW functionality,2025-03-13 17:31:57+00:00,add tests for cow functionality,2025-03-13 17:31:57+00:00,Testing & CI,0.1502925,0.07661609,0.104576305,0.28526184,0.09388804,0.10530145,0.091726445,0.09233731,after,0,0.0
+"Clone is protect.
+There's cmdline -Dprivate=public in cmake.
+Add -Dprotected=public too",2025-03-14 02:44:02+00:00,clone is protect there s cmdline dprivate public in cmake add dprotected public too,2025-03-14 02:44:02+00:00,Deployment,0.102354884,0.09881763,0.13843888,0.156027,0.10790181,0.103428684,0.16811651,0.124914594,after,0,0.0
+Does .yml look like .cmake to you?,2025-03-14 03:08:24+00:00,does yml look like cmake to you,2025-03-14 03:08:24+00:00,Deployment,0.092143156,0.1089621,0.11726461,0.12730354,0.12585466,0.14239497,0.17292082,0.11315621,after,0,0.0
+"Everything looks good! The change correctly updates the build command to use BUILD_DIR instead of SRC_DIR, which is the proper directory for build operations.",2025-03-16 00:36:19+00:00,everything looks good the change correctly updates the build command to use build dir instead of src dir which is the proper directory for build operations,2025-03-16 00:36:19+00:00,Deployment,0.07684808,0.12392583,0.09127469,0.120148554,0.10003767,0.14185071,0.22149403,0.12442039,after,0,0.0
+Everything looks good! The PR simplifies the Sum::operator+= method by removing complex optimization logic and replacing it with a more streamlined approach. This is a good improvement in code maintainability.,2025-03-16 09:54:26+00:00,everything looks good the pr simplifies the sum operator method by removing complex optimization logic and replacing it with a more streamlined approach this is a good improvement in code maintainability,2025-03-16 09:54:26+00:00,Feature Development,0.14627293,0.1088032,0.119873606,0.10281258,0.14287393,0.124741666,0.11364926,0.14097282,after,0,0.0
+"I've reviewed the ODE test cases and found a few minor issues to address before implementation. The test structure is well-designed and follows TDD principles by being disabled until implementation is complete. The mathematical formulations appear correct, but there are a few code quality improvements that would make the tests more robust and maintainable.",2025-03-17 06:44:11+00:00,i ve reviewed the ode test cases and found a few minor issues to address before implementation the test structure is well designed and follows tdd principles by being disabled until implementation is complete the mathematical formulations appear correct but there are a few code quality improvements that would make the tests more robust and maintainable,2025-03-17 06:44:11+00:00,Testing & CI,0.11502793,0.08610651,0.11401353,0.28571588,0.09006429,0.10415397,0.09979459,0.105123304,after,0,0.0
+"At least one test must be enabled to omit linking issue.
+ Consider checking if any of these tests work to introduce it enabled.
+ If not, then add new empty test for this.",2025-03-17 14:29:44+00:00,at least one test must be enabled to omit linking issue consider checking if any of these tests work to introduce it enabled if not then add new empty test for this,2025-03-17 14:29:44+00:00,Testing & CI,0.08893529,0.07959853,0.14689586,0.28594455,0.09445856,0.1004112,0.11039086,0.09336515,after,0,0.0
+Fix compilation (see CI actions),2025-03-17 21:00:33+00:00,fix compilation see ci actions,2025-03-17 21:00:33+00:00,Bug Fixing & Debugging,0.08074162,0.07961702,0.18406564,0.17380404,0.11599843,0.10486781,0.1457852,0.1151202,after,0,0.0
+"Everything looks good! The clone-on-write implementation in Valuable::operator= is well done, and enabling the previously disabled tests is a good improvement to test coverage.",2025-03-18 17:04:16+00:00,everything looks good the clone on write implementation in valuable operator is well done and enabling the previously disabled tests is a good improvement to test coverage,2025-03-18 17:04:16+00:00,Testing & CI,0.14158307,0.08240532,0.11789081,0.23458782,0.11279969,0.09864114,0.09427933,0.11781284,after,0,0.0
+Everything looks good!,2025-03-18 17:28:22+00:00,everything looks good,2025-03-18 17:28:22+00:00,UI / UX,0.101269916,0.1780493,0.13895759,0.10812114,0.121269256,0.123358786,0.09837284,0.1306012,after,0,0.0
+"Everything looks good! The clone-on-write implementation is properly implemented and all tests are passing. The CI failure is due to an infrastructure issue with the Microsoft package repository, not related to the code changes.",2025-03-18 18:04:13+00:00,everything looks good the clone on write implementation is properly implemented and all tests are passing the ci failure is due to an infrastructure issue with the microsoft package repository not related to the code changes,2025-03-18 18:04:13+00:00,Testing & CI,0.08592191,0.08386683,0.11096981,0.25040522,0.09523736,0.09829672,0.14775732,0.12754484,after,0,0.0
+Everything looks good! The PR simplifies the Sum::operator+= method by removing complex optimization logic and replacing it with a more streamlined approach. This is a good improvement in code maintainability.,2025-03-20 13:58:46+00:00,everything looks good the pr simplifies the sum operator method by removing complex optimization logic and replacing it with a more streamlined approach this is a good improvement in code maintainability,2025-03-20 13:58:46+00:00,Feature Development,0.14627293,0.1088032,0.119873606,0.10281258,0.14287393,0.124741666,0.11364926,0.14097282,after,0,0.0
+"Everything looks good! The changes add proper retry mechanisms for package installations in the GitHub workflows, which will improve build reliability.",2025-03-21 09:05:25+00:00,everything looks good the changes add proper retry mechanisms for package installations in the github workflows which will improve build reliability,2025-03-21 09:05:25+00:00,Deployment,0.09138136,0.091589354,0.076671734,0.14480224,0.08745114,0.1493535,0.1975833,0.16116737,after,0,0.0
+Everything looks good! The changes to extend clone-on-write scenarios are well-implemented and follow the existing code patterns.,2025-03-21 11:27:55+00:00,everything looks good the changes to extend clone on write scenarios are well implemented and follow the existing code patterns,2025-03-21 11:27:55+00:00,Feature Development,0.15474927,0.09913276,0.08490278,0.14985134,0.115284696,0.11771626,0.14989974,0.12846316,after,0,0.0
+Everything looks good!,2025-03-21 11:38:27+00:00,everything looks good,2025-03-21 11:38:27+00:00,UI / UX,0.101269916,0.1780493,0.13895759,0.10812114,0.121269256,0.123358786,0.09837284,0.1306012,after,0,0.0
+Everything looks good!,2025-03-22 10:08:22+00:00,everything looks good,2025-03-22 10:08:22+00:00,UI / UX,0.101269916,0.1780493,0.13895759,0.10812114,0.121269256,0.123358786,0.09837284,0.1306012,after,0,0.0
+Everything looks good!,2025-03-22 10:08:23+00:00,everything looks good,2025-03-22 10:08:23+00:00,UI / UX,0.101269916,0.1780493,0.13895759,0.10812114,0.121269256,0.123358786,0.09837284,0.1306012,after,0,0.0
+Everything looks good!,2025-03-23 12:25:07+00:00,everything looks good,2025-03-23 12:25:07+00:00,UI / UX,0.101269916,0.1780493,0.13895759,0.10812114,0.121269256,0.123358786,0.09837284,0.1306012,after,0,0.0
+"Everything looks good! The issues with the IsTautology and IsContradiction methods, as well as the missing test for IsTautology, have already been identified in previous comments. These should be addressed before merging.",2025-03-25 18:33:24+00:00,everything looks good the issues with the istautology and iscontradiction methods as well as the missing test for istautology have already been identified in previous comments these should be addressed before merging,2025-03-25 18:33:24+00:00,Code Review & Collaboration,0.10409516,0.08458931,0.12215536,0.1323027,0.13428739,0.1452168,0.10337864,0.17397471,after,0,0.0
+Variadic Params number,2025-03-26 22:40:43+00:00,variadic params number,2025-03-26 22:40:43+00:00,Refactoring & Cleanup,0.14327031,0.1022152,0.14298193,0.09977914,0.14986515,0.13693692,0.11297221,0.11197911,after,0,0.0
+"#include <iostream>
+#include <vector>
+#include <utility>
+
+// Helper function to print the parameters
+template<typename... Args>
+void print(Args... args) {
+    (std::cout << ... << args) << '\n'; // Fold expression to print all args
+}
+
+// Function to convert vector to parameter pack
+template<typename T>
+void vectorToParamPack(const std::vector<T>& vec) {
+    // Call print with unpacked vector elements
+    print(vec.data(), vec.data() + vec.size());
+}
+
+int main() {
+    std::vector<int> vec = {1, 2, 3, 4, 5};
+    vectorToParamPack(vec);
+    return 0;
+}",2025-03-26 23:38:27+00:00,include iostream include vector include utility helper function to print the parameters template typename args void print args args std cout args n fold expression to print all args function to convert vector to parameter pack template typename t void vectortoparampack const std vector t vec call print with unpacked vector elements print vec data vec data vec size int main std vector int vec 1 2 3 4 5 vectortoparampack vec return 0,2025-03-26 23:38:27+00:00,Refactoring & Cleanup,0.13665928,0.10783542,0.11809903,0.09665485,0.17418596,0.14063731,0.116870865,0.10905729,after,0,0.0
+"I've reviewed the changes in PR #365 and found several issues that should be addressed:
+
+**1. Debug Print Statements in Production Code**
+
+There are numerous debug print statements in `Polyfit.h` that should be removed before merging to production. Debug statements can impact performance and clutter logs in production environments.
+
+```cpp
+std::cout << ""Debug: xMean = "" << xMean << "", xStd = "" << xStd << "", yMean = "" << yMean << "", yStd = "" << yStd << std::endl;
+
+// Multiple other debug prints throughout the file
+std::cout << ""Debug: Regularization parameter lambda = "" << lambda << std::endl;
+std::cout << ""Debug: Coefficients:"" << std::endl;
+std::cout << ""Debug: Determinant before LU decomposition: "" << det << std::endl;
+```
+
+Recommendation: Remove all debug print statements or wrap them in conditional compilation directives (e.g., `#ifdef DEBUG`) to ensure they don't appear in release builds.
+
+**2. Duplicate Code in Polyfit.h**
+
+There is duplicate code for scaling input data in `Polyfit.h`. The same operations are performed twice with slightly different variable names:
+
+```cpp
+// First instance
+T xMean = std::accumulate(oX.begin(), oX.end(), T(0)) / oX.size();
+T xStd = std::sqrt(std::inner_product(oX.begin(), oX.end(), oX.begin(), T(0)) / oX.size() - xMean * xMean);
+T yMean = std::accumulate(oY.begin(), oY.end(), T(0)) / oY.size();
+T yStd = std::sqrt(std::inner_product(oY.begin(), oY.end(), oY.begin(), T(0)) / oY.size() - yMean * yMean);
+
+// Second instance
+T x_mean = std::accumulate(oX.begin(), oX.end(), T(0)) / nCount;
+T x_std = std::sqrt(std::inner_product(oX.begin(), oX.end(), oX.begin(), T(0)) / nCount - x_mean * x_mean);
+T y_mean = std::accumulate(oY.begin(), oY.end(), T(0)) / nCount;
+T y_std = std::sqrt(std::inner_product(oY.begin(), oY.end(), oY.begin(), T(0)) / nCount - y_mean * y_mean);
+```
+
+Recommendation: Refactor to calculate these values only once and reuse them throughout the function.
+
+**3. Double Regularization Application**
+
+The regularization term is applied twice to the matrix in `Polyfit.h`:
+
+```cpp
+// First application
+const T lambda = 1e-8; // Adjusted regularization parameter
+for (size_t i = 0; i < oXtXMatrix.size1(); ++i) {
+    oXtXMatrix(i, i) += lambda;
+}
+
+// Second application
+// Add regularization term to oXtXMatrix
+for (size_t i = 0; i < oXtXMatrix.size1(); ++i) {
+    oXtXMatrix(i, i) += lambda;
+}
+```
+
+This double application of regularization could lead to numerical instability by making the regularization effect stronger than intended.
+
+Recommendation: Apply regularization only once at the appropriate point in the algorithm.",2025-03-28 08:25:00+00:00,i ve reviewed the changes in pr 365 and found several issues that should be addressed 1 debug print statements in production code there are numerous debug print statements in that should be removed before merging to production debug statements can impact performance and clutter logs in production environments recommendation remove all debug print statements or wrap them in conditional compilation directives e g to ensure they don t appear in release builds 2 duplicate code in polyfit h there is duplicate code for scaling input data in the same operations are performed twice with slightly different variable names recommendation refactor to calculate these values only once and reuse them throughout the function 3 double regularization application the regularization term is applied twice to the matrix in this double application of regularization could lead to numerical instability by making the regularization effect stronger than intended recommendation apply regularization only once at the appropriate point in the algorithm,2025-03-28 08:25:00+00:00,Code Review & Collaboration,0.10083503,0.10878079,0.11598352,0.10809565,0.11870671,0.12813735,0.13464823,0.18481272,after,0,0.0
+Everything looks good! The implementation for irrational fractions equality comparison is now more robust with proper optimization strategies.,2025-03-28 08:25:35+00:00,everything looks good the implementation for irrational fractions equality comparison is now more robust with proper optimization strategies,2025-03-28 08:25:35+00:00,Testing & CI,0.13011242,0.104115084,0.14427799,0.14940073,0.12474922,0.10617119,0.113036446,0.12813689,after,0,0.0
+See comments,2025-03-28 12:00:49+00:00,see comments,2025-03-28 12:00:49+00:00,Code Review & Collaboration,0.12684207,0.10452974,0.113936886,0.10676438,0.11040285,0.16455291,0.0875,0.18547115,after,0,0.0
+Everything looks good!,2025-03-30 01:09:23+00:00,everything looks good,2025-03-30 01:09:23+00:00,UI / UX,0.101269916,0.1780493,0.13895759,0.10812114,0.121269256,0.123358786,0.09837284,0.1306012,after,0,0.0
+"## PR Review for #365
+
+I've reviewed the changes and found the following issues:
+
+### 1. Debug Print Statements in Production Code
+Numerous debug print statements should be removed or conditionally compiled:
+```cpp
+std::cout << ""Debug: xMean = "" << xMean << "", xStd = "" << xStd << "", yMean = "" << yMean << "", yStd = "" << yStd << std::endl;
+// And many other similar statements throughout the file
+```
+Recommendation: Remove all debug prints or wrap them in `#ifdef DEBUG` directives.
+
+### 2. Duplicate Data Scaling Logic & Double Regularization
+The input data scaling calculation is performed twice and regularization is applied twice to the same matrix:
+```cpp
+// Duplicate scaling calculations
+// First occurrence
+T xMean = std::accumulate(oX.begin(), oX.end(), T(0)) / oX.size();
+// ...
+// Second occurrence
+T x_mean = std::accumulate(oX.begin(), oX.end(), T(0)) / nCount;
+
+// Double regularization
+// First application
+const T lambda = 1e-8;
+for (size_t i = 0; i < oXtXMatrix.size1(); ++i) {
+    oXtXMatrix(i, i) += lambda;
+}
+// Second application later in the code
+for (size_t i = 0; i < oXtXMatrix.size1(); ++i) {
+    oXtXMatrix(i, i) += lambda;
+}
+```
+Recommendation: Calculate scaling values only once and remove one of the regularization loops.
+
+### 3. Inconsistent Brace Style
+The PR introduces inconsistent brace styles:
+```cpp
+// K&R style (braces on same line)
+Extrapolator::T Extrapolator::Determinant() const {
+    // ...
+}
+
+// Allman style (braces on new line) elsewhere
+Extrapolator::solution_t Extrapolator::Solve(...) const
+{
+    // ...
+}
+```
+Recommendation: Maintain consistent brace style throughout the codebase.",2025-03-30 01:17:44+00:00,pr review for 365 i ve reviewed the changes and found the following issues 1 debug print statements in production code numerous debug print statements should be removed or conditionally compiled recommendation remove all debug prints or wrap them in directives 2 duplicate data scaling logic double regularization the input data scaling calculation is performed twice and regularization is applied twice to the same matrix recommendation calculate scaling values only once and remove one of the regularization loops 3 inconsistent brace style the pr introduces inconsistent brace styles recommendation maintain consistent brace style throughout the codebase,2025-03-30 01:17:44+00:00,Code Review & Collaboration,0.09626378,0.1061423,0.11173753,0.09825609,0.11863129,0.13698848,0.11915965,0.21282083,after,0,0.0
+Looks good.,2025-05-21 12:40:56+00:00,looks good,2025-05-21 12:40:56+00:00,UI / UX,0.12542298,0.14736143,0.11936187,0.10741242,0.14207433,0.13632272,0.10338367,0.118660524,after,0,0.0
+Left a comment re `since` which should be cross checked,2025-06-03 12:14:27+00:00,left a comment re which should be cross checked,2025-06-03 12:14:27+00:00,Code Review & Collaboration,0.11162571,0.08751621,0.15360896,0.103848524,0.124826,0.13285485,0.0957055,0.19001429,after,0,0.0
+Left a few comments that are worth checking into,2025-06-03 12:36:22+00:00,left a few comments that are worth checking into,2025-06-03 12:36:22+00:00,Code Review & Collaboration,0.11216989,0.104984924,0.13380502,0.11479141,0.107533276,0.15432498,0.08903246,0.183358,after,0,0.0
+Spotted an author tag in the last javadoc,2025-06-03 12:40:20+00:00,spotted an author tag in the last javadoc,2025-06-03 12:40:20+00:00,Documentation & Communication,0.09968014,0.09905915,0.14357062,0.099894196,0.14590566,0.18411103,0.1072143,0.12056486,after,0,0.0
+One small comment about StringInterner,2025-06-03 12:45:11+00:00,one small comment about stringinterner,2025-06-03 12:45:11+00:00,Bug Fixing & Debugging,0.11553215,0.108513154,0.1668364,0.10101281,0.15810356,0.14090677,0.099094994,0.11000011,after,0,0.0
+Commented added re wiki links,2025-06-03 12:59:09+00:00,commented added re wiki links,2025-06-03 12:59:09+00:00,Documentation & Communication,0.12467871,0.10981564,0.108919136,0.0826243,0.0945434,0.22306691,0.11750565,0.13884623,after,0,0.0
+PR matches the purpose and summary noted in the description and the requirements inside AGENTS.md are met. looks good!,2025-06-24 10:42:05+00:00,pr matches the purpose and summary noted in the description and the requirements inside md are met looks good,2025-06-24 10:42:05+00:00,Code Review & Collaboration,0.140162,0.09416141,0.08197036,0.11611811,0.09704998,0.16244477,0.11156267,0.19653074,after,0,0.0
+LGTM,2025-07-10 13:19:43+00:00,lgtm,2025-07-10 13:19:43+00:00,Refactoring & Cleanup,0.115179464,0.1394654,0.14623089,0.1065589,0.14700052,0.11577477,0.10233896,0.1274511,after,0,0.0
+@dependabot rebase,2025-07-14 10:31:18+00:00,dependabot rebase,2025-07-14 10:31:18+00:00,Deployment,0.11041565,0.08541537,0.14471243,0.14693087,0.13321874,0.10193301,0.16485876,0.112515196,after,0,0.0
+All good,2025-07-18 21:16:51+00:00,all good,2025-07-18 21:16:51+00:00,Documentation & Communication,0.107607104,0.1231356,0.1453367,0.09034528,0.123663396,0.14667504,0.12407951,0.13915737,after,0,0.0
+CI is failing,2025-08-11 14:49:20+00:00,ci is failing,2025-08-11 14:49:20+00:00,Testing & CI,0.086118504,0.07236178,0.18591656,0.23242694,0.0901865,0.09391536,0.1359916,0.10308282,after,0,0.0
+"CI is failing, docs need updating and other samples too.",2025-08-11 14:50:02+00:00,ci is failing docs need updating and other samples too,2025-08-11 14:50:02+00:00,Testing & CI,0.0639243,0.07275242,0.13137081,0.21593052,0.077202685,0.15492453,0.15935604,0.12453866,after,0,0.0
+"@copilot  you need to translate the 2 entries you added to strings.xml to all supported  lanugages in strings-pl, sings-de, strings-fr and so on",2025-08-23 16:56:57+00:00,copilot you need to translate the 2 entries you added to strings xml to all supported lanugages in strings pl sings de strings fr and so on,2025-08-23 16:56:57+00:00,Bug Fixing & Debugging,0.13229813,0.10959336,0.1607087,0.11541791,0.118831374,0.14061034,0.13164833,0.09089182,after,0,0.0
+"change ""password"".equals(methodField) to ""email"".equals(methodField)",2025-08-23 18:08:21+00:00,change password equals methodfield to email equals methodfield,2025-08-23 18:08:21+00:00,Bug Fixing & Debugging,0.1410542,0.11012798,0.15783106,0.11992455,0.11995977,0.11958694,0.10512647,0.12638906,after,0,0.0
+@copilot  translate the text in strings to all supported languages,2025-08-27 20:28:30+00:00,copilot translate the text in strings to all supported languages,2025-08-27 20:28:30+00:00,Refactoring & Cleanup,0.14247024,0.10760378,0.12016732,0.118327856,0.14763823,0.12597074,0.12227579,0.11554604,after,0,0.0
+"@copilot 
+
+The consent for AdMob was collected only after user registered, even anonymously.
+
+The GA4 data is collected all the time, even when user is not registered.
+
+Make sure that consent is collected BEFORE any data is passed to GA4",2025-09-03 09:16:06+00:00,copilot the consent for admob was collected only after user registered even anonymously the ga4 data is collected all the time even when user is not registered make sure that consent is collected before any data is passed to ga4,2025-09-03 09:16:06+00:00,Feature Development,0.14476644,0.104819454,0.12720318,0.13768631,0.09990012,0.1254525,0.12117999,0.13899198,after,0,0.0
+"@copilot 
+
+you added in thee two buttons:
+Authentication check - Prompts user to register/login if not authenticated
+Consent check - Ensures user has given consent for ad display
+Ad display - Shows interstitial ads based on frequency settings before launching the game
+
+but i did not asked to add Authentication check in these two buttons, therfore remove Authentication check from these wto buttons",2025-09-04 09:59:34+00:00,copilot you added in thee two buttons authentication check prompts user to register if not authenticated consent check ensures user has given consent for ad display ad display shows interstitial ads based on frequency settings before launching the game but i did not asked to add authentication check in these two buttons therfore remove authentication check from these wto buttons,2025-09-04 09:59:34+00:00,Bug Fixing & Debugging,0.13694182,0.14368662,0.15443835,0.12717657,0.09665713,0.11287073,0.10457843,0.12365033,after,0,0.0
+@copilot  - The messages in strings.xml should be translated to all supported languages,2025-09-04 19:57:42+00:00,copilot the messages in strings xml should be translated to all supported languages,2025-09-04 19:57:42+00:00,Documentation & Communication,0.14040509,0.1021011,0.13696651,0.113320515,0.12011368,0.1487962,0.12689051,0.11140637,after,0,0.0
+"@copilot i also asked to translate the string
+
+<string name=""app_launch_failed"">App launch failed. Please try again.</string>
+check strings for other languages if this string id ""app_launch_failed"" is present. 
+if not translate it to all supported languages",2025-09-04 20:25:29+00:00,copilot i also asked to translate the string string name app launch failed app launch failed please try again check strings for other languages if this string id app launch failed is present if not translate it to all supported languages,2025-09-04 20:25:29+00:00,Bug Fixing & Debugging,0.12973152,0.0967348,0.17296113,0.12681374,0.12005385,0.118335016,0.12232647,0.11304344,after,0,0.0
+"@copilot  check if the string
+
+<string name=""login_in_progress"">Login in progress, please wait...</string>
+
+is present in all supported languages. if not, then translate it and add it.",2025-09-04 21:17:54+00:00,copilot check if the string string name login in progress login in progress please wait is present in all supported languages if not then translate it and add it,2025-09-04 21:17:54+00:00,Bug Fixing & Debugging,0.13917461,0.094787225,0.14922568,0.13482371,0.12710243,0.1120169,0.11616845,0.12670098,after,0,0.0
+Tests are failing,2025-09-06 07:18:47+00:00,tests are failing,2025-09-06 07:18:47+00:00,Testing & CI,0.059089795,0.067371204,0.19508973,0.3354563,0.083217025,0.087083384,0.08158373,0.09110882,after,0,0.0
+"@copilot  add relase notes info for other 11 languages that we support. full list of languages
+
+        LANGUAGE_NAME_RES_IDS.put(""am"", R.string.language_amharic);
+        LANGUAGE_NAME_RES_IDS.put(""ar"", R.string.language_arabic);
+        LANGUAGE_NAME_RES_IDS.put(""bn"", R.string.language_bengali);
+        LANGUAGE_NAME_RES_IDS.put(""my"", R.string.language_burmese);
+        LANGUAGE_NAME_RES_IDS.put(""en"", R.string.language_english);
+        LANGUAGE_NAME_RES_IDS.put(""fr"", R.string.language_french);
+        LANGUAGE_NAME_RES_IDS.put(""de"", R.string.language_german);
+        LANGUAGE_NAME_RES_IDS.put(""hi"", R.string.language_hindi);
+        LANGUAGE_NAME_RES_IDS.put(""km"", R.string.language_khmer);
+        LANGUAGE_NAME_RES_IDS.put(""lo"", R.string.language_lao);
+        LANGUAGE_NAME_RES_IDS.put(""mg"", R.string.language_malagasy);
+        LANGUAGE_NAME_RES_IDS.put(""mn"", R.string.language_mongolian);
+        LANGUAGE_NAME_RES_IDS.put(""ne"", R.string.language_nepali);
+        LANGUAGE_NAME_RES_IDS.put(""fa"", R.string.language_persian);
+        LANGUAGE_NAME_RES_IDS.put(""pl"", R.string.language_polish);
+        LANGUAGE_NAME_RES_IDS.put(""si"", R.string.language_sinhala);
+        LANGUAGE_NAME_RES_IDS.put(""so"", R.string.language_somali);
+        LANGUAGE_NAME_RES_IDS.put(""es"", R.string.language_spanish);
+        LANGUAGE_NAME_RES_IDS.put(""sw"", R.string.language_swahili);
+        LANGUAGE_NAME_RES_IDS.put(""ur"", R.string.language_urdu);",2025-09-15 11:48:40+00:00,copilot add relase notes info for other 11 languages that we support full list of languages language name res ids put am r string language amharic language name res ids put ar r string language arabic language name res ids put bn r string language bengali language name res ids put my r string language burmese language name res ids put en r string language english language name res ids put fr r string language french language name res ids put de r string language german language name res ids put hi r string language hindi language name res ids put km r string language khmer language name res ids put lo r string language lao language name res ids put mg r string language malagasy language name res ids put mn r string language mongolian language name res ids put ne r string language nepali language name res ids put fa r string language persian language name res ids put pl r string language polish language name res ids put si r string language sinhala language name res ids put so r string language somali language name res ids put es r string language spanish language name res ids put sw r string language swahili language name res ids put ur r string language urdu,2025-09-15 11:48:40+00:00,Feature Development,0.15752442,0.10135195,0.12409073,0.10391544,0.12693447,0.15389174,0.1108699,0.12142137,after,0,0.0
+"@copilot  add safeuard, that such user cannot be deleted if:
+
+1. there are any invitations, which were sent from {id} user
+2. there are any \matches where player0==user {id} or player1==user {id}
+3. there are any \tournaments\matches where player0==user {id} or player1==user {id}
+4. there are any \tournaments\participants where user {id} is present
+if any of above happends rerport this to consol that user cannot be removed because of the presnce in certain collection",2025-09-17 15:35:33+00:00,copilot add safeuard that such user cannot be deleted if 1 there are any invitations which were sent from id user 2 there are any matches where player0 user id or player1 user id 3 there are any tournaments matches where player0 user id or player1 user id 4 there are any tournaments participants where user id is present if any of above happends rerport this to consol that user cannot be removed because of the presnce in certain collection,2025-09-17 15:35:33+00:00,Feature Development,0.17968433,0.09088343,0.15224311,0.12108108,0.13747193,0.10367319,0.092606336,0.12235664,after,0,0.0
+"@copilot revist the changes that were implemented by the latest pull reguest ""Fix SafeStringFormatter to handle UnknownFormatConversionException crashes #498"" and then revisit the proposed changes again. maybe they are already addressed",2025-09-19 10:35:19+00:00,copilot revist the changes that were implemented by the latest pull reguest fix safestringformatter to handle unknownformatconversionexception crashes 498 and then revisit the proposed changes again maybe they are already addressed,2025-09-19 10:35:19+00:00,Bug Fixing & Debugging,0.08188498,0.09106028,0.2029816,0.14429449,0.10693291,0.12256235,0.13096868,0.11931475,after,0,0.0
+"@copilot The change should be not made in all :
+
+mobile/app/src/main/res/values-am/strings.xml
+mobile/app/src/main/res/values-mn/strings.xml
+mobile/app/src/main/res/values-de/strings.xml
+mobile/app/src/main/res/values-si/strings.xml
+mobile/app/src/main/res/values-my/strings.xml
+mobile/app/src/main/res/values-ur/strings.xml
+mobile/app/src/main/res/values-bn/strings.xml
+mobile/app/src/main/res/values-fr/strings.xml
+mobile/app/src/main/res/values-es/strings.xml
+mobile/app/src/main/res/values-lo/strings.xml
+mobile/app/src/main/res/values-sw/strings.xml
+mobile/app/src/main/res/values-hi/strings.xml
+mobile/app/src/main/res/values-so/strings.xml
+mobile/app/src/main/res/values-pl/strings.xml
+mobile/app/src/main/res/values/strings.xml
+mobile/app/src/main/res/values-km/strings.xml
+mobile/app/src/main/res/values-ar/strings.xml
+mobile/app/src/main/res/values-fa/strings.xml
+mobile/app/src/main/res/values-ne/strings.xml
+mobile/app/src/main/res/values-mg/strings.xml
+
+
+but translations of <en> block to all supported languages should be added in this one file  GOOGLE_PLAY_RELEASE_NOTES_v15.4.txt",2025-09-19 11:44:28+00:00,copilot the change should be not made in all mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile but translations of en block to all supported languages should be added in this one file google play release notes v15 4 txt,2025-09-19 11:44:28+00:00,Documentation & Communication,0.10211474,0.13002767,0.12820208,0.09153633,0.11828866,0.15855466,0.14034005,0.13093583,after,0,0.0
+"@copilot  instead of using French in missing translations, use ENglish translations, maintain <!-- TODO: Translate to [lang]--> so i know hat i have to translate in the future",2025-09-19 15:40:22+00:00,copilot instead of using french in missing translations use english translations maintain todo translate to lang so i know hat i have to translate in the future,2025-09-19 15:40:22+00:00,Documentation & Communication,0.140267,0.103820734,0.11901155,0.112103626,0.13188301,0.153098,0.118869066,0.12094703,after,0,0.0
+"@copilot 
+DO not remove comments from strings
+
+DO not translate the strings which are marked not translateable",2025-09-20 11:01:52+00:00,copilot do not remove comments from strings do not translate the strings which are marked not translateable,2025-09-20 11:01:52+00:00,Refactoring & Cleanup,0.09781527,0.09379578,0.15201324,0.106145844,0.17012264,0.13810645,0.109622754,0.13237801,after,0,0.0
+@copilot implement the remmended code chages to enable sending inbvites for users who are active i.e. status shows offline but last heartbeat was see within last 20 minutes,2025-09-22 10:36:34+00:00,copilot implement the remmended code chages to enable sending inbvites for users who are active i e status shows offline but last heartbeat was see within last 20 minutes,2025-09-22 10:36:34+00:00,Feature Development,0.19075856,0.09768597,0.11102122,0.12651253,0.09679656,0.11547964,0.11933115,0.14241439,after,0,0.0
+"@copilot  all strings must be implemented using strings iand translated to all languages
+
+mobile/app/src/main/res/values-hi/strings.xml
+mobile/app/src/main/res/values-bn/strings.xml
+mobile/app/src/main/res/values-sw/strings.xml
+mobile/app/src/main/res/values-km/strings.xml
+mobile/app/src/main/res/values-de/strings.xml
+mobile/app/src/main/res/values-fr/strings.xml
+mobile/app/src/main/res/values-so/strings.xml
+mobile/app/src/main/res/values-am/strings.xml
+mobile/app/src/main/res/values-my/strings.xml
+mobile/app/src/main/res/values-es/strings.xml
+mobile/app/src/main/res/values-mn/strings.xml
+mobile/app/src/main/res/values/strings.xml
+mobile/app/src/main/res/values-fa/strings.xml
+mobile/app/src/main/res/values-ne/strings.xml
+mobile/app/src/main/res/values-si/strings.xml
+mobile/app/src/main/res/values-ar/strings.xml
+mobile/app/src/main/res/values-pl/strings.xml
+mobile/app/src/main/res/values-ur/strings.xml
+mobile/app/src/main/res/values-lo/strings.xml
+mobile/app/src/main/res/values-mg/strings.xml",2025-10-02 12:35:54+00:00,copilot all strings must be implemented using strings iand translated to all languages mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile,2025-10-02 12:35:54+00:00,Feature Development,0.17111604,0.08407966,0.15249181,0.11310604,0.15683153,0.12076391,0.10649388,0.09511718,after,0,0.0
+"@copilot 
+
+i asked to that below
+<Button
+android:id=""@+id/addFriendBtn"" ...>
+
+i want to you to add drop down with two options:
+Sort alphabetically
+Sort by last seen
+
+By default is should be showing ""Sort by last seen"" and list of friends should be sorted descending by the last heartbeat (from the latest to the earliest)
+
+when user picks Sort alphabetically, the list should be sorted alphabetically by nickanem ascending",2025-10-02 20:25:16+00:00,copilot i asked to that below button android id id i want to you to add drop down with two options sort alphabetically sort by last seen by default is should be showing sort by last seen and list of friends should be sorted descending by the last heartbeat from the latest to the earliest when user picks sort alphabetically the list should be sorted alphabetically by nickanem ascending,2025-10-02 20:25:16+00:00,Feature Development,0.19539654,0.14979844,0.11346487,0.086894125,0.1266451,0.118734956,0.095648095,0.11341792,after,0,0.0
+"# Review Notes for PR 937
+
+## Findings
+- **Major** — `src/Dock.Avalonia/Internal/DockHelpers.cs:138`: caught exceptions now route through `DockLogger.Log`, which exits early when `DockSettings.EnableDiagnosticsLogging` is false; this regresses the previous always-on diagnostics and hides hit-test failures.
+- **Major** — `src/Dock.Settings/DockLogger.cs:29`: `[Conditional(""DEBUG"")]` on `LogDebug` strips the calls from release builds, so the new diagnostics toggles cannot emit logs when investigating issues outside debug configurations.
+- **Medium** — `src/Dock.Avalonia/Internal/DockHelpers.cs:48`: `LogDropAreas` walks the entire visual tree even when diagnostics logging is disabled; guard the method early to avoid the extra per-move overhead.
+- **Minor** — `src/Dock.Model/FactoryBase.cs:207`: duplicated `CopyDockGroup(dockable, split);` invocation (with odd indentation) causes the copy to run twice; remove the extra call.",2025-10-10 13:01:08+00:00,review notes for pr 937 findings major caught exceptions now route through which exits early when is false this regresses the previous always on diagnostics and hides hit test failures major on strips the calls from release builds so the new diagnostics toggles cannot emit logs when investigating issues outside debug configurations medium walks the entire visual tree even when diagnostics logging is disabled guard the method early to avoid the extra per move overhead minor duplicated invocation with odd indentation causes the copy to run twice remove the extra call,2025-10-10 13:01:08+00:00,Testing & CI,0.09380838,0.073574424,0.12172263,0.17102467,0.12463512,0.13031161,0.12093702,0.16398613,after,0,0.0
+"@copilot , you added <string name=""invite_received_format"">Received %1$s</string>
+
+it must be added to all strings and translated to relevant languages",2025-10-12 19:48:04+00:00,copilot you added string name invite received format received 1 s it must be added to all strings and translated to relevant languages,2025-10-12 19:48:04+00:00,Bug Fixing & Debugging,0.1445404,0.089748524,0.17327467,0.1064682,0.11898772,0.13711245,0.10289098,0.12697703,after,0,0.0
+"@copilot , translation must be made in all languages in 
+mobile/app/src/main/res/values-km/strings.xml
+mobile/app/src/main/res/values/strings.xml
+mobile/app/src/main/res/values-my/strings.xml
+mobile/app/src/main/res/values-pl/strings.xml
+mobile/app/src/main/res/values-am/strings.xml
+mobile/app/src/main/res/values-de/strings.xml
+mobile/app/src/main/res/values-es/strings.xml
+mobile/app/src/main/res/values-so/strings.xml
+mobile/app/src/main/res/values-fa/strings.xml
+mobile/app/src/main/res/values-mg/strings.xml
+mobile/app/src/main/res/values-hi/strings.xml
+mobile/app/src/main/res/values-si/strings.xml
+mobile/app/src/main/res/values-bn/strings.xml
+mobile/app/src/main/res/values-ur/strings.xml
+mobile/app/src/main/res/values-sw/strings.xml
+mobile/app/src/main/res/values-ar/strings.xml
+mobile/app/src/main/res/values-fr/strings.xml
+mobile/app/src/main/res/values-lo/strings.xml
+mobile/app/src/main/res/values-ne/strings.xml
+mobile/app/src/main/res/values-mn/strings.xml",2025-10-13 12:28:08+00:00,copilot translation must be made in all languages in mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile mobile,2025-10-13 12:28:08+00:00,Feature Development,0.146592,0.09988924,0.1356976,0.1077701,0.13353865,0.13508795,0.11977393,0.12165051,after,0,0.0
+"@copilot , the former codes review brought following observations:
+
+💡 Codex Review
+https://github.com/piotr-gorczynski/Soccer/blob/da43e5322e144517a8c53e99449a4489092de691/mobile/app/src/main/java/piotr_gorczynski/soccer2/InvitationsActivity.java#L299-L309
+P1 Badge Preserve loaded pages when snapshot listener updates
+
+The real‑time listener rebuilds the pending invitations list with pendingAdapter.setData(...) every time Firestore pushes an update. After the user taps Load more, any new invite or status change will trigger this callback and replace the adapter’s contents with only the first page (10 items), discarding the pages that were manually appended. The same pattern is used for past invites. This effectively breaks pagination as soon as the data changes while the screen is open.
+
+https://github.com/piotr-gorczynski/Soccer/blob/da43e5322e144517a8c53e99449a4489092de691/mobile/app/src/main/java/piotr_gorczynski/soccer2/InvitationsActivity.java#L312-L315
+P1 Badge Pagination cursor derived after filtering out expired invites
+
+When calculating lastPendingDoc and hasMorePendingInvites you rely on pendingInvites, which has been filtered to remove expired entries and then sorted by createdAt. The Firestore query is ordered by expireAt, so the last element of this filtered/sorted list may not correspond to the last document returned by the query, and its size may be < page size even when more unexpired invites exist after the first page. In scenarios where the first 10 results contain expired items, the load‑more button will never appear and startAfter(lastPendingDoc) can skip or repeat invitations. The pagination cursor and has‑more flag should be derived from the raw query snapshot or by filtering server‑side.",2025-10-22 18:24:20+00:00,copilot the former codes review brought following observations codex review p1 badge preserve loaded pages when snapshot listener updates the real time listener rebuilds the pending invitations list with pendingadapter setdata every time firestore pushes an update after the user taps load more any new invite or status change will trigger this callback and replace the adapter s contents with only the first page 10 items discarding the pages that were manually appended the same pattern is used for past invites this effectively breaks pagination as soon as the data changes while the screen is open p1 badge pagination cursor derived after filtering out expired invites when calculating lastpendingdoc and hasmorependinginvites you rely on pendinginvites which has been filtered to remove expired entries and then sorted by createdat the firestore query is ordered by expireat so the last element of this filtered list may not correspond to the last document returned by the query and its size may be page size even when more unexpired invites exist after the first page in scenarios where the first 10 results contain expired items the load more button will never appear and startafter lastpendingdoc can skip or repeat invitations the pagination cursor and has more flag should be derived from the raw query snapshot or by filtering server side,2025-10-22 18:24:20+00:00,Code Review & Collaboration,0.13778654,0.12720168,0.101375274,0.107321955,0.11053805,0.14639172,0.10964807,0.15973671,after,1,0.0005717552887364208
+"@copilot  The spritesheet_run contains 22 columns the same as frames, so correct the describtions",2025-11-01 17:39:19+00:00,copilot the spritesheet run contains 22 columns the same as frames so correct the describtions,2025-11-01 17:39:19+00:00,UI / UX,0.09168854,0.1521641,0.13516465,0.11207088,0.13624038,0.12672007,0.12912814,0.116823204,after,0,0.0
+"@copilot  all strings has the smae value Failed to load terms and conditions. 
+This is wrong.
+They must be translated to specific language for given strings",2025-11-02 21:30:20+00:00,copilot all strings has the smae value failed to load terms and conditions this is wrong they must be translated to specific language for given strings,2025-11-02 21:30:20+00:00,Bug Fixing & Debugging,0.115438506,0.08602928,0.18058784,0.1422451,0.110478595,0.120450325,0.14183839,0.102931924,after,0,0.0
+"@copilot  instead of <string name=""pref_title_show_hand_tutorial"">Show hand for possible moves</string> shorten it to <string name=""pref_title_show_hand_tutorial"">Show possible moves</string>
+
+update it in all languages",2025-11-05 11:56:51+00:00,copilot instead of string name pref title show hand tutorial show hand for possible moves shorten it to string name pref title show hand tutorial show possible moves update it in all languages,2025-11-05 11:56:51+00:00,Bug Fixing & Debugging,0.12822308,0.13425674,0.16000667,0.09233157,0.14527687,0.15276183,0.08811103,0.09903218,after,0,0.0
+"@copilot 
+
+CHange the  <string name=""pref_title_show_hand_tutorial"">Pokaż rękę dla możliwych ruchów</string> to  <string name=""pref_title_show_hand_tutorial"">Pokaż rękę dla możliwych ruchów</string>",2025-11-05 12:06:55+00:00,copilot change the string name pref title show hand tutorial poka r k dla mo liwych ruch w to string name pref title show hand tutorial poka r k dla mo liwych ruch w,2025-11-05 12:06:55+00:00,Documentation & Communication,0.12672855,0.105304934,0.15395717,0.10804278,0.1500475,0.1543825,0.102610335,0.09892623,after,0,0.0
+"@copilot , the gemini advised : You need to grant an IAM role containing the aiplatform.endpoints.predict permission to your Cloud Functions service account. The recommended predefined role for this purpose is the Vertex AI User role.
+
+Look how we did it in other scripts:
+
+gcp\cloud-build\grant_apikeys_admin_to_cloudbuild.yaml
+gcp\cloud-build\grant_apikeys_permissions_to_firebase_admin.yaml
+gcp\cloud-build\grant_auth_admin_to_appengine_sa.yaml
+gcp\cloud-build\grant_firestore_permission.yaml
+gcp\cloud-build\grant_identity_platform_admin_to_cloudbuild.yaml
+gcp\cloud-build\grant_servicemanagement_admin_to_cloudbuild.yaml
+gcp\cloud-build\grant_token_creator_to_cloudbuild.yaml
+
+Th gemini advised how to do it in console, but i ant to do it via yaml script
+
+Step-by-Step Instructions
+Identify the Service Account: The service account for your Firebase Functions is typically in one of these two formats:
+
+PROJECT_ID@appspot.gserviceaccount.com (The default App Engine/Cloud Functions service account)
+service-PROJECT_NUMBER@gcf-admin-robot.iam.gserviceaccount.com (Less common for new projects, but possible)
+The most common one for default Cloud Functions is PROJECT_ID@appspot.gserviceaccount.com. Replace PROJECT_ID with your actual project ID (soccer-dev-1744877837).
+
+Go to the Google Cloud IAM Page:
+
+Open the Google Cloud Console.
+Ensure your project (soccer-dev-1744877837) is selected.
+Navigate to IAM & Admin -> IAM (or search for ""IAM"" in the console).
+Find and Edit the Service Account:
+
+Look for the service account identified in Step 1 (e.g., soccer-dev-1744877837@appspot.gserviceaccount.com) in the list of principals.
+Click the pencil icon (Edit principal) next to that service account.
+Add the Required Role:
+
+Click + Add another role.
+In the ""Select a role"" dropdown, search for ""Vertex AI User"" (roles/aiplatform.user). This role contains the necessary aiplatform.endpoints.predict permission12.
+Select the role and click Save.",2025-11-07 19:02:54+00:00,copilot the gemini advised you need to grant an iam role containing the aiplatform endpoints predict permission to your cloud functions service account the recommended predefined role for this purpose is the vertex user role look how we did it in other scripts gcp cloud build grant apikeys admin to cloudbuild yaml gcp cloud build grant apikeys permissions to firebase admin yaml gcp cloud build grant auth admin to appengine sa yaml gcp cloud build grant firestore permission yaml gcp cloud build grant identity platform admin to cloudbuild yaml gcp cloud build grant servicemanagement admin to cloudbuild yaml gcp cloud build grant token creator to cloudbuild yaml th gemini advised how to do it in console but i ant to do it via yaml script step by step instructions identify the service account the service account for your firebase functions is typically in one of these two formats project id appspot gserviceaccount com the default app engine functions service account service project number gcf admin robot iam gserviceaccount com less common for new projects but possible the most common one for default cloud functions is project id appspot gserviceaccount com replace project id with your actual project id soccer dev go to the google cloud iam page open the google cloud console ensure your project soccer dev is selected navigate to iam admin iam or search for iam in the console find and edit the service account look for the service account identified in step 1 e g soccer dev appspot gserviceaccount com in the list of principals click the pencil icon edit principal next to that service account add the required role click add another role in the select a role dropdown search for vertex user roles this role contains the necessary aiplatform endpoints predict permission12 select the role and click save,2025-11-07 19:02:54+00:00,Feature Development,0.17178115,0.08854544,0.10286819,0.13635981,0.0899902,0.122221924,0.16111076,0.1271225,after,0,0.0
+"@copilot  i do not want text based filters, because they will not catch all reactivity from humans. i need only to rely on vertex.",2025-11-08 21:49:58+00:00,copilot i do not want text based filters because they will not catch all reactivity from humans i need only to rely on vertex,2025-11-08 21:49:58+00:00,Feature Development,0.19479157,0.11000301,0.10126892,0.10995416,0.12953737,0.11078172,0.110917956,0.13274527,after,0,0.0
+"@copilot do not change the logic of lastSignInTime .
+
+The log for this user shows following:
+
+{
+  ""textPayload"": ""⏭️ Skipping user with active involvement: undefined (UID: kvwXswlx2UVBkQmYmpx5hthL1Ck2, inactive for 67 days)"",
+  ""insertId"": ""6913927c000d0f441fae08c3"",
+  ""resource"": {
+    ""type"": ""cloud_function"",
+    ""labels"": {
+      ""function_name"": ""cleanupInactiveUsers"",
+      ""project_id"": ""soccer-prod-1754048346"",
+      ""region"": ""us-central1""
+    }
+  },
+  ""timestamp"": ""2025-11-11T19:46:04.855876Z"",
+  ""labels"": {
+    ""instance_id"": ""0014778296f69ebc27ce01b35c61c26f594fe89421c2a117aad212de7d9413542c077b70a9d4bba8391010147d63907cdef546bfec409a3e94e9914824851257bcb7d1bc2168614e20ac32f9b4b70f"",
+    ""execution_id"": ""lg0ebmuu9qbj"",
+    ""runtime_version"": ""nodejs18_20251102_18_20_8_RC00""
+  },
+  ""logName"": ""projects/soccer-prod-1754048346/logs/cloudfunctions.googleapis.com%2Fcloud-functions"",
+  ""trace"": ""projects/soccer-prod-1754048346/traces/b7e23c3dd000af5670ec19bc01317009"",
+  ""receiveTimestamp"": ""2025-11-11T19:46:05.188224474Z""
+}
+
+but as i see the logic of cleanupInactiveUsers, it should show, whether he has invites or tournaments or matches. but the log shows nothing and despite this fact the log says it is skipping this user. so verify the logic why it is skipping him or add additional debug info.",2025-11-12 07:44:37+00:00,copilot do not change the logic of lastsignintime the log for this user shows following textpayload skipping user with active involvement undefined uid kvwxswlx2uvbkqmympx5hthl1ck2 inactive for 67 days insertid resource type cloud function labels function name cleanupinactiveusers project id soccer prod region us central1 timestamp 2025 11 11t19 46 04 855876z labels instance id 0014778296f69ebc27ce01b35c61c26f594fe89421c2a117aad212de7d9413542c077b70a9d4bba8391010147d63907cdef546bfec409a3e94e9914824851257bcb7d1bc2168614e20ac32f9b4b70f execution id lg0ebmuu9qbj runtime version nodejs18 20251102 18 20 8 rc00 logname projects trace projects receivetimestamp 2025 11 11t19 46 05 188224474z but as i see the logic of cleanupinactiveusers it should show whether he has invites or tournaments or matches but the log shows nothing and despite this fact the log says it is skipping this user so verify the logic why it is skipping him or add additional debug info,2025-11-12 07:44:37+00:00,Bug Fixing & Debugging,0.12221866,0.0803155,0.16955422,0.13726741,0.12709688,0.112726524,0.10578736,0.14503343,after,0,0.0
+"@copilot  i found one more piece of log, which migh help you to find root cause why kvwXswlx2UVBkQmYmpx5hthL1Ck2 could not be deleted. CHeck if this help  s you and modify scripts accordingly.
+
+{
+  ""textPayload"": ""   🔍 Checking if user undefined (kvwXswlx2UVBkQmYmpx5hthL1Ck2) can be safely deleted..."",
+  ""insertId"": ""6913927c000c330891d0b0bb"",
+  ""resource"": {
+    ""type"": ""cloud_function"",
+    ""labels"": {
+      ""region"": ""us-central1"",
+      ""project_id"": ""soccer-prod-1754048346"",
+      ""function_name"": ""cleanupInactiveUsers""
+    }
+  },
+  ""timestamp"": ""2025-11-11T19:46:04.799496Z"",
+  ""labels"": {
+    ""execution_id"": ""lg0ebmuu9qbj"",
+    ""runtime_version"": ""nodejs18_20251102_18_20_8_RC00"",
+    ""instance_id"": ""0014778296f69ebc27ce01b35c61c26f594fe89421c2a117aad212de7d9413542c077b70a9d4bba8391010147d63907cdef546bfec409a3e94e9914824851257bcb7d1bc2168614e20ac32f9b4b70f""
+  },
+  ""logName"": ""projects/soccer-prod-1754048346/logs/cloudfunctions.googleapis.com%2Fcloud-functions"",
+  ""trace"": ""projects/soccer-prod-1754048346/traces/b7e23c3dd000af5670ec19bc01317009"",
+  ""receiveTimestamp"": ""2025-11-11T19:46:04.854644249Z""
+}
+
+{
+  ""textPayload"": ""   ❌ Error checking user involvement for undefined (kvwXswlx2UVBkQmYmpx5hthL1Ck2): When querying a collection group and ordering by FieldPath.documentId(), the corresponding value must result in a valid document path, but 'kvwXswlx2UVBkQmYmpx5hthL1Ck2' is not because it contains an odd number of segments."",
+  ""insertId"": ""6913927c000d0ef58c941c1a"",
+  ""resource"": {
+    ""type"": ""cloud_function"",
+    ""labels"": {
+      ""project_id"": ""soccer-prod-1754048346"",
+      ""region"": ""us-central1"",
+      ""function_name"": ""cleanupInactiveUsers""
+    }
+  },
+  ""timestamp"": ""2025-11-11T19:46:04.855797Z"",
+  ""labels"": {
+    ""instance_id"": ""0014778296f69ebc27ce01b35c61c26f594fe89421c2a117aad212de7d9413542c077b70a9d4bba8391010147d63907cdef546bfec409a3e94e9914824851257bcb7d1bc2168614e20ac32f9b4b70f"",
+    ""runtime_version"": ""nodejs18_20251102_18_20_8_RC00"",
+    ""execution_id"": ""lg0ebmuu9qbj""
+  },
+  ""logName"": ""projects/soccer-prod-1754048346/logs/cloudfunctions.googleapis.com%2Fcloud-functions"",
+  ""trace"": ""projects/soccer-prod-1754048346/traces/b7e23c3dd000af5670ec19bc01317009"",
+  ""receiveTimestamp"": ""2025-11-11T19:46:05.188224474Z""
+}",2025-11-12 09:44:07+00:00,copilot i found one more piece of log which migh help you to find root cause why kvwxswlx2uvbkqmympx5hthl1ck2 could not be deleted check if this help s you and modify scripts accordingly textpayload checking if user undefined kvwxswlx2uvbkqmympx5hthl1ck2 can be safely deleted insertid resource type cloud function labels region us central1 project id soccer prod function name cleanupinactiveusers timestamp 2025 11 11t19 46 04 799496z labels execution id lg0ebmuu9qbj runtime version nodejs18 20251102 18 20 8 rc00 instance id 0014778296f69ebc27ce01b35c61c26f594fe89421c2a117aad212de7d9413542c077b70a9d4bba8391010147d63907cdef546bfec409a3e94e9914824851257bcb7d1bc2168614e20ac32f9b4b70f logname projects trace projects receivetimestamp 2025 11 11t19 46 04 854644249z textpayload error checking user involvement for undefined kvwxswlx2uvbkqmympx5hthl1ck2 when querying a collection group and ordering by fieldpath documentid the corresponding value must result in a valid document path but kvwxswlx2uvbkqmympx5hthl1ck2 is not because it contains an odd number of segments insertid resource type cloud function labels project id soccer prod region us central1 function name cleanupinactiveusers timestamp 2025 11 11t19 46 04 855797z labels instance id 0014778296f69ebc27ce01b35c61c26f594fe89421c2a117aad212de7d9413542c077b70a9d4bba8391010147d63907cdef546bfec409a3e94e9914824851257bcb7d1bc2168614e20ac32f9b4b70f runtime version nodejs18 20251102 18 20 8 rc00 execution id lg0ebmuu9qbj logname projects trace projects receivetimestamp 2025 11 11t19 46 05 188224474z,2025-11-12 09:44:07+00:00,Bug Fixing & Debugging,0.0854033,0.081393085,0.1933544,0.13287151,0.14337794,0.12550238,0.124649644,0.113447726,after,2,0.0008631851532153647
+"@copilot  I want the logic to work like this:
+
+if (method === ""anonymous"") {
+  // Try to delete user completely
+  if await deleteUserCompletely(auth, db, rtdb, user.uid, user.email)  not possible then
+  // Force logoff
+  await forceUserLogoff(rtdb, user.uid, user.email);
+  
+} else {
+  // Force logoff
+  await forceUserLogoff(rtdb, user.uid, user.email);
+}",2025-11-18 19:06:24+00:00,copilot i want the logic to work like this if method anonymous try to delete user completely if await deleteusercompletely auth db rtdb user uid user email not possible then force logoff await forceuserlogoff rtdb user uid user email else force logoff await forceuserlogoff rtdb user uid user email,2025-11-18 19:06:24+00:00,Feature Development,0.1594801,0.08428488,0.1467603,0.14680982,0.13611339,0.09368994,0.09521625,0.13764532,after,0,0.0
+"@copilot 
+
+The ones that // Only orphaned if BOTH from and to users don't exist
+return !fromExists && !toExists;
+should be deleted
+
+The ones that // Orphaned if EITHER from or to user doesn't exist
+return !fromExists || !toExists;
+should be reported!",2025-11-19 14:34:02+00:00,copilot the ones that only orphaned if both from and to users don t exist return fromexists toexists should be deleted the ones that orphaned if either from or to user doesn t exist return fromexists toexists should be reported,2025-11-19 14:34:02+00:00,Bug Fixing & Debugging,0.13303784,0.08263806,0.16283968,0.13913582,0.14117783,0.106611855,0.09871979,0.13583918,after,0,0.0
+"@copilot 
+check the latest version of field.java file and then redesign your modifications to cpmly with the latest version of field.java",2025-11-20 20:40:28+00:00,copilot check the latest version of field java file and then redesign your modifications to cpmly with the latest version of field java,2025-11-20 20:40:28+00:00,Deployment,0.0953755,0.103744194,0.15137242,0.12661818,0.10757951,0.12972385,0.16947505,0.116111346,after,0,0.0
+"@copilot Aboslutely do not initialize like thsi :
+
+        // Track sprite bounds for logging - initialize to ball center (sprites kick from ball position)
+        float redSpriteLeft = ballCenterX;
+        float redSpriteTop = ballCenterY;
+        float redSpriteRight = ballCenterX;
+        float redSpriteBottom = ballCenterY;
+        float blueSpriteLeft = ballCenterX;
+        float blueSpriteTop = ballCenterY;
+        float blueSpriteRight = ballCenterX;
+        float blueSpriteBottom = ballCenterY;
+        
+        the same for red one
+        
+        
+        i do demand that you usae exactly values which you use in 
+        RectF blueDst = new RectF(blueLeft, blueTop, blueRight, blueBottom);
+        and 
+        RectF redDst = new RectF(redLeft, redTop, redRight, redBottom);
+        
+        for the ball you can just use for logging ballCenterX and ballCenterY",2025-11-22 19:11:24+00:00,copilot aboslutely do not initialize like thsi track sprite bounds for logging initialize to ball center sprites kick from ball position float redspriteleft ballcenterx float redspritetop ballcentery float redspriteright ballcenterx float redspritebottom ballcentery float bluespriteleft ballcenterx float bluespritetop ballcentery float bluespriteright ballcenterx float bluespritebottom ballcentery the same for red one i do demand that you usae exactly values which you use in rectf bluedst new rectf blueleft bluetop blueright bluebottom and rectf reddst new rectf redleft redtop redright redbottom for the ball you can just use for logging ballcenterx and ballcentery,2025-11-22 19:11:24+00:00,Bug Fixing & Debugging,0.13805875,0.11206672,0.1578795,0.12415435,0.124194376,0.11466185,0.11034207,0.1186424,after,0,0.0
+"@copilot 
+
+Do not rewrtie sprite RectF(spriteLeft, spriteTop, spriteRight, spriteBottom) to new variables.
+
+
+
+Use scatly the same variavles as in RectF(spriteLeft, spriteTop, spriteRight, spriteBottom).
+Add log/d only when canvas.drawbitmap is executed, so you do not have to use aditional variables .",2025-11-22 19:29:27+00:00,copilot do not rewrtie sprite rectf spriteleft spritetop spriteright spritebottom to new variables use scatly the same variavles as in rectf spriteleft spritetop spriteright spritebottom add log only when canvas drawbitmap is executed so you do not have to use aditional variables,2025-11-22 19:29:27+00:00,Bug Fixing & Debugging,0.11745865,0.115048446,0.16647905,0.11776125,0.13453287,0.10312996,0.12543184,0.12015792,after,0,0.0

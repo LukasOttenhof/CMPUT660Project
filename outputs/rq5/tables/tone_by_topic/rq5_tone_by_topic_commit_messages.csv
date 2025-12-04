@@ -1,0 +1,49 @@
+topic_label,group,sentiment_cat,count,share
+Bug Fixing & Debugging,after,negative,457,0.2515134837644469
+Bug Fixing & Debugging,after,neutral,1070,0.5888827738029719
+Bug Fixing & Debugging,after,positive,290,0.15960374243258119
+Bug Fixing & Debugging,before,negative,307,0.15213082259663033
+Bug Fixing & Debugging,before,neutral,1305,0.6466798810703667
+Bug Fixing & Debugging,before,positive,406,0.20118929633300298
+Code Review & Collaboration,after,negative,361,0.08621925005970862
+Code Review & Collaboration,after,neutral,3050,0.7284451874850728
+Code Review & Collaboration,after,positive,776,0.18533556245521854
+Code Review & Collaboration,before,negative,71,0.0693359375
+Code Review & Collaboration,before,neutral,827,0.8076171875
+Code Review & Collaboration,before,positive,126,0.123046875
+Deployment,after,negative,200,0.07112375533428165
+Deployment,after,neutral,2167,0.7706258890469416
+Deployment,after,positive,445,0.15825035561877668
+Deployment,before,negative,45,0.012972038051311616
+Deployment,before,neutral,3069,0.8846929950994523
+Deployment,before,positive,355,0.1023349668492361
+Documentation & Communication,after,negative,121,0.04350952894642215
+Documentation & Communication,after,neutral,2067,0.7432578209277239
+Documentation & Communication,after,positive,593,0.21323265012585402
+Documentation & Communication,before,negative,42,0.027433050293925537
+Documentation & Communication,before,neutral,1311,0.8563030698889614
+Documentation & Communication,before,positive,178,0.116263879817113
+Feature Development,after,negative,156,0.06230031948881789
+Feature Development,after,neutral,1753,0.7000798722044729
+Feature Development,after,positive,595,0.23761980830670926
+Feature Development,before,negative,73,0.05112044817927171
+Feature Development,before,neutral,903,0.6323529411764706
+Feature Development,before,positive,452,0.3165266106442577
+Refactoring & Cleanup,after,negative,123,0.0777496839443742
+Refactoring & Cleanup,after,neutral,1099,0.6946902654867256
+Refactoring & Cleanup,after,positive,360,0.22756005056890014
+Refactoring & Cleanup,before,negative,92,0.05057724024189115
+Refactoring & Cleanup,before,neutral,1407,0.7735019241341397
+Refactoring & Cleanup,before,positive,320,0.1759208356239692
+Testing & CI,after,negative,297,0.12526360185575705
+Testing & CI,after,neutral,1565,0.6600590468156896
+Testing & CI,after,positive,509,0.21467735132855334
+Testing & CI,before,negative,151,0.09611712285168682
+Testing & CI,before,neutral,1066,0.6785486950986632
+Testing & CI,before,positive,354,0.22533418204964992
+UI / UX,after,negative,179,0.08848245180425111
+UI / UX,after,neutral,1321,0.6529906080079091
+UI / UX,after,positive,523,0.25852694018783984
+UI / UX,before,negative,25,0.03424657534246575
+UI / UX,before,neutral,614,0.8410958904109589
+UI / UX,before,positive,91,0.12465753424657534
