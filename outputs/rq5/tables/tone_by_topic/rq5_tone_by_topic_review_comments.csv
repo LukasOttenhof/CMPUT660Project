@@ -1,0 +1,39 @@
+topic_label,group,sentiment_cat,count,share
+Bug Fixing & Debugging,after,negative,4,0.14285714285714285
+Bug Fixing & Debugging,after,neutral,16,0.5714285714285714
+Bug Fixing & Debugging,after,positive,8,0.2857142857142857
+Bug Fixing & Debugging,before,negative,3,0.375
+Bug Fixing & Debugging,before,neutral,1,0.125
+Bug Fixing & Debugging,before,positive,4,0.5
+Code Review & Collaboration,after,negative,3,0.09375
+Code Review & Collaboration,after,neutral,22,0.6875
+Code Review & Collaboration,after,positive,7,0.21875
+Code Review & Collaboration,before,neutral,6,0.3157894736842105
+Code Review & Collaboration,before,positive,13,0.6842105263157895
+Deployment,after,neutral,4,0.4
+Deployment,after,positive,6,0.6
+Deployment,before,neutral,2,1.0
+Documentation & Communication,after,negative,2,0.2222222222222222
+Documentation & Communication,after,neutral,5,0.5555555555555556
+Documentation & Communication,after,positive,2,0.2222222222222222
+Documentation & Communication,before,positive,2,1.0
+Feature Development,after,negative,1,0.07692307692307693
+Feature Development,after,neutral,2,0.15384615384615385
+Feature Development,after,positive,10,0.7692307692307693
+Feature Development,before,negative,1,0.2
+Feature Development,before,neutral,3,0.6
+Feature Development,before,positive,1,0.2
+Refactoring & Cleanup,after,negative,1,0.047619047619047616
+Refactoring & Cleanup,after,neutral,10,0.47619047619047616
+Refactoring & Cleanup,after,positive,10,0.47619047619047616
+Refactoring & Cleanup,before,negative,1,0.09090909090909091
+Refactoring & Cleanup,before,neutral,4,0.36363636363636365
+Refactoring & Cleanup,before,positive,6,0.5454545454545454
+Testing & CI,after,negative,7,0.3333333333333333
+Testing & CI,after,neutral,5,0.23809523809523808
+Testing & CI,after,positive,9,0.42857142857142855
+Testing & CI,before,negative,4,0.5714285714285714
+Testing & CI,before,positive,3,0.42857142857142855
+UI / UX,after,neutral,1,0.07142857142857142
+UI / UX,after,positive,13,0.9285714285714286
+UI / UX,before,positive,2,1.0
