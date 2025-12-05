@@ -555,11 +555,71 @@ def plot_mean_weights(summary_df: pd.DataFrame, out_path: Path, title: str) -> N
     plt.savefig(out_path, dpi=300)
     plt.close()
 
+def plot_stacked_across_text_types(summary_dict: Dict[str, pd.DataFrame], out_path: Path, mode: str = "before"):
+    """
+    summary_dict: mapping { text_type -> summary_df }
+    mode: "before", "after", or "delta"
+    """
+    assert mode in {"before", "after", "delta"}
+
+    # Order bars
+    text_types = ["commit_messages", "pr_bodies", "issue_bodies", "review_comments"]
+    text_types = [t for t in text_types if t in summary_dict]
+
+    # Extract ordered topic labels
+    topics = CATEGORY_LIST
+
+    # Build matrix: rows=text types, columns=topics
+    data = []
+    for tt in text_types:
+        df = summary_dict[tt].set_index("topic_label").loc[topics]
+
+        if mode == "before":
+            data.append(df["share_before"].values)
+            title_mode = "Before (share)"
+        elif mode == "after":
+            data.append(df["share_after"].values)
+            title_mode = "After (share)"
+        else:  # delta
+            data.append(df["delta_share"].values)
+            title_mode = "Delta (after - before)"
+
+    data = np.array(data)  # shape (4, 8)
+
+    # Plot
+    plt.figure(figsize=(14, 7))
+    x = np.arange(len(text_types))
+    bottom = np.zeros(len(text_types))
+
+    # Color palette with 8 colors
+    cmap = plt.get_cmap("tab20")
+    colors = [cmap(i) for i in range(0, 16, 2)]
+
+    for i, topic in enumerate(topics):
+        plt.bar(
+            x,
+            data[:, i],
+            bottom=bottom,
+            label=topic,
+            color=colors[i],
+        )
+        bottom += data[:, i]
+
+    plt.xticks(x, text_types, rotation=30, ha="right")
+    plt.ylabel("Share of Topics")
+    plt.title(f"Topic Distribution Across Text Types — {title_mode}")
+    plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=300)
+    plt.close()
+
+
 
 # -------------------------------------------------------------
 # MAIN
 # -------------------------------------------------------------
 def run() -> None:
+    summary_by_type = {}
     data = load_all()
 
     TARGETS = {
@@ -590,6 +650,7 @@ def run() -> None:
             continue
 
         before_out, after_out, summary_df = result
+        summary_by_type[name] = summary_df
 
         # Save per-document assignments
         doc_path = OUT_TABLES / f"rq5_doc_topics_{name}.csv"
@@ -616,8 +677,33 @@ def run() -> None:
             OUT_PLOTS / f"rq5_meanweights_{name}.png",
             f"{name}: topic weights before vs after",
         )
+        # ============================
+        # Stacked barplots (across text types)
+        # ============================
+        if summary_by_type:
+            print("[rq5] Creating stacked topic-distribution plots...")
+
+            plot_stacked_across_text_types(
+                summary_by_type,
+                OUT_PLOTS / "rq5_stacked_before.png",
+                mode="before",
+            )
+            plot_stacked_across_text_types(
+                summary_by_type,
+                OUT_PLOTS / "rq5_stacked_after.png",
+                mode="after",
+            )
+            plot_stacked_across_text_types(
+                summary_by_type,
+                OUT_PLOTS / "rq5_stacked_delta.png",
+                mode="delta",
+            )
+
+            print("[rq5] Wrote stacked barplots.")
+
 
     print("[rq5] Done.")
+    
 
 
 if __name__ == "__main__":

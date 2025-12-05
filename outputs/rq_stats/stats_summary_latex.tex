@@ -1,0 +1,65 @@
+% Auto-generated statistical results
+\section{Statistical Tests for Topic, Tone, and Tone-by-Topic}
+\subsection*{Topic Distribution Before vs After}
+\begin{tabular}{lccc}
+\toprule
+Text Type & $\chi^2$ & p-value & Cramer's V\\
+\midrule
+commit_messages & 2276.717 & 0.000e+00 & 0.260\\
+issue_bodies & 95.097 & 1.107e-17 & 0.232\\
+pr_bodies & 1393.817 & 8.403e-297 & 0.359\\
+review_comments & 6.783 & 4.519e-01 & 0.182\\
+\bottomrule
+\end{tabular}
+
+\subsection*{Tone Distribution Before vs After}
+\begin{tabular}{lccc}
+\toprule
+Text Type & $\chi^2$ & p-value & Cramer's V\\
+\midrule
+commit_messages & 237.470 & 2.717e-52 & 0.084\\
+issue_bodies & 95.630 & 1.714e-21 & 0.231\\
+pr_bodies & 967.653 & 7.531e-211 & 0.299\\
+review_comments & 27.954 & 8.509e-07 & 0.131\\
+\bottomrule
+\end{tabular}
+
+\subsection*{Tone by Topic}
+\begin{tabular}{lcccc}
+\toprule
+Topic & Text Type & $\chi^2$ & p (FDR) & Cramer's V\\
+\midrule
+Bug Fixing & Debugging & commit_messages & 61.671 & 1.299e-13 & 0.127\\
+Code Review & Collaboration & commit_messages & 28.203 & 1.717e-06 & 0.074\\
+Deployment & commit_messages & 197.005 & 2.660e-42 & 0.177\\
+Documentation & Communication & commit_messages & 74.784 & 2.050e-16 & 0.132\\
+Feature Development & commit_messages & 29.391 & 1.178e-06 & 0.086\\
+Refactoring & Cleanup & commit_messages & 28.299 & 1.717e-06 & 0.091\\
+Testing & CI & commit_messages & 8.037 & 3.028e-02 & 0.045\\
+UI / UX & commit_messages & 91.403 & 6.490e-20 & 0.182\\
+Bug Fixing & Debugging & issue_bodies & 17.238 & 3.613e-04 & 0.181\\
+Code Review & Collaboration & issue_bodies & nan & 2.808e-01 & nan\\
+Deployment & issue_bodies & nan & 1.000e+00 & nan\\
+Documentation & Communication & issue_bodies & nan & 6.249e-01 & nan\\
+Feature Development & issue_bodies & 21.795 & 3.948e-05 & 0.285\\
+Refactoring & Cleanup & issue_bodies & nan & 1.000e+00 & nan\\
+Testing & CI & issue_bodies & 12.688 & 3.124e-03 & 0.253\\
+UI / UX & issue_bodies & 4.717 & 1.513e-01 & 0.190\\
+Bug Fixing & Debugging & pr_bodies & 158.279 & 4.551e-34 & 0.397\\
+Code Review & Collaboration & pr_bodies & 14.077 & 1.652e-03 & 0.239\\
+Deployment & pr_bodies & 79.591 & 2.085e-17 & 0.307\\
+Documentation & Communication & pr_bodies & 29.266 & 1.178e-06 & 0.147\\
+Feature Development & pr_bodies & 151.765 & 8.867e-33 & 0.414\\
+Refactoring & Cleanup & pr_bodies & 91.555 & 6.490e-20 & 0.456\\
+Testing & CI & pr_bodies & 298.208 & 5.625e-64 & 0.251\\
+UI / UX & pr_bodies & 109.599 & 1.016e-23 & 0.294\\
+Bug Fixing & Debugging & review_comments & nan & 2.552e-01 & nan\\
+Code Review & Collaboration & review_comments & nan & 3.961e-01 & nan\\
+Deployment & review_comments & nan & 1.000e+00 & nan\\
+Documentation & Communication & review_comments & nan & 1.000e+00 & nan\\
+Feature Development & review_comments & nan & 6.249e-01 & nan\\
+Refactoring & Cleanup & review_comments & nan & 1.000e+00 & nan\\
+Testing & CI & review_comments & nan & 5.079e-01 & nan\\
+UI / UX & review_comments & nan & 1.000e+00 & nan\\
+\bottomrule
+\end{tabular}
