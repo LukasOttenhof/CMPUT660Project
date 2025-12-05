@@ -1,0 +1,69 @@
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{llrrrrrr}
+\toprule
+\textbf{Dataset} & \textbf{Topic} &
+\textbf{Count (B)} & \textbf{Count (A)} &
+\textbf{$\Delta$ Count} &
+\textbf{Share (B)} & \textbf{Share (A)} &
+\textbf{$\Delta$ Share (\%)} \\
+\midrule
+
+\multirow{8}{*}{Commit Messages}
+& Bug Fixing \& Debugging & 2018 & 1817 & -201 & 0.1485 & 0.0905 & -5.80\% \\
+& Code Review \& Collaboration & 1024 & 4187 & +3163 & 0.0753 & 0.2085 & +13.32\% \\
+& Deployment & 3469 & 2812 & -657 & 0.2553 & 0.1401 & -11.52\% \\
+& Documentation \& Communication & 1531 & 2781 & +1250 & 0.1127 & 0.1385 & +2.59\% \\
+ & Feature Development & 1428 & 2504 & +1076 & 0.1051 & 0.1247 & +1.96\% \\
+& Refactoring \& Cleanup & 1819 & 1582 & -237 & 0.1338 & 0.0788 & -5.51\% \\
+& Testing \& CI & 1571 & 2371 & +800 & 0.1156 & 0.1181 & +0.25\% \\
+& UI / UX & 730 & 2023 & +1293 & 0.0537 & 0.1008 & +4.70\% \\
+\midrule
+\multirow{8}{*}{Issues}
+& Bug Fixing \& Debugging & 348 & 179 & -169 & 0.2611 & 0.4068 & +14.58\% \\
+& Code Review \& Collaboration & 62 & 12 & -50 & 0.0465 & 0.0273 & -1.92\% \\
+& Deployment & 164 & 35 & -129 & 0.1230 & 0.0795 & -4.35\% \\
+& Documentation \& Communication & 241 & 22 & -219 & 0.1808 & 0.0500 & -13.08\% \\
+ & Feature Development & 175 & 94 & -81 & 0.1313 & 0.2136 & +8.24\% \\
+& Refactoring \& Cleanup & 93 & 19 & -74 & 0.0698 & 0.0432 & -2.66\% \\
+& Testing \& CI & 160 & 38 & -122 & 0.1200 & 0.0864 & -3.37\% \\
+& UI / UX & 90 & 41 & -49 & 0.0675 & 0.0932 & +2.57\% \\
+\midrule
+\multirow{8}{*}{Pull Request Bodies}
+& Bug Fixing \& Debugging & 413 & 593 & +180 & 0.2365 & 0.0656 & -17.10\% \\
+& Code Review \& Collaboration & 87 & 160 & +73 & 0.0498 & 0.0177 & -3.21\% \\
+& Deployment & 338 & 508 & +170 & 0.1936 & 0.0562 & -13.74\% \\
+& Documentation \& Communication & 161 & 1191 & +1030 & 0.0922 & 0.1317 & +3.94\% \\
+ & Feature Development & 133 & 754 & +621 & 0.0762 & 0.0834 & +0.72\% \\
+& Refactoring \& Cleanup & 168 & 273 & +105 & 0.0962 & 0.0302 & -6.60\% \\
+& Testing \& CI & 344 & 4403 & +4059 & 0.1970 & 0.4867 & +28.97\% \\
+& UI / UX & 102 & 1164 & +1062 & 0.0584 & 0.1287 & +7.03\% \\
+\midrule
+\multirow{8}{*}{Review Comments}
+& Bug Fixing \& Debugging & 8 & 28 & +20 & 0.1429 & 0.1892 & +4.63\% \\
+& Code Review \& Collaboration & 19 & 32 & +13 & 0.3393 & 0.2162 & -12.31\% \\
+& Deployment & 2 & 10 & +8 & 0.0357 & 0.0676 & +3.19\% \\
+& Documentation \& Communication & 2 & 9 & +7 & 0.0357 & 0.0608 & +2.51\% \\
+ & Feature Development & 5 & 13 & +8 & 0.0893 & 0.0878 & -0.14\% \\
+& Refactoring \& Cleanup & 11 & 21 & +10 & 0.1964 & 0.1419 & -5.45\% \\
+& Testing \& CI & 7 & 21 & +14 & 0.1250 & 0.1419 & +1.69\% \\
+& UI / UX & 2 & 14 & +12 & 0.0357 & 0.0946 & +5.89\% \\
+\midrule
+\multirow{8}{*}{Combined}
+ & Bug Fixing \& Debugging & 2787 & 2617 & -170 & 0.1666 & 0.0881 & -7.86\% \\
+& Code Review \& Collaboration & 1192 & 4391 & +3199 & 0.0713 & 0.1478 & +7.65\% \\
+& Deployment & 3973 & 3365 & -608 & 0.2375 & 0.1133 & -12.43\% \\
+& Documentation \& Communication & 1935 & 4003 & +2068 & 0.1157 & 0.1347 & +1.90\% \\
+& Feature Development & 1741 & 3365 & +1624 & 0.1041 & 0.1133 & +0.92\% \\
+& Refactoring \& Cleanup & 2091 & 1895 & -196 & 0.1250 & 0.0638 & -6.12\% \\
+& Testing \& CI & 2082 & 6833 & +4751 & 0.1245 & 0.2300 & +10.55\% \\
+& UI / UX & 924 & 3242 & +2318 & 0.0552 & 0.1091 & +5.39\% \\
+\midrule
+
+\bottomrule
+\end{tabular}
+\caption{Combined topic classification results across all datasets, including a unified ``Combined'' dataset.}
+\label{tab:combined_topics}
+\end{table*}
