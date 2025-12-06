@@ -210,22 +210,23 @@ def plot_sentiment_per_dataset():
     full = pd.concat(dfs, ignore_index=True)
 
     full["share"] = full.groupby(["dataset", "group"])["count"].transform(lambda x: x / x.sum())
-    full["dataset_group"] = full["dataset"] + " (" + full["group"].str[0].str.upper() + ")"
 
     tidy = (
-        full.groupby(["dataset_group", "group", "sentiment_cat"])["share"]
+        full.groupby(["dataset", "group", "sentiment_cat"])["share"]
         .sum()
         .reset_index()
     )
 
+
     plot_stacked(
         tidy,
-        "dataset_group",
+        "dataset",
         "Sentiment Distribution Per Dataset (Before vs After)",
         PLOT_DIR / "sentiment_by_dataset.png",
         PALETTE_BEFORE,
         PALETTE_AFTER
     )
+
 
 
 # ------------------------------------------------------------
