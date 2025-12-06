@@ -1,0 +1,48 @@
+topic_id,category
+0,Automation
+25,Automation
+
+2,Optimization
+28,Optimization
+21,Optimization
+9,Optimization
+
+3,Testing
+37,Testing
+
+4,Release Management
+
+5,Feature Development
+13,Feature Development
+19,Feature Development
+10,Feature Development
+32,Feature Development
+
+6,Documentation
+11,Documentation
+18,Documentation
+22,Documentation
+33,Documentation
+
+7,Deployment_Config_Build
+39,Deployment_Config_Build
+1,Deployment_Config_Build
+23,Deployment_Config_Build
+36,Deployment_Config_Build
+12,Deployment_Config_Build
+
+8,Agentic Development
+14,Agentic Development
+
+15,Datetime Handling
+
+16,User Interface
+27,User Interface
+31,User Interface
+20,User Interface
+
+17,Refactoring
+24,Refactoring
+30,Refactoring
+
+29,Repository Management
