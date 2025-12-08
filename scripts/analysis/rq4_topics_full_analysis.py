@@ -4,9 +4,6 @@ import numpy as np
 from scipy.stats import chi2_contingency
 import matplotlib.pyplot as plt
 
-# ==================================================
-# Paths
-# ==================================================
 ROOT = Path(__file__).resolve().parents[2]
 
 TABLES = ROOT / "outputs" / "rq5" / "tables"
@@ -20,12 +17,10 @@ PLOTS.mkdir(parents=True, exist_ok=True)
 LATEX.mkdir(parents=True, exist_ok=True)
 STATS.mkdir(parents=True, exist_ok=True)
 
-# Color palette
+#All colour palette
 PALETTE = ["#E74C3C", "#3498DB"]
 
-# ==================================================
-# Loading + mapping
-# ==================================================
+
 def load_topic_mapping(path: Path) -> dict[int, str]:
     df = pd.read_csv(path)
     return dict(zip(df["topic_id"], df["category"]))
@@ -40,9 +35,6 @@ def load_and_map_docs(doc_csv: Path, mapping_csv: Path) -> pd.DataFrame:
     return docs
 
 def latex_escape(text: str) -> str:
-    """
-    Escapes LaTeX special characters.
-    """
     replacements = {
         "\\": r"\textbackslash{}",
         "&":  r"\&",
@@ -70,9 +62,6 @@ def load_bert_topic_names(path: Path) -> dict[int, str]:
     }
 
 
-# ==================================================
-# Category summary
-# ==================================================
 def build_category_summary(df: pd.DataFrame) -> pd.DataFrame:
     grouped = (
         df.groupby(["group", "category"])
@@ -100,9 +89,6 @@ def build_category_summary(df: pd.DataFrame) -> pd.DataFrame:
     )
 
 
-# ==================================================
-# Statistics
-# ==================================================
 def compute_chi2(summary: pd.DataFrame, label: str) -> dict:
     table = summary[["count_before", "count_after"]].values
     chi2, p, _, _ = chi2_contingency(table)
@@ -119,9 +105,6 @@ def compute_chi2(summary: pd.DataFrame, label: str) -> dict:
     }
 
 
-# ==================================================
-# Topic provenance
-# ==================================================
 def build_topic_provenance(
     df: pd.DataFrame,
     topic_to_category: dict[int, str],
@@ -149,9 +132,7 @@ def build_topic_provenance(
     )
 
 
-# ==================================================
-# LaTeX output
-# ==================================================
+#Latex
 def write_latex_table(df, cols, caption, label, out):
     percent_cols = {
         "share_before",
@@ -201,10 +182,6 @@ def write_combined_distribution_table(
     label: str,
     out: Path,
 ):
-    """
-    Writes a LaTeX table with:
-    category | count_before | count_after | share_before (%) | share_after (%) | delta_share (%)
-    """
 
     cols = [
         "category",
@@ -246,9 +223,7 @@ def write_combined_distribution_table(
     out.write_text("\n".join(lines), encoding="utf8")
 
 
-# ==================================================
-# Plotting
-# ==================================================
+#Plotting
 def plot_grouped(summary, out, title):
     x = np.arange(len(summary))
     w = 0.35
@@ -299,9 +274,7 @@ def plot_stacked_before_after(summary, out, title):
     plt.close()
 
 
-# ==================================================
-# Per-text-type pipeline
-# ==================================================
+#Per text type
 def process_text_type(name, doc_csv, map_csv, bert_csv):
     mapping = load_topic_mapping(map_csv)
     bert_labels = load_bert_topic_names(bert_csv)
@@ -311,7 +284,6 @@ def process_text_type(name, doc_csv, map_csv, bert_csv):
 
     summary.to_csv(TABLES / f"rq5_manual_topic_summary_{name}.csv", index=False)
 
-    # Existing tables
     write_latex_table(
         summary,
         ["category", "count_before", "count_after", "delta_count"],
@@ -327,8 +299,6 @@ def process_text_type(name, doc_csv, map_csv, bert_csv):
         f"tab:{name}_shares",
         LATEX / f"{name}_shares.tex"
     )
-
-    # ✅ NEW combined table
     write_combined_distribution_table(
         summary,
         f"{name}: Category Counts, Shares, and Share Change",
@@ -336,7 +306,6 @@ def process_text_type(name, doc_csv, map_csv, bert_csv):
         LATEX / f"{name}_combined_distribution.tex",
     )
 
-    # Provenance table (unchanged)
     provenance = build_topic_provenance(df, mapping, bert_labels)
     write_latex_table(
         provenance,
@@ -346,7 +315,6 @@ def process_text_type(name, doc_csv, map_csv, bert_csv):
         LATEX / f"{name}_topics.tex"
     )
 
-    # Plots (unchanged)
     plot_grouped(
         summary,
         PLOTS / f"rq5_manual_grouped_{name}.png",
@@ -361,21 +329,17 @@ def process_text_type(name, doc_csv, map_csv, bert_csv):
 
     return summary
 
-# ==================================================
-# MAIN
-# ==================================================
+
 def run():
     configs = {
         "commit_messages": {
             "docs": TABLES / "rq5_doc_topics_commit_messages.csv",
             "map":  ROOT / "manual_commit_message_topic_mapping.csv",
-            # ⬇️ use the overview file for commits
             "bert": TABLES / "rq5_topics_overview_commit_messages.csv",
         },
         "pr_bodies": {
             "docs": TABLES / "rq5_doc_topics_pr_bodies.csv",
             "map":  ROOT / "manual_pr_topic_mapping.csv",
-            # ⬇️ use the overview file for PR bodies
             "bert": TABLES / "rq5_topics_overview_pr_bodies.csv",
         },
     }
@@ -387,7 +351,7 @@ def run():
             name,
             cfg["docs"],
             cfg["map"],
-            cfg["bert"],   # already correct
+            cfg["bert"],
         )
         stats.append(compute_chi2(summary, name))
 

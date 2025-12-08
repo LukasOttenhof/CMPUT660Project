@@ -6,9 +6,6 @@ import seaborn as sns
 from scipy import stats
 import matplotlib.ticker as ticker
 
-# ==========================================
-# ⚙️ CONFIGURATION & PATHS
-# ==========================================
 ROOT = Path(__file__).resolve().parents[2]
 INPUT_DIR = Path("inputs/processed")
 PLOTS_DIR = ROOT / "outputs" / "rq12_final"
@@ -18,7 +15,7 @@ def load_and_process(period):
     file_name = f"pull_requests_{period}.parquet"
     fpath = INPUT_DIR / file_name
     if not fpath.exists():
-        print(f"⚠️ Missing file: {file_name}")
+        print(f"Missing file: {file_name}")
         return pd.DataFrame()
 
     df = pd.read_parquet(fpath)
@@ -44,14 +41,14 @@ def main():
     time_a = df_after["time_to_merge_hours"].dropna()
     time_a = time_a[time_a > 0]
 
-    # Statistical test
+    #Statistical test
     u_stat, p_value = stats.mannwhitneyu(time_a, time_b, alternative='two-sided')
     n1, n2 = len(time_b), len(time_a)
     var1, var2 = np.var(time_b, ddof=1), np.var(time_a, ddof=1)
     pooled_se = np.sqrt(((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2))
     cohens_d = (time_a.mean() - time_b.mean()) / pooled_se if pooled_se > 0 else 0
 
-    # Boxplot
+    #Boxplot
     plot_data = pd.DataFrame({
         "Time to Merge (Hours)": np.concatenate([time_b, time_a]),
         "Period": ["Before (Last 3y)"] * len(time_b) + ["After Agents"] * len(time_a)

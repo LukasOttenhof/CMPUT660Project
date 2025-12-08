@@ -4,9 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# Correct directory for tone-by-texttype CSVs
 TONE_DIR = ROOT / "outputs" / "rq5" / "tables"
-
 OUT_POS = ROOT / "outputs" / "rq5" / "tone_positive_table.tex"
 OUT_NEU = ROOT / "outputs" / "rq5" / "tone_neutral_table.tex"
 OUT_NEG = ROOT / "outputs" / "rq5" / "tone_negative_table.tex"
@@ -30,7 +28,6 @@ def pct(v, total):
 
 
 def load_stats():
-    """Compute sentiment counts, shares, and deltas for each dataset + combined."""
     results = {}
 
     for ds_name, fname in FILES.items():
@@ -61,7 +58,7 @@ def load_stats():
 
         results[ds_name] = stats
 
-    # ------------------ COMBINED ------------------
+    #Combined dataset
     combined = {s: {"b": 0, "a": 0} for s in SENTIMENTS}
 
     for ds_stats in results.values():
@@ -88,9 +85,7 @@ def load_stats():
     return results
 
 
-# ===============================================
-# LATEX GENERATION
-# ===============================================
+#Latex
 
 def make_table(stats, sentiment, outfile):
     label = {

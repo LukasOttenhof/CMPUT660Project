@@ -1,10 +1,10 @@
+#This file outputs parquet structures for debugging and ease of use
 import pandas as pd
 from pathlib import Path
 import numpy as np
 
 BASE = Path("inputs/processed")
 
-# Exact file names from your screenshot
 PARQUET_FILES = [
     "commit_messages_before.parquet",
     "commit_messages_after.parquet",
@@ -29,18 +29,12 @@ PARQUET_FILES = [
 ]
 
 
-# ---------------------------------------------------------------------
-# Helper to pretty-print a section
-# ---------------------------------------------------------------------
 def header(title):
     print("\n" + "=" * 100)
-    print(f"📦 {title}")
+    print(f"{title}")
     print("=" * 100)
 
 
-# ---------------------------------------------------------------------
-# Deep DataFrame Inspection
-# ---------------------------------------------------------------------
 def inspect_df(name, df):
     header(f"FILE: {name}")
 
@@ -48,25 +42,19 @@ def inspect_df(name, df):
     print(f"Columns: {len(df.columns)}")
     print("Column names:", list(df.columns))
 
-    print("\n📌 dtypes:")
+    print("\ndtypes:")
     print(df.dtypes)
 
-    print("\n📌 Missing values per column:")
+    print("\nMissing values per column:")
     print(df.isna().sum())
 
-    # -----------------------------------------------------------------
-    # Identify potential date columns (created_at, updated_at, merged_at)
-    # -----------------------------------------------------------------
     date_cols = [c for c in df.columns if df[c].dtype == "datetime64[ns]"]
 
     if date_cols:
-        print("\n📅 Date columns (min/max):")
+        print("\nDate columns (min/max):")
         for c in date_cols:
             print(f"  {c}: {df[c].min()} → {df[c].max()}")
 
-    # -----------------------------------------------------------------
-    # Print text column length distributions
-    # -----------------------------------------------------------------
     text_cols = [
         c for c in df.columns
         if "text" in c.lower()
@@ -76,7 +64,7 @@ def inspect_df(name, df):
     ]
 
     if text_cols:
-        print("\n✏️ Text length stats:")
+        print("\nText length stats:")
         for c in text_cols:
             try:
                 cleaned = df[c].fillna("").astype(str)
@@ -89,32 +77,24 @@ def inspect_df(name, df):
             except Exception:
                 pass
 
-    # -----------------------------------------------------------------
-    # Print a sample row
-    # -----------------------------------------------------------------
-    print("\n📌 Sample row:")
+    #Sample row from each 
+    print("\nSample row:")
     if len(df) > 0:
         print(df.sample(1))
 
-    # -----------------------------------------------------------------
-    # Basic category counts
-    # -----------------------------------------------------------------
-    print("\n📊 Categorical counts (if any):")
+    #Category counts
+    print("\nCategorical counts (if any):")
     for col in df.columns:
         if df[col].dtype == object and df[col].nunique() <= 20:
             print(f"\n  • {col} (unique={df[col].nunique()})")
             print(df[col].value_counts())
 
-
-# ---------------------------------------------------------------------
-# MAIN
-# ---------------------------------------------------------------------
 def main():
     for fname in PARQUET_FILES:
         fpath = BASE / fname
 
         if not fpath.exists():
-            print(f"⚠️ Missing file: {fname}")
+            print(f"Missing file: {fname}")
             continue
 
         try:
@@ -122,7 +102,7 @@ def main():
             inspect_df(fname, df)
 
         except Exception as e:
-            print(f"❌ Error loading {fname}: {e}")
+            print(f"Error loading {fname}: {e}")
 
 
 if __name__ == "__main__":

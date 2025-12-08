@@ -1,4 +1,3 @@
-# scripts/analysis/analyze_rq4_rq5_stats.py
 from __future__ import annotations
 import re
 from pathlib import Path
@@ -76,9 +75,7 @@ def slugify(label: str) -> str:
 WEIGHT_COLS = {label: f"w_{slugify(label)}" for label in CATEGORY_LIST}
 
 
-# ---------------------------------------------------------------------------
-# 1. Topic rates per text type
-# ---------------------------------------------------------------------------
+#USES OLD TOPICS FROM PRE BERTOPIC///DEPRECATED
 def analyze_topic_rates():
     csvs = list(TABLES_RQ5.glob("rq5_topic_summary_*.csv"))
     out = []
@@ -111,9 +108,7 @@ def analyze_topic_rates():
     return df_out
 
 
-# ---------------------------------------------------------------------------
-# 1B. NEW — Topic rates combined across ALL text types
-# ---------------------------------------------------------------------------
+#USES OLD TOPICS FROM PRE BERTOPIC///DEPRECATED
 def analyze_topic_rates_combined():
     csvs = list(TABLES_RQ5.glob("rq5_topic_summary_*.csv"))
 
@@ -150,9 +145,7 @@ def analyze_topic_rates_combined():
     return df_out
 
 
-# ---------------------------------------------------------------------------
-# 2. Tone distribution per text type
-# ---------------------------------------------------------------------------
+#Tone distribution by text type
 def analyze_tone_rates():
     csvs = list(TABLES_RQ5.glob("rq5_tone_summary_*.csv"))
     out = []
@@ -186,9 +179,7 @@ def analyze_tone_rates():
     return df_out
 
 
-# ---------------------------------------------------------------------------
-# 2B. NEW — Tone distribution combined across ALL text types
-# ---------------------------------------------------------------------------
+#Combined tone distribution (all text types)
 def analyze_tone_rates_combined():
     csvs = list(TABLES_RQ5.glob("rq5_tone_summary_*.csv"))
     sentiments = ["negative", "neutral", "positive"]
@@ -218,9 +209,7 @@ def analyze_tone_rates_combined():
     return df_out
 
 
-# ---------------------------------------------------------------------------
-# 3. Tone by topic per text type (unchanged)
-# ---------------------------------------------------------------------------
+#USES OLD TOPICS FROM PRE BERTOPIC///DEPRECATED
 def analyze_tone_by_topic():
     csvs = list(TABLES_RQ5.glob("tone_by_topic/rq5_tone_by_topic_*.csv"))
     if len(csvs) == 0:
@@ -284,9 +273,7 @@ def analyze_tone_by_topic():
     return df_out
 
 
-# ---------------------------------------------------------------------------
-# 3B. NEW — Tone by topic across ALL text types combined
-# ---------------------------------------------------------------------------
+#USES OLD TOPICS FROM PRE BERTOPIC///DEPRECATED
 def analyze_tone_by_topic_combined():
     csvs = list(TABLES_RQ5.glob("tone_by_topic/rq5_tone_by_topic_*.csv"))
     sentiments = ["negative", "neutral", "positive"]
@@ -351,9 +338,7 @@ def analyze_tone_by_topic_combined():
     return df_out
 
 
-# ---------------------------------------------------------------------------
-# 4. Mean weight tests — already include pooled data
-# ---------------------------------------------------------------------------
+#USES OLD TOPICS FROM PRE BERTOPIC///DEPRECATED
 def analyze_mean_weights():
     DOC_FILES = {
         "commit_messages": TABLES_RQ5 / "rq5_doc_topics_commit_messages.csv",
@@ -446,9 +431,7 @@ def analyze_mean_weights():
     return weight_df_types, weight_df_combined
 
 
-# ---------------------------------------------------------------------------
-# LaTeX Summary (unchanged)
-# ---------------------------------------------------------------------------
+#Latex tables
 def write_latex_summary(topic_df, tone_df, tone_topic_df,
                         weight_df_combined, weight_df_types,
                         topic_df_combined,
@@ -532,9 +515,8 @@ def write_latex_summary(topic_df, tone_df, tone_topic_df,
     print(f"[stats] Wrote LaTeX summary → {out}")
 
 
-# ---------------------------------------------------------------------------
-# MAIN
-# ---------------------------------------------------------------------------
+
+
 def run():
     print("[stats] Topic Rates (per type)...")
     topic_df = analyze_topic_rates()

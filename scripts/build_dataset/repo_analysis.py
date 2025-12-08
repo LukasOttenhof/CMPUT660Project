@@ -1,32 +1,3 @@
-#!/usr/bin/env python3
-"""
-repo_analysis.py (HYBRID FIXED)
-
-Centralized data-collection script for CMPUT660Project.
-
-Fixes applied vs your current version:
-1) Removed GitHub Search API usage entirely:
-   - No more 403s from ancient date ranges or bot authors.
-   - No more massive backoff loops.
-   - PRs and Issues are collected by listing everything once, then filtering.
-
-2) Commit author matching made robust:
-   - First tries your heuristic matching.
-   - If heuristic fails, resolves commit SHA -> GitHub login via API (cached).
-   - This recovers agentic commits whose email/name doesn't match PR login.
-
-3) Tracked developers kept consistent with your intent:
-   - top N contributors
-   - ANY PR author in the repo
-   - (so bot/agent PR authors are always tracked)
-
-Outputs:
-- Same 20 parquets, same names, same columns.
-
-Dependencies:
-pip install PyGithub pydriller pandas pyarrow python-dotenv tqdm
-"""
-
 from __future__ import annotations
 
 import os
@@ -40,7 +11,7 @@ from typing import List, Dict, Any, Optional, Tuple, Set
 import pandas as pd
 from tqdm import tqdm
 
-# ---- load dotenv early ----
+#load dotenv early
 try:
     from dotenv import load_dotenv
     load_dotenv()
@@ -49,11 +20,6 @@ except Exception:
 
 from github import Github, Auth, GithubException
 from pydriller import Repository
-
-
-# =============================================================================
-# CONFIG
-# =============================================================================
 
 REPO_LIST_TXT = "filtered_repos_3year100star.txt"
 CLONE_DIR = "repos"
@@ -65,18 +31,15 @@ END_DATE   = datetime(2025, 12, 31, tzinfo=timezone.utc)
 TOP_N = 5
 PER_PAGE = 100
 
-# Logging / stability
+#Logging/stability
 PYDRILLER_LOG_EVERY = 500
 API_RETRIES = 8
 SHORT_BACKOFF = 5
 FULL_LIMIT_SLEEP = 60
 
-MAX_COMMENTS_PER_THREAD = None  # None = no cap
+MAX_COMMENTS_PER_THREAD = None
 
-
-# =============================================================================
-# TOKEN POOL (3 tokens, rotation & safe calls)
-# =============================================================================
+#Rotates 3 tokens for large github API querying
 
 class TokenPoolGithub:
     def __init__(self, tokens: List[str]):
@@ -96,14 +59,9 @@ class TokenPoolGithub:
         old = self.i
         self.i = (self.i + 1) % len(self.tokens)
         self.gh = self._make_client(self.tokens[self.i])
-        print(f"🔄 Rotating token {old} → {self.i}")
+        print(f"Rotating token {old} → {self.i}")
 
     def safe(self, func, *args, label: str = "", **kwargs):
-        """
-        Safe wrapper around any PyGithub call.
-        - rotates token on 401/403 or rate/secondary limit
-        - retries a few times
-        """
         for attempt in range(1, API_RETRIES + 1):
             try:
                 return func(*args, **kwargs)
@@ -135,14 +93,14 @@ class TokenPoolGithub:
                     if rotated:
                         continue
 
-                    print(f"⏳ All tokens exhausted. Sleeping {FULL_LIMIT_SLEEP}s...")
+                    print(f"All tokens exhausted. Sleeping {FULL_LIMIT_SLEEP}s...")
                     time.sleep(FULL_LIMIT_SLEEP)
                     continue
 
-                print(f"⚠️ [{label}] HTTP {status} attempt={attempt}/{API_RETRIES}. Retrying...")
+                print(f"[{label}] HTTP {status} attempt={attempt}/{API_RETRIES}. Retrying...")
                 time.sleep(SHORT_BACKOFF)
 
-        print(f"❌ Giving up after retries [{label}]")
+        print(f"Giving up after retries [{label}]")
         raise RuntimeError(f"Giving up after retries [{label}]")
 
 
@@ -153,10 +111,7 @@ def load_tokens_from_env() -> TokenPoolGithub:
     return TokenPoolGithub([t1, t2, t3])
 
 
-# =============================================================================
-# REPO LIST PARSING
-# =============================================================================
-
+#Parse repo list
 @dataclass
 class RepoSpec:
     full_name: str
@@ -190,7 +145,7 @@ def parse_repo_list(path: str) -> List[RepoSpec]:
                     created = pd.to_datetime(created_str, utc=True, errors="coerce")
 
             if boundary is None or pd.isna(boundary):
-                print(f"⚠️ Skipping malformed line (no boundary): {line}")
+                print(f"Skipping malformed line (no boundary): {line}")
                 continue
 
             specs.append(
@@ -204,10 +159,7 @@ def parse_repo_list(path: str) -> List[RepoSpec]:
     return specs
 
 
-# =============================================================================
-# CLONING
-# =============================================================================
-
+#Clone repos
 def safe_repo_dirname(full_name: str) -> str:
     return full_name.replace("/", "_")
 
@@ -216,34 +168,28 @@ def ensure_clone(full_name: str) -> str:
     repo_dir = os.path.join(CLONE_DIR, safe_repo_dirname(full_name))
 
     if os.path.isdir(repo_dir) and os.path.isdir(os.path.join(repo_dir, ".git")):
-        print(f"📁 Using existing clone: {repo_dir}")
+        print(f"Using existing clone: {repo_dir}")
         return repo_dir
 
-    print(f"📥 Cloning {full_name} → {repo_dir}")
+    print(f"Cloning {full_name} → {repo_dir}")
     url = f"https://github.com/{full_name}.git"
 
     subprocess.run(["git", "clone", "--quiet", url, repo_dir], check=True)
     return repo_dir
 
 
-# =============================================================================
-# TRACKED DEVELOPERS (top 5 + ALL PR authors)
-# =============================================================================
+#Top 5 authors per repo
 
 def get_top_contributors(tp: TokenPoolGithub, repo) -> List[str]:
-    print("👥 Fetching contributors…")
+    print("Fetching contributors…")
     contribs = tp.safe(repo.get_contributors, label="get_contributors")
     lst = list(contribs)
     lst.sort(key=lambda c: getattr(c, "contributions", 0), reverse=True)
     top = [c.login for c in lst[:TOP_N] if getattr(c, "login", None)]
-    print(f"👥 Top {TOP_N} contributors: {top}")
+    print(f"Top {TOP_N} contributors: {top}")
     return top
 
 def get_all_pr_authors(tp: TokenPoolGithub, repo) -> Set[str]:
-    """
-    List ALL PRs once, collect all authors.
-    (No Search API, so no 403 explosions.)
-    """
     authors: Set[str] = set()
     pulls = tp.safe(
         repo.get_pulls,
@@ -260,13 +206,9 @@ def get_all_pr_authors(tp: TokenPoolGithub, repo) -> Set[str]:
 def build_tracked_users(tp: TokenPoolGithub, repo, top_users: List[str]) -> List[str]:
     pr_authors = get_all_pr_authors(tp, repo)
     tracked = sorted(set(top_users) | pr_authors)
-    print(f"👥 Tracked users count: {len(tracked)} (top + PR authors)")
+    print(f"Tracked users count: {len(tracked)} (top + PR authors)")
     return tracked
 
-
-# =============================================================================
-# AUTHOR MATCHING HEURISTICS (kept, but now fallback to SHA->login)
-# =============================================================================
 
 def matches_login(author_name: str, author_email: str, login: str) -> bool:
     l = login.lower().strip()
@@ -288,9 +230,6 @@ def matches_login(author_name: str, author_email: str, login: str) -> bool:
     return False
 
 def heuristic_match_login(author_name: str, author_email: str, tracked_users: List[str]) -> Optional[str]:
-    """
-    Return matching login if heuristics find one, else None.
-    """
     for u in tracked_users:
         if matches_login(author_name, author_email, u):
             return u
@@ -307,13 +246,9 @@ def canonical_author(author_name: str, author_email: str, matched_login: Optiona
 
 
 def prefetch_tracked_commit_shas(tp: TokenPoolGithub, repo, tracked_users: List[str]) -> Dict[str, Set[str]]:
-    """
-    Pre-fetches commit SHAs for each tracked GitHub login.
-    This avoids calling repo.get_commit() for every PyDriller commit.
-    """
     commits_by_author: Dict[str, Set[str]] = {u: set() for u in tracked_users}
 
-    print("🔍 Prefetching commit SHAs for tracked users…")
+    print("Prefetching commit SHAs for tracked users…")
 
     for login in tracked_users:
         try:
@@ -322,17 +257,14 @@ def prefetch_tracked_commit_shas(tp: TokenPoolGithub, repo, tracked_users: List[
             for c in gh_commits:
                 commits_by_author[login].add(c.sha)
         except Exception as e:
-            print(f"⚠️ Could not prefetch commits for author {login}: {e}")
+            print(f"Could not prefetch commits for author {login}: {e}")
 
     total = sum(len(v) for v in commits_by_author.values())
     print(f"   → Prefetched {total} SHAs for {len(tracked_users)} authors.")
     return commits_by_author
 
 
-# =============================================================================
-# PYDRILLER COMMITS (numeric + text) with SHA->login fallback
-# =============================================================================
-
+#Pydriller commit handling
 def extract_commits_from_clone(
     tp: TokenPoolGithub,
     repo_api,
@@ -345,7 +277,7 @@ def extract_commits_from_clone(
     text_before: List[Dict[str, Any]],
     text_after: List[Dict[str, Any]],
 ):
-    print("📊 PyDriller: commits (FAST mode)")
+    print("PyDriller: commits (FAST mode)")
 
     # Pre-fetch all commits by tracked users to avoid expensive SHA lookups
     tracked_shas = prefetch_tracked_commit_shas(tp, repo_api, tracked_users)
@@ -376,18 +308,18 @@ def extract_commits_from_clone(
         if "bot" in (author_name + author_email).lower():
             continue
 
-        # --- 1. Fast path: SHA found in prefetch lists ---
+        #1. Fast path: SHA found in prefetch lists
         matched_login = None
         for login, sha_set in tracked_shas.items():
             if sha in sha_set:
                 matched_login = login
                 break
 
-        # --- 2. Heuristic match (cheap local check) ---
+        #2. Heuristic match (cheap local check)
         if matched_login is None:
             matched_login = heuristic_match_login(author_name, author_email, tracked_users)
 
-        # --- 3. Otherwise skip: not tracked
+        #3. Otherwise skip: not tracked
         if matched_login is None:
             continue
 
@@ -430,9 +362,7 @@ def extract_commits_from_clone(
 
 
 
-# =============================================================================
-# PRs + REVIEWS (LIST ONCE, FILTER)
-# =============================================================================
+#PRs + Reviews
 
 def extract_prs_reviews_comments(
     tp: TokenPoolGithub,
@@ -520,7 +450,7 @@ def extract_prs_reviews_comments(
                 else:
                     numeric_after_prs.append(pr_merge_rec)
 
-            # ---- reviews (numeric + text) ----
+            #reviews (numeric + text)
             try:
                 reviews = tp.safe(pr.get_reviews, label="get_reviews")
                 for r in reviews:
@@ -566,9 +496,7 @@ def extract_prs_reviews_comments(
             continue
 
 
-# =============================================================================
-# ISSUES + COMMENTS (LIST ONCE, FILTER)
-# =============================================================================
+#Issues + Comments
 
 def extract_issues_and_comments(
     tp: TokenPoolGithub,
@@ -687,9 +615,7 @@ def extract_issues_and_comments(
             continue
 
 
-# =============================================================================
-# DISCUSSIONS (optional)
-# =============================================================================
+# Discussions (these are broken/inaccessible)
 
 def extract_discussions(
     tp: TokenPoolGithub,
@@ -908,7 +834,7 @@ def main():
         print(f"✔ Finished {repo_name}")
 
 
-    # ---- write parquets ----
+    #write parquets
     def to_parquet(rows: List[Dict[str, Any]], path: str):
         df = pd.DataFrame(rows)
         if len(df) == 0:
@@ -920,7 +846,7 @@ def main():
         df.to_parquet(path, index=False)
 
     print("\n==============================")
-    print("💾 Writing 20 parquet outputs…")
+    print("Writing 20 parquet outputs…")
     print("==============================")
 
     to_parquet(commits_before, os.path.join(OUTPUT_DIR, "commits_before.parquet"))
@@ -953,7 +879,7 @@ def main():
     to_parquet(discussion_comments_before, os.path.join(OUTPUT_DIR, "discussion_comments_before.parquet"))
     to_parquet(discussion_comments_after,  os.path.join(OUTPUT_DIR, "discussion_comments_after.parquet"))
 
-    print("🎉 Done. Parquets are in ./inputs/processed/")
+    print("Parquets are in ./inputs/processed/")
 
 
 if __name__ == "__main__":

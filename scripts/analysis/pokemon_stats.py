@@ -111,9 +111,7 @@ def plot_radar(before, after, title, filename):
 def main():
     data = load_all()
 
-    # =========================================================
-    # ✂️ TIME SLICING: LIMIT 'BEFORE' DATA TO LAST 3 YEARS
-    # =========================================================
+    #Time slicing
     print("Applying 3-year filter to 'Before' datasets...")
     
     # Iterate over all keys in the data dictionary
@@ -137,8 +135,6 @@ def main():
 
             # Apply the filter IN PLACE within the dictionary
             data[key] = df[df["date"] >= cutoff_date]
-    
-    # =========================================================
 
     before, after = build_radar_data_ratios(data)
 

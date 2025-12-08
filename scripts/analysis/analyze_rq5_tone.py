@@ -1,4 +1,3 @@
-# scripts/analysis/analyze_rq5_tone.py
 from __future__ import annotations
 
 import pandas as pd
@@ -40,7 +39,7 @@ def categorize(c: float) -> str:
     return "neutral"
 
 
-# nice consistent colors
+#Old sentiment colour palette
 COLORS = {
     "negative": "#cc3f3f",
     "neutral":  "#d8cd79",
@@ -84,7 +83,6 @@ def plot_topic_stacked(topic: str, df: pd.DataFrame, outpath: Path):
 
 
 def run():
-    # These files come from analyze_rq5.py
     TARGETS = [
         "commit_messages",
         "pr_bodies",
@@ -95,7 +93,6 @@ def run():
     for name in TARGETS:
         print(f"[rq5-tone] Processing sentiment by topic for {name}...")
 
-        # Load the per-document topics
         topic_file = TOPIC_TABLES / f"rq5_doc_topics_{name}.csv"
         if not topic_file.exists():
             print(f"[rq5-tone] MISSING topic file for {name}, skipping.")
@@ -103,7 +100,7 @@ def run():
 
         df = pd.read_csv(topic_file)
 
-        # Compute sentiment
+        #Sentiment computation
         tones = df["text"].astype(str).apply(score_tone)
         df["neg"]      = tones.apply(lambda d: d["neg"])
         df["neu"]      = tones.apply(lambda d: d["neu"])
@@ -111,29 +108,22 @@ def run():
         df["compound"] = tones.apply(lambda d: d["compound"])
         df["sentiment_cat"] = df["compound"].apply(categorize)
 
-        # -------------------------
-        # GROUP BY (topic, group, sentiment)
-        # -------------------------
         summary = (
             df.groupby(["topic_label", "group", "sentiment_cat"])
               .size()
               .reset_index(name="count")
         )
 
-        # normalize shares within each (topic, group)
         summary["share"] = (
             summary.groupby(["topic_label", "group"])["count"]
                    .transform(lambda x: x / x.sum())
         )
 
-        # Save table
         out_csv = TONE_TABLES / f"rq5_tone_by_topic_{name}.csv"
         summary.to_csv(out_csv, index=False)
         print(f"[rq5-tone] Saved → {out_csv}")
 
-        # -------------------------
-        # Plot stacked bars per topic
-        # -------------------------
+        #Stacked sentiment bars
         for topic in summary["topic_label"].unique():
             sdf = summary[summary["topic_label"] == topic]
             topic_file = safe_filename(topic)

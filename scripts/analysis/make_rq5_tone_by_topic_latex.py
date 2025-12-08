@@ -1,3 +1,4 @@
+#THIS FILE IS NO LONGER APPLICABLE. WAS USED FOR MEANS PRIOR TO BERTOPIC TOPIC MODELLING
 from __future__ import annotations
 import pandas as pd
 import numpy as np
@@ -14,32 +15,24 @@ def pct(x):
     return f"{x*100:.2f}\\%"
 
 def build():
-    # -------------------------------------------------
-    # Load ALL tone-by-topic CSVs & combine
-    # -------------------------------------------------
     csvs = list(TONE_TABLES.glob("rq5_tone_by_topic_*.csv"))
     if not csvs:
         raise RuntimeError("No tone_by_topic CSVs found.")
 
     df = pd.concat([pd.read_csv(f) for f in csvs], ignore_index=True)
 
-    # Aggregate counts across datasets
     agg = (
         df.groupby(["topic_label", "group", "sentiment_cat"])["count"]
         .sum()
         .reset_index()
     )
 
-    # Compute share
     agg["share"] = agg.groupby(["topic_label", "group"])["count"].transform(
         lambda x: x / x.sum()
     )
 
     topics = sorted(agg["topic_label"].unique())
 
-    # -------------------------------------------------
-    # Function to build ONE table per sentiment
-    # -------------------------------------------------
     def make_table(sent):
         header = """
 \\begin{table*}[t]
@@ -59,13 +52,13 @@ def build():
         rows = []
 
         for topic in topics:
-            # Before
+            #Before
             b = agg[
                 (agg.topic_label == topic)
                 & (agg.group == "before")
                 & (agg.sentiment_cat == sent)
             ]
-            # After
+            #After
             a = agg[
                 (agg.topic_label == topic)
                 & (agg.group == "after")
@@ -93,9 +86,7 @@ def build():
 
         return header + "\n".join(rows) + footer
 
-    # -------------------------------------------------
-    # Write all 3 tables vertically
-    # -------------------------------------------------
+    #All 3 tables together for now
     final_text = (
         make_table("positive")
         + "\n\n"

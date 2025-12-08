@@ -1,5 +1,3 @@
-# scripts/analysis/table_utils.py
-
 from __future__ import annotations
 
 import pandas as pd
@@ -7,14 +5,9 @@ import numpy as np
 from pathlib import Path
 
 
-# ----------------------------------------------------------------------
-# BEFORE/AFTER SUMMARY TABLE  (with numerator & denominator counts)
-# ----------------------------------------------------------------------
-
 STATS = ["mean", "median", "p25", "p75", "variance", "std"]
 
 def compute_stats(series: pd.Series) -> dict:
-    """Compute descriptive stats for a distribution."""
     if series.empty:
         return {s: np.nan for s in STATS}
 
@@ -29,30 +22,18 @@ def compute_stats(series: pd.Series) -> dict:
 
 
 def summarize_before_after(before: pd.Series, after: pd.Series) -> pd.DataFrame:
-    """
-    Produces a table with rows: before / after / diff
-    Columns:
-        n_numerator (sum of values)
-        n_denominator (number of items)
-        mean, median, p25, p75, variance, std
-    """
-
-    # Safeguard: convert to numeric
     before = pd.to_numeric(before, errors='coerce').dropna()
     after = pd.to_numeric(after, errors='coerce').dropna()
 
-    # Counts auto-derived from series
     num_before = before.sum()
     num_after = after.sum()
     denom_before = before.count()
     denom_after = after.count()
 
-    # Compute descriptive stats
     stats_b = compute_stats(before)
     stats_a = compute_stats(after)
     stats_d = {k: stats_a[k] - stats_b[k] for k in STATS}
 
-    # Assemble rows
     before_row = {
         "n_numerator": num_before,
         "n_denominator": denom_before,
@@ -78,9 +59,7 @@ def summarize_before_after(before: pd.Series, after: pd.Series) -> pd.DataFrame:
 
     return df
 
-# ----------------------------------------------------------------------
-# SAVE TABLES (CSV + LaTeX ACM STYLE)
-# ----------------------------------------------------------------------
+#CSV and Latex
 def save_table(df: pd.DataFrame, name: str, outdir: Path):
     outdir.mkdir(parents=True, exist_ok=True)
     path = outdir / f"{name}.csv"
@@ -88,7 +67,6 @@ def save_table(df: pd.DataFrame, name: str, outdir: Path):
     print(f"[table_utils] Saved table → {name}")
     path = outdir / f"{name}.tex"
 
-    # Format floats for LaTeX
     df_fmt = df.copy()
     df_fmt = df_fmt.applymap(
         lambda x: f"{x:.3f}" if isinstance(x, (float, int)) else x
