@@ -72,7 +72,7 @@ def build_monthly_dev_ratios(data):
                 activity_count=('author', 'size'),
                 dev_count=('author', 'nunique')
             ).reset_index()
-
+        
             # 2. Calculate Activity Per Developer Per Month
             # Safety check: avoid division by zero
             monthly_data['activity_per_dev'] = np.where(
@@ -127,8 +127,9 @@ def plot_radar(before, after, title, filename):
     ax = plt.subplot(111, polar=True)
 
     # Apply sqrt scaling for visual balance (optional but often helps ratios)
-    values_before_scaled = [np.sqrt(v) for v in values_before]
-    values_after_scaled = [np.sqrt(v) for v in values_after]
+    values_before_scaled = values_before
+    values_after_scaled = values_after
+
 
     # Clean red and blue
     color_before_line = "#E74C3C" 
@@ -192,7 +193,7 @@ def main():
     plot_radar(
         before_ratios, after_ratios,
         "Developer Activity Before vs After Agents (Per Dev Per Month Ratios)",
-        "rq2_radar_developer_activity_per_dev_per_month_ratios.png"
+        "final.png"
     )
 
     # =========================================================

@@ -14,11 +14,8 @@ PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Define categories and their keywords
 CATEGORIES = {
-    "Bug": [
-        "fix", "bug", "repair", "resolve",
-        "broken", "error", "fail", "hotfix", "issue", "crash",
-        "correct", "debug", "restore"
-    ],
+    "Bug": ["bug", "bugs", "fix", "fixed", "fixes", "fixing", "resolves", "issue", "issues", "bugfix", "bugfixes", "closes", "hotfix", "hotfixes", "fixed", "fixes", "typo", "typos", "correct", "correction", "incorrect"]
+,
     "Refactor": [
         "refactor", "clean", "structure", "style", 
         "rename", "move", "format", "lint", "tidy", "simplify", "optimize"
@@ -131,8 +128,8 @@ def analyze_fixes():
     # 4. Plot Grouped Bar Chart
     df_plot = pd.DataFrame(plot_data)
     
-    plt.figure(figsize=(10, 6))
-    
+    plt.figure(figsize=(12, 8)) # Bigger figure
+
     # Create grouped bar chart
     ax = sns.barplot(
         x="Category", 
@@ -141,27 +138,34 @@ def analyze_fixes():
         data=df_plot, 
         palette=["#E74C3C", "#3498DB"]
     )
-    
-    
-    plt.title("Shift in Maintenance Activity Types (Commits + PRs)", fontsize=20, fontweight='bold', pad=20)
-    plt.ylabel("Proportion of Text Artifacts", fontsize=18)
-    plt.xlabel("")
-    plt.legend(title="Time Period")
-    
-    # Add labels - Explicitly format float ratio (0.12) to percentage string (12.2%)
+    ymax = max([bar.get_height() for container in ax.containers for bar in container])
+    ax.set_ylim(0, ymax * 1.08) 
+    # Title and axis labels
+   #ft in Maintenance Activity Types (Commits + PRs)", fontsize=28, fontweight='bold', pad=25)
+    plt.ylabel("Proportion of Text Artifacts", fontsize=24)
+    plt.xlabel("Category", fontsize=24)
+
+    # Tick labels
+    ax.tick_params(axis='x', labelsize=22)
+    ax.tick_params(axis='y', labelsize=22)
+
+    # Legend font
+    plt.legend(title="Time Period", fontsize=20, title_fontsize=20)
+
+    # Add percentage labels above bars
     for container in ax.containers:
-        # Check if datavalues attribute exists (matplotlib > 3.4), otherwise use get_height
         if hasattr(container, 'datavalues'):
             labels = [f'{val:.1%}' for val in container.datavalues]
         else:
             labels = [f'{bar.get_height():.1%}' for bar in container]
-            
-        ax.bar_label(container, labels=labels, padding=3, fontsize=13)
+        ax.bar_label(container, labels=labels, padding=7, fontsize=20, label_type='edge')  # Bigger labels, above bars
 
+    # Save and show
     outpath = PLOTS_DIR / "rq3_maintenance_types_combined.png"
     plt.savefig(outpath, dpi=300, bbox_inches="tight")
-    print(f"\n[Plot] Saved chart to -> {outpath}")
     plt.show()
+
+
 
 if __name__ == "__main__":
     analyze_fixes()
