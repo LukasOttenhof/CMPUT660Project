@@ -1,5 +1,3 @@
-# scripts/analysis/data_loader.py
-
 from __future__ import annotations
 
 import os
@@ -56,9 +54,7 @@ def load_all() -> Dict[str, pd.DataFrame]:
     return data
 
 
-# ---------------------------------------------------------------------
-# Repo language classification (GitHub API, cached)
-# ---------------------------------------------------------------------
+#Language classification///DEPRECATED (unused in paper)
 
 STATIC_LANGS = {
     "C", "C++", "C#", "Java", "Go", "Rust", "Scala", "Kotlin",
@@ -70,10 +66,6 @@ DYNAMIC_LANGS = {
 
 
 def _github_get_repo_language(repo_full_name: str) -> str | None:
-    """
-    Query GitHub API for the primary language of a repo.
-    repo_full_name: 'owner/name'
-    """
     url = f"https://api.github.com/repos/{repo_full_name}"
     token = os.getenv("GITHUB_TOKEN_1") or os.getenv("GH_TOKEN")
 
@@ -91,10 +83,6 @@ def _github_get_repo_language(repo_full_name: str) -> str | None:
 
 
 def get_repo_language_mapping(repos: Iterable[str]) -> pd.DataFrame:
-    """
-    Returns a DataFrame with columns [repo, language, lang_type].
-    Caches results in inputs/processed/repo_languages.csv.
-    """
     repos = sorted(set(r for r in repos if isinstance(r, str) and "/" in r))
 
     if LANG_CACHE.exists():

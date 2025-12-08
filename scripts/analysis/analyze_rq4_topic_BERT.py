@@ -1,6 +1,3 @@
-# =============================================================
-# rq5 — BERTopic-Based Topic Modeling with Manual Topic Labeling
-# =============================================================
 from __future__ import annotations
 
 import re
@@ -18,9 +15,6 @@ from sentence_transformers import SentenceTransformer
 from data_loader import load_all
 
 
-# -------------------------------------------------------------
-# Paths
-# -------------------------------------------------------------
 ROOT = Path(__file__).resolve().parents[2]
 OUT_TABLES = ROOT / "outputs" / "rq5" / "tables"
 OUT_PLOTS  = ROOT / "outputs" / "rq5" / "plots"
@@ -29,9 +23,7 @@ OUT_TABLES.mkdir(parents=True, exist_ok=True)
 OUT_PLOTS.mkdir(parents=True, exist_ok=True)
 
 
-# -------------------------------------------------------------
-# Text Cleaning
-# -------------------------------------------------------------
+#Clean text and filter some LLM AI terms
 AI_TERMS = [
     "ai", "agent", "agents", "model", "models", "llm", "gpt", "openai",
     "anthropic", "assistant", "automated", "auto"
@@ -61,9 +53,7 @@ def split_into_segments(text: str):
     return segs if segs else [text.strip()]
 
 
-# -------------------------------------------------------------
-# BERTopic Setup (MPNet embeddings)
-# -------------------------------------------------------------
+#Embedding model
 EMBED_MODEL = SentenceTransformer("sentence-transformers/all-mpnet-base-v2")
 
 topic_model = BERTopic(
@@ -73,9 +63,7 @@ topic_model = BERTopic(
 )
 
 
-# -------------------------------------------------------------
-# BERTopic classification
-# -------------------------------------------------------------
+#Classification
 def run_bertopic(
     df_before: pd.DataFrame,
     df_after: pd.DataFrame,
@@ -97,7 +85,7 @@ def run_bertopic(
 
     combined = pd.concat([before, after], ignore_index=True)
 
-    # Segment texts (optional but improves quality)
+    #Text segmenting
     all_segments = []
     spans = []
 
@@ -132,9 +120,9 @@ def run_bertopic(
     return combined, topic_model
 
 
-# -------------------------------------------------------------
-# MAIN
-# -------------------------------------------------------------
+
+
+
 def run():
     data = load_all()
 
@@ -166,23 +154,16 @@ def run():
 
         topic_models[name] = tm
 
-        # -------------------------------------
-        # Save document-level topics
-        # -------------------------------------
         out_docs = OUT_TABLES / f"rq5_doc_topics_{name}.csv"
         doc_df.to_csv(out_docs, index=False)
         print(f"[rq5-bertopic] Saved → {out_docs}")
 
-        # -------------------------------------
-        # Save topic info for manual labeling
-        # -------------------------------------
         topic_info = tm.get_topic_info()
         topic_info.to_csv(
             OUT_TABLES / f"rq5_topics_overview_{name}.csv",
             index=False
         )
 
-        # Save representative words
         rows = []
         for tid in topic_info["Topic"].unique():
             if tid == -1:

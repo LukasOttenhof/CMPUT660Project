@@ -5,9 +5,6 @@ import pandas as pd
 from data_loader import load_all
 import seaborn as sns
 
-# Suppress pandas warnings related to setting values on copies and TimeZone conversion
-# Note: For production use, it's generally better to fix the root cause (which we did below) 
-# but this line can be used as a general safety if other copy-related warnings appear.
 pd.options.mode.chained_assignment = None
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -35,12 +32,6 @@ METRIC_MAP = {
 }
 
 def build_monthly_dev_ratios(data):
-    """
-    Calculates the average activity per developer per month for 'before' and 'after' periods,
-    then normalizes these averages into a ratio for the radar chart.
-    
-    Returns: (before_ratios, after_ratios, before_avg_per_dev, after_avg_per_dev)
-    """
     before_avg_per_dev = {}
     after_avg_per_dev = {}
 
@@ -165,12 +156,9 @@ def plot_radar(before, after, title, filename):
 def main():
     data = load_all()
 
-    # =========================================================
-    # ✂️ TIME SLICING: LIMIT 'BEFORE' DATA TO LAST 3 YEARS
-    # =========================================================
+    #Time slicing
     print("Applying 3-year filter to 'Before' datasets...")
     
-    # Iterate over all keys in the data dictionary
     for key in data:
         if key.endswith("_before"):
             df = data[key]
@@ -186,19 +174,15 @@ def main():
     
     # =========================================================
 
-    # --- USE THE NEW FUNCTION HERE TO GET AVGS AND RATIOS ---
     before_ratios, after_ratios, before_avg, after_avg = build_monthly_dev_ratios(data)
 
-    # Plot radar
     plot_radar(
         before_ratios, after_ratios,
         "Developer Activity Before vs After Agents (Per Dev Per Month Ratios)",
         "final.png"
     )
 
-    # =========================================================
-    # 📊 Print Raw Averages Per Month Per Dev
-    # =========================================================
+    #Monthly averages
     avg_df = pd.DataFrame({
         "Metric": list(before_avg.keys()),
         "Before (Avg/Dev/Month)": [f"{v:.2f}" for v in before_avg.values()],
@@ -207,7 +191,7 @@ def main():
     print("\n================ RAW ACTIVITY PER DEVELOPER PER MONTH ================\n")
     print(avg_df.to_string(index=False))
 
-    # Print ratios as table
+    #Ratios as table
     ratio_df = pd.DataFrame({
         "Metric": list(before_ratios.keys()),
         "Before (Ratio)": [f"{v:.3f}" for v in before_ratios.values()],

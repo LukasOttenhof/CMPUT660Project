@@ -1,13 +1,8 @@
-# scripts/analysis/analyze_rq1.py
-
 from __future__ import annotations
 
 from pathlib import Path
 import sys
 
-# ---------------------------------------------------------------------
-# Path setup so we can import sibling modules when run as a script
-# ---------------------------------------------------------------------
 THIS_DIR = Path(__file__).resolve().parent
 if str(THIS_DIR) not in sys.path:
     sys.path.append(str(THIS_DIR))
@@ -23,7 +18,7 @@ from plot_utils import monthly_or_quarterly_boxplot, stacked_activity_share_bar
 
 def commits_per_repo(df):
     if df.empty:
-        return df.groupby("repo").size()  # empty
+        return df.groupby("repo").size()
     return df.groupby("repo").size()
 
 
@@ -67,17 +62,13 @@ def main():
     TABLES_DIR.mkdir(parents=True, exist_ok=True)
     PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ----------------------------------------------------------
-    # PR body text length
-    # ----------------------------------------------------------
+    #PR body by length
     pr_text_len_b = prs_bodies_b["text"].fillna("").astype(str).str.split().str.len()
     pr_text_len_a = prs_bodies_a["text"].fillna("").astype(str).str.split().str.len()
     pr_text_table = summarize_before_after(pr_text_len_b, pr_text_len_a)
     save_table(pr_text_table, "rq1_pr_text_length", TABLES_DIR)
 
-    # ----------------------------------------------------------
-    # Issue body text length (communication-focused)
-    # ----------------------------------------------------------
+    #Issue body text length
     def issue_text_len(df):
         if df.empty or "text" not in df.columns:
             return []
@@ -88,9 +79,7 @@ def main():
     issue_text_table = summarize_before_after(issue_text_len_b, issue_text_len_a)
     save_table(issue_text_table, "rq1_issue_text_length", TABLES_DIR)
 
-    # ----------------------------------------------------------
-    # Commits / PRs / Reviews / Issues per repo (global tables)
-    # ----------------------------------------------------------
+    #Metrics per repo
     commits_per_repo_b = commits_per_repo(commits_b)
     commits_per_repo_a = commits_per_repo(commits_a)
     save_table(
@@ -123,7 +112,6 @@ def main():
         TABLES_DIR,
     )
 
-    # Also save raw per-repo distributions for later statistical tests
     all_repos = sorted(
         set(commits_per_repo_b.index)
         | set(commits_per_repo_a.index)
@@ -142,9 +130,7 @@ def main():
     per_repo_df.to_csv(TABLES_DIR / "rq1_repo_level_counts_raw.csv", index=False)
     print("[rq1] Saved repo-level raw counts.")
 
-    # ----------------------------------------------------------
-    # Monthly / quarterly boxplots for activity
-    # ----------------------------------------------------------
+    #Boxplots over time
     for freq, tag in [("M", "monthly"), ("Q", "quarterly")]:
         monthly_or_quarterly_boxplot(
             commits_b,
@@ -190,9 +176,7 @@ def main():
             freq=freq,
         )
 
-    # ----------------------------------------------------------
-    # Stacked before/after activity share
-    # ----------------------------------------------------------
+    #Activit share stacked bars
     def count_commits(df):
         return len(df)
 
@@ -238,6 +222,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import pandas as pd  # needed for per_repo_df
+    import pandas as pd
 
     main()

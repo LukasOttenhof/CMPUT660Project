@@ -1,5 +1,3 @@
-# scripts/analysis/analyze_rq2.py
-
 from __future__ import annotations
 
 from pathlib import Path
@@ -28,10 +26,7 @@ def build_dev_activity_df(
     issues: pd.DataFrame,
     period_label: str,
 ) -> pd.DataFrame:
-    """
-    Build per-developer activity table WITH derived rate metrics.
-    Unlike raw totals, these rates normalize behavior beyond time frame length.
-    """
+    
     authors = set()
 
     for df in (commits, prs_events, reviews, review_comments, issues):
@@ -41,14 +36,10 @@ def build_dev_activity_df(
     authors = sorted(authors)
     out = pd.DataFrame({"author": authors})
 
-    # Helper for zero-safe division
     def safe_div(num, den):
         return num / den if den != 0 else 0
 
-    # -------------------------------------------------------------
-    # RAW COUNTS
-    # -------------------------------------------------------------
-    # Commits + LOC
+    #Commits + LOC
     if not commits.empty:
         c_group = commits.groupby("author")
         out["commits"] = out["author"].map(c_group.size()).fillna(0).astype(int)
@@ -59,7 +50,7 @@ def build_dev_activity_df(
         out["loc_added"] = 0
         out["loc_deleted"] = 0
 
-    # PR events
+    #PR events
     if not prs_events.empty:
         pr_created = prs_events[prs_events["activity_type"] == "pr_created"]
         pr_merged = prs_events[prs_events["activity_type"] == "pr_merged"]
@@ -69,7 +60,7 @@ def build_dev_activity_df(
         out["prs_created"] = 0
         out["prs_merged"] = 0
 
-    # Reviews submitted
+    #Reviews submitted
     if not reviews.empty:
         out["reviews_submitted"] = out["author"].map(
             reviews.groupby("author").size()
@@ -77,7 +68,7 @@ def build_dev_activity_df(
     else:
         out["reviews_submitted"] = 0
 
-    # Review comments
+    #Review comments
     if not review_comments.empty:
         out["review_comments"] = out["author"].map(
             review_comments.groupby("author").size()
@@ -85,7 +76,7 @@ def build_dev_activity_df(
     else:
         out["review_comments"] = 0
 
-    # Issues opened / closed
+    #Issues opened / closed
     if not issues.empty:
         opened = issues[issues["activity_type"] == "issue_opened"]
         closed = issues[issues["activity_type"] == "issue_closed"]
@@ -99,9 +90,7 @@ def build_dev_activity_df(
         out["issues_opened"] = 0
         out["issues_closed"] = 0
 
-    # -------------------------------------------------------------
-    # DERIVED RATES (per developer)
-    # -------------------------------------------------------------
+    #Rates per Developer
     out["reviews_per_pr"] = [
         safe_div(row.reviews_submitted, row.prs_created) for row in out.itertuples()
     ]
@@ -143,9 +132,7 @@ def main():
     TABLES_DIR.mkdir(parents=True, exist_ok=True)
     PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ----------------------------------------------------------
-    # Developer-level aggregated activity
-    # ----------------------------------------------------------
+    #Activity per developer
     dev_b = build_dev_activity_df(
         commits_b, prs_events_b, reviews_b, review_comments_b, issues_b, "before"
     )
@@ -153,9 +140,7 @@ def main():
         commits_a, prs_events_a, reviews_a, review_comments_a, issues_a, "after"
     )
 
-        # ----------------------------------------------------------
-# PER-REPOSITORY RATES
-# ----------------------------------------------------------
+    #Per repo rates
     def build_repo_rates(commits, prs_events, reviews, review_comments, issues, period):
         repos = set()
         for df in (commits, prs_events, reviews, review_comments, issues):
@@ -164,15 +149,14 @@ def main():
 
         out = pd.DataFrame({"repo": sorted(repos)})
 
-        # Helper
         def safe_div(n, d):
             return n / d if d != 0 else 0
 
-        # Commits
+        #Commits per repo
         c = commits.groupby("repo").size() if not commits.empty else {}
         out["commits"] = out["repo"].map(c).fillna(0).astype(int)
 
-        # PRs
+        #PRs per repo
         if not prs_events.empty:
             created = prs_events[prs_events["activity_type"] == "pr_created"]
             merged = prs_events[prs_events["activity_type"] == "pr_merged"]
@@ -184,14 +168,14 @@ def main():
         out["prs_created"] = out["repo"].map(pr_c).fillna(0).astype(int)
         out["prs_merged"] = out["repo"].map(pr_m).fillna(0).astype(int)
 
-        # Reviews + review comments
+        #Reviews per repo
         rev = reviews.groupby("repo").size() if not reviews.empty else {}
         rcom = review_comments.groupby("repo").size() if not review_comments.empty else {}
 
         out["reviews_submitted"] = out["repo"].map(rev).fillna(0).astype(int)
         out["review_comments"] = out["repo"].map(rcom).fillna(0).astype(int)
 
-        # Issues opened/closed
+        #Issue activity per repo
         if not issues.empty:
             opened = issues[issues["activity_type"] == "issue_opened"].groupby("repo").size()
             closed = issues[issues["activity_type"] == "issue_closed"].groupby("repo").size()
@@ -201,7 +185,7 @@ def main():
         out["issues_opened"] = out["repo"].map(opened).fillna(0).astype(int)
         out["issues_closed"] = out["repo"].map(closed).fillna(0).astype(int)
 
-        # Rates per repo
+
         out["reviews_per_pr"] = [
             safe_div(r, p) for r, p in zip(out["reviews_submitted"], out["prs_created"])
         ]
@@ -234,7 +218,7 @@ def main():
     dev_all.to_csv(TABLES_DIR / "rq2_dev_activity_raw.csv", index=False)
     print("[rq2] Saved developer-level raw activity table.")
 
-    # Summaries on key metrics
+
     metrics = [
         "commits",
         "prs_created",
@@ -248,9 +232,7 @@ def main():
         summary = summarize_before_after(dev_b[col], dev_a[col])
         save_table(summary, f"rq2_dev_{col}", TABLES_DIR)
     
-    # ----------------------------------------------------------
-    # Review latency (time_to_merge_hours)
-    # ----------------------------------------------------------
+    #Review time to merge
     def extract_merge_times(df: pd.DataFrame) -> pd.Series:
         if df.empty:
             return pd.Series(dtype=float)
@@ -264,7 +246,7 @@ def main():
     merge_summary = summarize_before_after(merge_before, merge_after)
     save_table(merge_summary, "rq2_merge_time_hours", TABLES_DIR)
 
-    # per-PR merge times
+    #per-PR merge times
     def per_pr_merge_df(df: pd.DataFrame, period: str) -> pd.DataFrame:
         if df.empty:
             return pd.DataFrame(
@@ -284,9 +266,7 @@ def main():
     per_pr_all.to_csv(TABLES_DIR / "rq2_per_pr_merge_times.csv", index=False)
     print("[rq2] Saved per-PR merge-time data.")
 
-    # ----------------------------------------------------------
-    # Review workload: reviews per PR and per reviewer
-    # ----------------------------------------------------------
+    #Review workload
     def reviews_per_pr(df: pd.DataFrame) -> pd.Series:
         if df.empty:
             return pd.Series(dtype=float)
@@ -320,7 +300,7 @@ def main():
         TABLES_DIR,
     )
 
-    # Summaries of derived metrics
+
     rate_metrics = [
         "reviews_per_pr",
         "issues_per_commit",
@@ -342,9 +322,7 @@ def main():
         )
 
 
-    # ----------------------------------------------------------
-    # Time-series boxplots of review workload per repo
-    # ----------------------------------------------------------
+    #Review workload time series boxplots
     for freq, tag in [("M", "monthly"), ("Q", "quarterly")]:
         monthly_or_quarterly_boxplot(
             reviews_b,

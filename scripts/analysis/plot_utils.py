@@ -15,19 +15,11 @@ from matplotlib.patches import Patch
 
 sns.set(style="whitegrid")
 
-# ----------------------------------------------------------------------
-# Lightness-only hue-preserving shade generator
-# ----------------------------------------------------------------------
 def _generate_lightness_shades(base_hex: str, n: int):
-    """
-    Generate n shades of the SAME hue:
-        darkest (bottom) → lightest (top)
-    Only modifies HLS lightness; hue & saturation preserved.
-    """
     r, g, b = mcolors.to_rgb(base_hex)
     h, l, s = colorsys.rgb_to_hls(r, g, b)
 
-    # Good default lightness range: dark 0.35 → light 0.80
+    # Lighting distribution
     lightness_values = np.linspace(0.35, 0.80, n)
 
     shades = []
@@ -37,10 +29,7 @@ def _generate_lightness_shades(base_hex: str, n: int):
 
     return shades
 
-
-# ----------------------------------------------------------------------
-# BOXPLOTS (RQ1): now using fixed red/blue palette
-# ----------------------------------------------------------------------
+#RQ1 Boxplot
 def monthly_or_quarterly_boxplot(
     df_before: pd.DataFrame,
     df_after: pd.DataFrame,
@@ -61,9 +50,6 @@ def monthly_or_quarterly_boxplot(
 
     outdir.mkdir(parents=True, exist_ok=True)
 
-    # -------------------------
-    # Internal aggregation
-    # -------------------------
     def aggregate(df: pd.DataFrame, label: str) -> pd.DataFrame:
         if df.empty:
             return pd.DataFrame(columns=["bin", group_col, "count", "period"])
@@ -85,7 +71,6 @@ def monthly_or_quarterly_boxplot(
     if data.empty:
         return
 
-    # Build categorical axis
     data = data.sort_values("bin")
     data["bin_label"] = data["bin"].dt.strftime("%Y-%m")
     bins = data["bin_label"].unique().tolist()
@@ -101,15 +86,12 @@ def monthly_or_quarterly_boxplot(
             year_positions.append(first_pos)
             year_labels.append(str(y))
 
-    # Palette
+    #All plot palette
     PALETTE = {
         "before": "#E74C3C",  # red
         "after":  "#3498DB",  # blue
     }
 
-    # ---------------------------------------
-    # Plot (linear + log)
-    # ---------------------------------------
     for scale in ["linear", "log"]:
         plt.figure(figsize=(20, 5))
 
@@ -138,9 +120,7 @@ def monthly_or_quarterly_boxplot(
         plt.close()
 
 
-# ----------------------------------------------------------------------
-# STACKED BARPLOT (RQ1): Before = red gradient, After = blue gradient
-# ----------------------------------------------------------------------
+#RQ1 stacked barplot
 def stacked_activity_share_bar(
     activity_counts_before,
     activity_counts_after,
@@ -148,33 +128,23 @@ def stacked_activity_share_bar(
     filename,
     title="Activity Share Before vs After"
 ):
-    """
-    Stacked barplot:
-    - before uses red gradients (dark → light)
-    - after uses blue gradients (dark → light)
-    - legend shows BOTH colours per activity type
-    """
 
     outdir = Path(outdir)
     outdir.mkdir(parents=True, exist_ok=True)
     outpath = outdir / filename
 
-    # Detect activities
     activity_types = sorted(activity_counts_before.keys())
 
-    # Totals
     total_before = sum(activity_counts_before.values())
     total_after = sum(activity_counts_after.values())
 
-    # Proportions
     props_before = {a: activity_counts_before[a] / total_before for a in activity_types}
     props_after  = {a: activity_counts_after[a] / total_after  for a in activity_types}
 
-    # Sort by global average contribution
     avg_props = {a: (props_before[a] + props_after[a]) / 2 for a in activity_types}
     sorted_acts = sorted(avg_props.keys(), key=lambda a: avg_props[a], reverse=True)
 
-    # Generate gradients
+    #All plot palette
     BASE_RED  = "#E74C3C"
     BASE_BLUE = "#3498DB"
 
@@ -207,9 +177,7 @@ def stacked_activity_share_bar(
     ax.set_ylabel("Proportion of activity")
     ax.set_title(title)
 
-    # --------------------------
-    # LEGEND: both colours shown
-    # --------------------------
+
     legend_handles = []
     for act in sorted_acts:
         legend_handles.append(Patch(color=before_colors[act], label=f"{act} (before)"))

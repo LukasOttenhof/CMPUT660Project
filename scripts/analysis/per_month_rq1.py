@@ -1,14 +1,9 @@
-# scripts/analysis/analyze_rq1.py
-
 from __future__ import annotations
 
 from pathlib import Path
 import sys
 import pandas as pd
 
-# ---------------------------------------------------------------------
-# Path setup so we can import sibling modules when run as a script
-# ---------------------------------------------------------------------
 THIS_DIR = Path(__file__).resolve().parent
 if str(THIS_DIR) not in sys.path:
     sys.path.append(str(THIS_DIR))
@@ -22,9 +17,6 @@ from table_utils import save_table
 from plot_utils import monthly_or_quarterly_boxplot, stacked_activity_share_bar
 
 
-# ----------------------------------------------------------
-# Helper functions
-# ----------------------------------------------------------
 def group_by_month(df, date_col="date", group_col="repo"):
     if df.empty:
         return pd.DataFrame()
@@ -77,13 +69,10 @@ def text_length_per_month(df, text_col="text"):
     return counts
 
 
-# ----------------------------------------------------------
-# Main analysis
-# ----------------------------------------------------------
 def main():
     data = load_all()
 
-    # Split before/after
+    #Before and after
     commits_b, commits_a = data["commits_before"], data["commits_after"]
     prs_bodies_b, prs_bodies_a = data["pr_bodies_before"], data["pr_bodies_after"]
     reviews_b, reviews_a = data["reviews_before"], data["reviews_after"]
@@ -103,7 +92,6 @@ def main():
     ]
 
     for metric, df_b, df_a in metrics:
-        # Compute counts / lengths per repo per month
         if metric in ["pr_text_length"]:
             counts_b = text_length_per_month(df_b, text_col="text")
             counts_a = text_length_per_month(df_a, text_col="text")
@@ -114,22 +102,17 @@ def main():
             counts_b = compute_counts(df_b, count_type=metric)
             counts_a = compute_counts(df_a, count_type=metric)
 
-        # Compute monthly statistics
         stats_b = per_month_stats(counts_b)
         stats_a = per_month_stats(counts_a)
 
-        # Combine before/after into one table
         combined = stats_b.merge(stats_a, on="month", suffixes=("_before", "_after"), how="outer")
         combined = combined.sort_values("month").reset_index(drop=True)
 
-        # Save table
         save_table(combined, f"rq1_{metric}_per_month", TABLES_DIR)
 
     print("[rq1] Monthly tables saved.")
 
-    # ----------------------------------------------------------
-    # Optional: generate plots (monthly/quarterly boxplots)
-    # ----------------------------------------------------------
+    #Boxplots over time
     for freq, tag in [("M", "monthly"), ("Q", "quarterly")]:
         for df_b, df_a, name, title_prefix in [
             (commits_b, commits_a, "commits", "Commits"),
@@ -148,9 +131,7 @@ def main():
                 freq=freq,
             )
 
-    # ----------------------------------------------------------
-    # Stacked activity share (total counts)
-    # ----------------------------------------------------------
+    #Activity share stacked bar
     def count_events(df, event_type=None):
         if df.empty:
             return 0

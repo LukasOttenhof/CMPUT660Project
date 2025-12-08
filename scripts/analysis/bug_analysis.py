@@ -5,9 +5,7 @@ import seaborn as sns
 from scipy import stats
 import numpy as np
 
-# ==========================================
-# ⚙️ CONFIGURATION
-# ==========================================
+
 BASE = Path("inputs/processed")
 PLOTS_DIR = BASE.parent / "outputs" / "pokemon" / "plots"
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
