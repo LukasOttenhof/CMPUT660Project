@@ -21,7 +21,6 @@ def load_parquet(name: str) -> pd.DataFrame:
 
 
 def load_all() -> Dict[str, pd.DataFrame]:
-    """Load all parquet files we care about into a dict."""
     files = {
         "commit_messages_before": "commit_messages_before.parquet",
         "commit_messages_after": "commit_messages_after.parquet",
@@ -45,12 +44,24 @@ def load_all() -> Dict[str, pd.DataFrame]:
         "reviews_after": "reviews_after.parquet",
     }
 
-    data = {}
+    data: Dict[str, pd.DataFrame] = {}
+    repos = set()
+
     for key, fname in files.items():
         df = load_parquet(fname)
-        if not df.empty and "date" in df.columns:
-            df["date"] = pd.to_datetime(df["date"], utc=True)
+
+        if not df.empty:
+            if "date" in df.columns:
+                df["date"] = pd.to_datetime(df["date"], utc=True)
+
+            if "repo" in df.columns:
+                repos.update(df["repo"].dropna().unique())
+
         data[key] = df
+
+    # 🔑 ADD THIS BLOCK
+    data["repo_languages"] = get_repo_language_mapping(repos)
+
     return data
 
 
