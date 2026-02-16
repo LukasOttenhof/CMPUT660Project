@@ -1,0 +1,1 @@
+{"sha_to_metrics": {"71060e89a3fe80f334d0db6c74f6ea9f8f171984": {"total_nloc": 0, "avg_nloc": 0.0, "avg_ccn": 0.0, "avg_tokens": 0.0, "function_count": 1, "files_analyzed": 3}, "2f0aefee3e718cb5ba3bce14ad2453a2282711cf": {"total_nloc": 1712, "avg_nloc": 9.4, "avg_ccn": 2.0, "avg_tokens": 67.1, "function_count": 148, "files_analyzed": 59}}}

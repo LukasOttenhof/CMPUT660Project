@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import List
 
 
-REPO_LIST_TXT = "filtered_repos_3year100star.txt"
+REPO_LIST_TXT = "/home/lottenho/660_pro/CMPUT660Project/filtered_repos_3year100star.txt"
 CLONE_DIR = "repos"
 
 
