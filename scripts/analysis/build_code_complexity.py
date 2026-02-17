@@ -294,55 +294,48 @@ _TOTAL_LINE_RE = re.compile(
 _FILE_TABLE_RE = re.compile(r"^\s*(\d+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+(\d+)\s+(.+)$")
 
 
-def _parse_totals_from_lizard_stdout(stdout_text: str) -> Optional[Dict[str, Any]]:
-    for line in stdout_text.splitlines():
-        m = _TOTAL_LINE_RE.search(line)
-        if m:
-            return {
-                "total_nloc": int(m.group(1)),
-                "avg_nloc": float(m.group(2)),
-                "avg_ccn": float(m.group(3)),
-                "avg_tokens": float(m.group(4)),
-                "function_count": int(m.group(5)),
-            }
+def _parse_totals_from_lizard_stdout(cli_output: str) -> Optional[Dict[str, Any]]:
+    """
+    Parse Lizard CLI output into totals using per-function metrics,
+    including number of parameters (variables) per function.
+    """
+    function_pattern = r"\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(.+)"
+    functions_info: List[Dict[str, Any]] = []
 
-    candidates: List[Dict[str, Any]] = []
-    for line in stdout_text.splitlines():
-        m = _FILE_TABLE_RE.match(line)
-        if not m:
-            continue
-        total_nloc, avg_nloc, avg_ccn, avg_tokens, func_count, name = m.groups()
-        candidates.append(
-            {
-                "total_nloc": int(total_nloc),
-                "avg_nloc": float(avg_nloc),
-                "avg_ccn": float(avg_ccn),
-                "avg_tokens": float(avg_tokens),
-                "function_count": int(func_count),
-                "name": name.strip(),
-            }
-        )
+    # Extract per-function info
+    for line in cli_output.splitlines():
+        match = re.match(function_pattern, line)
+        if match:
+            nloc, ccn, tokens, params, length, location = match.groups()
+            functions_info.append({
+                "nloc": int(nloc),
+                "ccn": int(ccn),
+                "tokens": int(tokens),
+                "params": int(params),
+                "length": int(length),
+                "location": location.strip()
+            })
 
-    if not candidates:
+    if not functions_info:
         return None
 
-    for c in reversed(candidates):
-        if "total" in c["name"].lower():
-            return {
-                "total_nloc": c["total_nloc"],
-                "avg_nloc": c["avg_nloc"],
-                "avg_ccn": c["avg_ccn"],
-                "avg_tokens": c["avg_tokens"],
-                "function_count": c["function_count"],
-            }
+    # Aggregate totals across all functions
+    total_nloc = sum(f["nloc"] for f in functions_info)
+    function_count = len(functions_info)
+    avg_nloc = total_nloc / function_count if function_count else 0
+    avg_ccn = sum(f["ccn"] for f in functions_info) / function_count if function_count else 0
+    avg_tokens = sum(f["tokens"] for f in functions_info) / function_count if function_count else 0
+    total_params = sum(f["params"] for f in functions_info)
+    avg_params = total_params / function_count if function_count else 0
 
-    last = candidates[-1]
     return {
-        "total_nloc": last["total_nloc"],
-        "avg_nloc": last["avg_nloc"],
-        "avg_ccn": last["avg_ccn"],
-        "avg_tokens": last["avg_tokens"],
-        "function_count": last["function_count"],
+        "total_nloc": total_nloc,
+        "avg_nloc": avg_nloc,
+        "avg_ccn": avg_ccn,
+        "avg_tokens": avg_tokens,
+        "function_count": function_count,
+        "total_params": total_params,
+        "avg_params": avg_params
     }
 
 
@@ -485,7 +478,10 @@ def compute_month_snapshot_metrics(repo_dir: str, sha: str) -> Dict[str, Any]:
                 "avg_tokens": 0.0,
                 "function_count": 0,
                 "files_analyzed": 0,
+                "total_params": 0,
+                "avg_params": 0.0,
             }
+
 
         metrics = run_lizard_on_tempdir(temp_dir)
         if metrics.get("_error"):
@@ -594,7 +590,10 @@ def main() -> None:
                 "avg_tokens": float(metrics.get("avg_tokens", 0.0)),
                 "function_count": int(metrics.get("function_count", 0)),
                 "files_analyzed": int(metrics.get("files_analyzed", 0)),
+                "total_params": int(metrics.get("total_params", 0)),   # NEW
+                "avg_params": float(metrics.get("avg_params", 0.0)),   # NEW
             }
+
 
             rows.append(row)
             existing_keys.add((repo_name, year_month))
