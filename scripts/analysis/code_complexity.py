@@ -103,6 +103,8 @@ def main():
         "avg_tokens",
         "total_params",
         "avg_params",
+        "total_length",   # NEW: total length (including comments)
+        "avg_length",     # NEW: average length per function
         "function_count",
         "files_analyzed",
         "loc_added",
@@ -142,7 +144,6 @@ def main():
         axis=1,
     )
 
- 
     # print("\nAggregated metrics per repo (first 5):")
     # print(repo_agg.head())
 
