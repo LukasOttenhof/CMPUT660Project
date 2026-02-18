@@ -22,7 +22,7 @@ which python
 python --version
 
 # Run your script
-python build_code_complexity.py
+python /home/lottenho/660_pro/CMPUT660Project/scripts/analysis/build_code_complexity.py
 
 END_TIME=$(date +%s)
 echo "Job ended at: $(date)"

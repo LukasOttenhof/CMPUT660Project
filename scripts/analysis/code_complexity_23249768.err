@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/lottenho/660_pro/CMPUT660Project/scripts/analysis/build_code_complexity.py", line 442, in <module>
+    main()
+  File "/home/lottenho/660_pro/CMPUT660Project/scripts/analysis/build_code_complexity.py", line 407, in main
+    metrics = compute_month_snapshot_metrics(repo_dir, sha)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lottenho/660_pro/CMPUT660Project/scripts/analysis/build_code_complexity.py", line 326, in compute_month_snapshot_metrics
+    temp_dir, nfiles = materialize_snapshot_to_tempdir(repo_dir, sha)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'materialize_snapshot_to_tempdir' is not defined
