@@ -1,0 +1,8 @@
+Job submitted at: Tue Feb 17 16:34:15 PST 2026
+Job started at: Tue Feb 17 16:34:15 PST 2026
+/home/lottenho/660_pro/venv/bin/python
+Python 3.11.4
+[warn] Could not read existing parquet: /home/lottenho/660_pro/CMPUT660Project/inputs/processed/repo_month_complexity.parquet. Starting fresh.
+[1/44] Skipping jwiedeman/BlueFrogAnalytics (not cloned)
+Job ended at: Tue Feb 17 16:34:49 PST 2026
+Execution time (seconds): 34

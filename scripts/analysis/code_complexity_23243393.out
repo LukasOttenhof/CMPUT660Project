@@ -1,0 +1,37 @@
+Job submitted at: Tue Feb 17 16:54:17 PST 2026
+Job started at: Tue Feb 17 16:54:17 PST 2026
+
+----------------------------------------------------------------------------
+  arrow:
+----------------------------------------------------------------------------
+    Description:
+      Apache Arrow is a cross-language development platform for in-memory
+      data.
+
+     Versions:
+        arrow/14.0.0
+        arrow/14.0.1
+        arrow/15.0.1
+        arrow/16.1.0
+        arrow/17.0.0
+        arrow/18.1.0
+        arrow/19.0.1
+        arrow/21.0.0
+        arrow/22.0.0
+        arrow/23.0.1
+
+----------------------------------------------------------------------------
+  For detailed information about a specific "arrow" package (including how to load the modules) use the module's full name.
+  Note that names that have a trailing (E) are extensions provided by other modules.
+  For example:
+
+     $ module spider arrow/23.0.1
+----------------------------------------------------------------------------
+
+ 
+
+/home/lottenho/660_pro/venv/bin/python
+Python 3.11.4
+[1/44] Skipping jwiedeman/BlueFrogAnalytics (not cloned)
+Job ended at: Tue Feb 17 16:55:02 PST 2026
+Execution time (seconds): 45
