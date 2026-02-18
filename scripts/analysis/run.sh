@@ -12,7 +12,8 @@ echo "Job submitted at: $(date)"
 echo "Job started at: $(date)"
 START_TIME=$(date +%s)
 module load gcc
-module load arrow
+module spider arrow
+module load arrow/14.0.0
 # Activate your virtual environment
 source /home/lottenho/660_pro/venv/bin/activate
 
