@@ -1,1 +1,0 @@
-{"sha_to_metrics": {"308dc8769e6234aa8b1c87d17f980c9c25ed567e": {"_error": "timeout"}, "7d2afd60c284097a07b980b88546ab0176bde6b8": {"_error": "Command '['python3', '-m', 'lizard', '/tmp/repo_snap_epuc8pgf']' timed out after 180 seconds"}}}
