@@ -30,17 +30,14 @@ LIZARD_TIMEOUT = 180  # per monthly snapshot
 # logging
 LOG_EVERY_MONTH = 1  # print after each month
 
-# prune common dependency/build dirs (path contains any of these segments)
+# prune common dependency/build dirs
 SKIP_DIR_NAMES = {
     ".git", "node_modules", "vendor", "dist", "build", "target",
     "bin", "obj", "__pycache__", ".venv", "venv", ".tox",
     ".mypy_cache", ".pytest_cache", ".idea", ".vscode",
 }
 
-# optional: avoid minified/bundled files that can explode runtime
 SKIP_FILE_SUFFIXES = (".min.js", ".min.css", ".map")
-
-# skip very large tracked files (blob size in bytes)
 MAX_TRACKED_FILE_BYTES = 2_000_000  # 2MB
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -112,7 +109,7 @@ def save_output_incremental(rows: List[Dict[str, Any]]) -> None:
         df["date"] = pd.to_datetime(df["date"], utc=True, errors="coerce")
         df["year_month"] = df["year_month"].astype(str)
         df = df.sort_values(["repo", "date"])
-    df.to_parquet(OUT_PARQUET, index=False)
+        df.to_parquet(OUT_PARQUET, index=False)
 
 
 def cache_path_for_repo(repo_name: str) -> str:
@@ -150,60 +147,25 @@ def ensure_full_history(repo_dir: str) -> None:
     shallow_file = os.path.join(repo_dir, ".git", "shallow")
     try:
         if os.path.exists(shallow_file):
-            try:
-                subprocess.run(
-                    ["git", "-C", repo_dir, "fetch", "--unshallow"],
-                    timeout=FETCH_TIMEOUT,
-                    capture_output=True,
-                )
-            except Exception:
-                subprocess.run(
-                    ["git", "-C", repo_dir, "fetch", "--depth=1000000"],
-                    timeout=FETCH_TIMEOUT,
-                    capture_output=True,
-                )
+            run_cmd(["git", "-C", repo_dir, "fetch", "--unshallow"], timeout=FETCH_TIMEOUT)
         else:
-            subprocess.run(
-                ["git", "-C", repo_dir, "fetch", "--all", "--tags", "--prune"],
-                timeout=FETCH_TIMEOUT,
-                capture_output=True,
-            )
+            run_cmd(["git", "-C", repo_dir, "fetch", "--all", "--tags", "--prune"], timeout=FETCH_TIMEOUT)
     except Exception:
         pass
 
 
 def get_first_last_commit_dates(repo_dir: str) -> Tuple[Optional[pd.Timestamp], Optional[pd.Timestamp]]:
     try:
-        cp_last = run_cmd(
-            ["git", "-C", repo_dir, "log", "-1", "--pretty=format:%cI", "--all"],
-            timeout=GIT_TIMEOUT,
-        )
-        if cp_last.returncode != 0:
-            return None, None
+        cp_last = run_cmd(["git", "-C", repo_dir, "log", "-1", "--pretty=format:%cI", "--all"], timeout=GIT_TIMEOUT)
+        if cp_last.returncode != 0: return None, None
         last = pd.to_datetime(cp_last.stdout.strip(), utc=True, errors="coerce")
-        if pd.isna(last):
-            return None, None
 
-        cp_first_sha = run_cmd(
-            ["git", "-C", repo_dir, "rev-list", "--max-parents=0", "--all"],
-            timeout=GIT_TIMEOUT,
-        )
-        if cp_first_sha.returncode != 0 or not cp_first_sha.stdout.strip():
-            return None, None
-
+        cp_first_sha = run_cmd(["git", "-C", repo_dir, "rev-list", "--max-parents=0", "--all"], timeout=GIT_TIMEOUT)
+        if cp_first_sha.returncode != 0 or not cp_first_sha.stdout.strip(): return None, None
         first_sha = cp_first_sha.stdout.strip().splitlines()[0]
 
-        cp_first_dt = run_cmd(
-            ["git", "-C", repo_dir, "show", "-s", "--pretty=format:%cI", first_sha],
-            timeout=GIT_TIMEOUT,
-        )
-        if cp_first_dt.returncode != 0:
-            return None, None
-
+        cp_first_dt = run_cmd(["git", "-C", repo_dir, "show", "-s", "--pretty=format:%cI", first_sha], timeout=GIT_TIMEOUT)
         first = pd.to_datetime(cp_first_dt.stdout.strip(), utc=True, errors="coerce")
-        if pd.isna(first):
-            return None, None
-
         return first, last
     except Exception:
         return None, None
@@ -227,42 +189,36 @@ def month_end_timestamp(month_start: pd.Timestamp) -> pd.Timestamp:
 
 def rev_list_before(repo_dir: str, before_dt: pd.Timestamp) -> Optional[str]:
     before_iso = before_dt.isoformat()
-    try:
-        cp = run_cmd(
-            ["git", "-C", repo_dir, "rev-list", "-1", "--all", f"--before={before_iso}"],
-            timeout=GIT_TIMEOUT,
-        )
-        if cp.returncode != 0:
-            return None
-        sha = cp.stdout.strip()
-        return sha or None
-    except Exception:
-        return None
+    cp = run_cmd(["git", "-C", repo_dir, "rev-list", "-1", "--all", f"--before={before_iso}"], timeout=GIT_TIMEOUT)
+    sha = cp.stdout.strip()
+    return sha or None
 
 
 def get_commit_datetime(repo_dir: str, sha: str) -> Optional[pd.Timestamp]:
-    try:
-        cp = run_cmd(
-            ["git", "-C", repo_dir, "show", "-s", "--pretty=format:%cI", sha],
-            timeout=GIT_TIMEOUT,
-        )
-        if cp.returncode != 0:
-            return None
-        dt = pd.to_datetime(cp.stdout.strip(), utc=True, errors="coerce")
-        if pd.isna(dt):
-            return None
-        return dt
-    except Exception:
-        return None
+    cp = run_cmd(["git", "-C", repo_dir, "show", "-s", "--pretty=format:%cI", sha], timeout=GIT_TIMEOUT)
+    dt = pd.to_datetime(cp.stdout.strip(), utc=True, errors="coerce")
+    return dt if not pd.isna(dt) else None
+
+
+def get_tracked_files_with_sizes(repo_dir: str, sha: str) -> List[Tuple[str, int]]:
+    cp = run_cmd(["git", "-C", repo_dir, "ls-tree", "-r", "-l", sha], timeout=GIT_TIMEOUT)
+    if cp.returncode != 0: return []
+    out = []
+    for line in cp.stdout.splitlines():
+        if "\t" not in line: continue
+        left, path = line.split("\t", 1)
+        parts = left.split()
+        if len(parts) >= 4 and parts[1] == "blob":
+            try: out.append((path.strip(), int(parts[3])))
+            except: continue
+    return out
 
 
 def should_skip_path(path: str) -> bool:
     lower = path.lower().replace("\\", "/")
     parts = lower.split("/")
-    if any(p in SKIP_DIR_NAMES for p in parts):
-        return True
-    if lower.endswith(SKIP_FILE_SUFFIXES):
-        return True
+    if any(p in SKIP_DIR_NAMES for p in parts): return True
+    if lower.endswith(SKIP_FILE_SUFFIXES): return True
     return False
 
 
@@ -271,10 +227,8 @@ def should_skip_path(path: str) -> bool:
 # ==========================================================
 
 def _parse_totals_from_lizard_stdout(cli_output: str) -> Optional[Dict[str, Any]]:
-    """
-    Parse Lizard output into totals, including total/avg length.
-    """
-    function_pattern = r"\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(.+)"
+    # Regex for Lizard table: NLOC CCN TOKEN PARAM LENGTH LOCATION
+    function_pattern = r"\s*(\d+)\s+([\d.]+)\s+([\d.]+)\s+(\d+)\s+(\d+)\s+(.+)"
     functions_info: List[Dict[str, Any]] = []
 
     for line in cli_output.splitlines():
@@ -283,73 +237,68 @@ def _parse_totals_from_lizard_stdout(cli_output: str) -> Optional[Dict[str, Any]
             nloc, ccn, tokens, params, length, location = match.groups()
             functions_info.append({
                 "nloc": int(nloc),
-                "ccn": int(ccn),
-                "tokens": int(tokens),
+                "ccn": float(ccn),
+                "tokens": float(tokens),
                 "params": int(params),
-                "length": int(length),
-                "location": location.strip()
+                "length": int(length)
             })
 
-    if not functions_info:
-        return None
+    if not functions_info: return None
 
-    function_count = len(functions_info)
+    funcs = len(functions_info)
     total_nloc = sum(f["nloc"] for f in functions_info)
-    avg_nloc = total_nloc / function_count if function_count else 0
-    avg_ccn = sum(f["ccn"] for f in functions_info) / function_count if function_count else 0
-    avg_tokens = sum(f["tokens"] for f in functions_info) / function_count if function_count else 0
-    total_params = sum(f["params"] for f in functions_info)
-    avg_params = total_params / function_count if function_count else 0
-    total_length = sum(f["length"] for f in functions_info)
-    avg_length = total_length / function_count if function_count else 0
-
     return {
         "total_nloc": total_nloc,
-        "avg_nloc": avg_nloc,
-        "avg_ccn": avg_ccn,
-        "avg_tokens": avg_tokens,
-        "function_count": function_count,
-        "total_params": total_params,
-        "avg_params": avg_params,
-        "total_length": total_length,  # NEW
-        "avg_length": avg_length       # NEW
+        "avg_nloc": total_nloc / funcs,
+        "avg_ccn": sum(f["ccn"] for f in functions_info) / funcs,
+        "avg_tokens": sum(f["tokens"] for f in functions_info) / funcs,
+        "function_count": funcs,
+        "total_params": sum(f["params"] for f in functions_info),
+        "avg_params": sum(f["params"] for f in functions_info) / funcs,
+        "total_length": sum(f["length"] for f in functions_info),
+        "avg_length": sum(f["length"] for f in functions_info) / funcs
     }
 
 
-# ==========================================================
-# compute snapshot
-# ==========================================================
+def run_lizard_on_tempdir(temp_dir: str) -> Dict[str, Any]:
+    try:
+        cp = subprocess.run(["python3", "-m", "lizard", temp_dir], capture_output=True, text=True, timeout=LIZARD_TIMEOUT)
+        metrics = _parse_totals_from_lizard_stdout(cp.stdout)
+        return metrics if metrics else {"_error": "no_metrics"}
+    except Exception as e:
+        return {"_error": str(e)}
+
+
+def materialize_snapshot_to_tempdir(repo_dir: str, sha: str) -> Tuple[Optional[str], int]:
+    tracked = get_tracked_files_with_sizes(repo_dir, sha)
+    if not tracked: return None, 0
+    temp_dir = tempfile.mkdtemp(prefix="repo_snap_")
+    files_written = 0
+    for rel_path, size in tracked:
+        if should_skip_path(rel_path) or size <= 0 or size > MAX_TRACKED_FILE_BYTES: continue
+        cp = run_cmd(["git", "-C", repo_dir, "show", f"{sha}:{rel_path}"], timeout=GIT_TIMEOUT, text=False)
+        if cp.returncode == 0:
+            out_path = os.path.join(temp_dir, rel_path)
+            os.makedirs(os.path.dirname(out_path), exist_ok=True)
+            with open(out_path, "wb") as f: f.write(cp.stdout)
+            files_written += 1
+    if files_written == 0:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        return None, 0
+    return temp_dir, files_written
+
 
 def compute_month_snapshot_metrics(repo_dir: str, sha: str) -> Dict[str, Any]:
     temp_dir = None
     try:
         temp_dir, nfiles = materialize_snapshot_to_tempdir(repo_dir, sha)
         if not temp_dir:
-            return {
-                "total_nloc": 0,
-                "avg_nloc": 0.0,
-                "avg_ccn": 0.0,
-                "avg_tokens": 0.0,
-                "function_count": 0,
-                "files_analyzed": 0,
-                "total_params": 0,
-                "avg_params": 0.0,
-                "total_length": 0,   # NEW
-                "avg_length": 0.0,   # NEW
-            }
-
+            return {"total_nloc": 0, "avg_nloc": 0.0, "avg_ccn": 0.0, "avg_tokens": 0.0, "function_count": 0, "files_analyzed": 0, "total_params": 0, "avg_params": 0.0, "total_length": 0, "avg_length": 0.0}
         metrics = run_lizard_on_tempdir(temp_dir)
-        if metrics.get("_error"):
-            return metrics
-
-        metrics["files_analyzed"] = nfiles
+        if not metrics.get("_error"): metrics["files_analyzed"] = nfiles
         return metrics
     finally:
-        if temp_dir:
-            try:
-                shutil.rmtree(temp_dir, ignore_errors=True)
-            except Exception:
-                pass
+        if temp_dir: shutil.rmtree(temp_dir, ignore_errors=True)
 
 
 # ==========================================================
@@ -375,47 +324,36 @@ def main() -> None:
             print(f"[{repo_index}/{total_repos}] Skipping {repo_name} (not cloned)")
             continue
 
+        print(f"\n[{repo_index}/{total_repos}] Repository: {repo_name}")
         ensure_full_history(repo_dir)
 
         first_dt, last_dt = get_first_last_commit_dates(repo_dir)
-        if first_dt is None or last_dt is None:
-            continue
+        if first_dt is None or last_dt is None: continue
 
         months = month_range_inclusive(first_dt, last_dt)
         cache = load_repo_cache(repo_name)
-        sha_cache: Dict[str, Dict[str, Any]] = cache.get("sha_to_metrics", {})
-        if not isinstance(sha_cache, dict):
-            sha_cache = {}
+        sha_cache = cache.get("sha_to_metrics", {})
 
         for month_start in months:
             year_month = f"{month_start.year:04d}-{month_start.month:02d}"
-            if (repo_name, year_month) in existing_keys:
-                continue
+            if (repo_name, year_month) in existing_keys: continue
 
             month_end = month_end_timestamp(month_start)
             sha = rev_list_before(repo_dir, month_end)
-            if not sha:
-                continue
+            if not sha: continue
 
             dt = get_commit_datetime(repo_dir, sha) or month_end
             period = "before" if dt < boundary else "after"
 
-            cached_metrics = sha_cache.get(sha)
-            if isinstance(cached_metrics, dict) and not cached_metrics.get("_error"):
-                metrics = cached_metrics
-            else:
+            metrics = sha_cache.get(sha)
+            if not metrics or metrics.get("_error"):
                 metrics = compute_month_snapshot_metrics(repo_dir, sha)
                 sha_cache[sha] = metrics
 
-            if metrics.get("_error"):
-                continue
+            if metrics.get("_error"): continue
 
             row = {
-                "repo": repo_name,
-                "year_month": year_month,
-                "date": dt,
-                "commit_sha": sha,
-                "period": period,
+                "repo": repo_name, "year_month": year_month, "date": dt, "commit_sha": sha, "period": period,
                 "total_nloc": int(metrics.get("total_nloc", 0)),
                 "avg_nloc": float(metrics.get("avg_nloc", 0.0)),
                 "avg_ccn": float(metrics.get("avg_ccn", 0.0)),
@@ -424,17 +362,20 @@ def main() -> None:
                 "files_analyzed": int(metrics.get("files_analyzed", 0)),
                 "total_params": int(metrics.get("total_params", 0)),
                 "avg_params": float(metrics.get("avg_params", 0.0)),
-                "total_length": int(metrics.get("total_length", 0)),  # NEW
-                "avg_length": float(metrics.get("avg_length", 0.0)),  # NEW
+                "total_length": int(metrics.get("total_length", 0)),
+                "avg_length": float(metrics.get("avg_length", 0.0)),
             }
 
             rows.append(row)
             existing_keys.add((repo_name, year_month))
+            # PROGRESS PRINT
+            print(f"   -> Finished {year_month} (Commit: {sha[:8]})")
 
         cache["sha_to_metrics"] = sha_cache
         save_repo_cache(repo_name, cache)
         save_output_incremental(rows)
 
+    print("\n--- Done. Final Save. ---")
     save_output_incremental(rows)
 
 
