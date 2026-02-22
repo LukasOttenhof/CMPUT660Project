@@ -227,8 +227,8 @@ def should_skip_path(path: str) -> bool:
 # ==========================================================
 
 def _parse_totals_from_lizard_stdout(cli_output: str) -> Optional[Dict[str, Any]]:
-    # Regex for Lizard table: NLOC CCN TOKEN PARAM LENGTH LOCATION
-    function_pattern = r"\s*(\d+)\s+([\d.]+)\s+([\d.]+)\s+(\d+)\s+(\d+)\s+(.+)"
+
+    function_pattern = r"\s*(\d+)\s+([\d.]+)\s+([\d.]+)\s+(\d+)\s+(\d+)\s+(.*@.*)"
     functions_info: List[Dict[str, Any]] = []
 
     for line in cli_output.splitlines():
@@ -243,16 +243,18 @@ def _parse_totals_from_lizard_stdout(cli_output: str) -> Optional[Dict[str, Any]
                 "length": int(length)
             })
 
-    if not functions_info: return None
+    if not functions_info: 
+        return None
 
     funcs = len(functions_info)
     total_nloc = sum(f["nloc"] for f in functions_info)
+    
     return {
         "total_nloc": total_nloc,
+        "function_count": funcs,
         "avg_nloc": total_nloc / funcs,
         "avg_ccn": sum(f["ccn"] for f in functions_info) / funcs,
         "avg_tokens": sum(f["tokens"] for f in functions_info) / funcs,
-        "function_count": funcs,
         "total_params": sum(f["params"] for f in functions_info),
         "avg_params": sum(f["params"] for f in functions_info) / funcs,
         "total_length": sum(f["length"] for f in functions_info),
