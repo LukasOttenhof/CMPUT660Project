@@ -24,7 +24,7 @@ CACHE_DIR = os.path.join(OUTPUT_DIR, "repo_month_complexity_cache")
 # timeouts (seconds)
 GIT_TIMEOUT = 120
 FETCH_TIMEOUT = 300
-LIZARD_TIMEOUT = 180  # per monthly snapshot
+LIZARD_TIMEOUT = 600  # RAISED to 10 minutes
 
 # logging
 LOG_EVERY_MONTH = 1  
@@ -36,7 +36,7 @@ SKIP_DIR_NAMES = {
 }
 
 SKIP_FILE_SUFFIXES = (".min.js", ".min.css", ".map")
-MAX_TRACKED_FILE_BYTES = 2_000_000  # 2MB
+MAX_TRACKED_FILE_BYTES = 2_000_000  # 2MB (roughly 2000 KB)
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(CACHE_DIR, exist_ok=True)
@@ -157,21 +157,15 @@ def get_commit_datetime(repo_dir: str, sha: str) -> Optional[pd.Timestamp]:
     except Exception: return None
 
 # ==========================================================
-# LIZARD PARSING (UPDATED)
+# LIZARD PARSING
 # ==========================================================
 
-# Regex for function level details
-# Example: 4 2 22 0 5 test@2-6@path
 _FUNCTION_PATTERN = re.compile(r"^\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(.+)")
-
-# Regex for the summary lines (Total or per-file summary)
 _SUMMARY_PATTERN = re.compile(r"^\s*(\d+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+(\d+)\s+(.+)$")
+
 def parse_detailed_lizard(stdout_text: str) -> Dict[str, Any]:
     functions_info = []
-    
-    # Track totals ourselves to avoid the "sticky" summary bug
     running_total_nloc = 0
-    
     max_values = {
         "max_nloc": 0, "max_ccn": 0, "max_tokens": 0, 
         "max_params": 0, "max_length": 0
@@ -179,18 +173,14 @@ def parse_detailed_lizard(stdout_text: str) -> Dict[str, Any]:
     
     lines = stdout_text.splitlines()
     for line in lines:
-        # 1. Match Functions
         f_match = _FUNCTION_PATTERN.match(line)
         if f_match:
             nloc, ccn, tokens, params, length, loc = f_match.groups()
             nloc, ccn, tokens, params, length = int(nloc), int(ccn), int(tokens), int(params), int(length)
-            
             functions_info.append({
                 "nloc": nloc, "ccn": ccn, "tokens": tokens,
                 "params": params, "length": length, "location": loc.strip()
             })
-            
-            # Update Maxes
             max_values["max_nloc"] = max(max_values["max_nloc"], nloc)
             max_values["max_ccn"] = max(max_values["max_ccn"], ccn)
             max_values["max_tokens"] = max(max_values["max_tokens"], tokens)
@@ -198,22 +188,16 @@ def parse_detailed_lizard(stdout_text: str) -> Dict[str, Any]:
             max_values["max_length"] = max(max_values["max_length"], length)
             continue
 
-        # 2. Match File Summaries (to get Total NLOC, including code outside functions)
         s_match = _SUMMARY_PATTERN.match(line)
         if s_match:
-            # We use this to get the NLOC of the file
-            # Lizard summary row: NLOC, AvgNLOC, AvgCCN, AvgTokens, FunCount, FileName
             file_nloc = int(s_match.group(1))
             file_name = s_match.group(6).strip()
-            
-            # Sum up NLOC from individual files, but skip the 'Total' row to avoid double counting
             if file_name.lower() != "total":
                 running_total_nloc += file_nloc
 
     if not functions_info and running_total_nloc == 0:
         return {"_error": "no_metrics_found"}
 
-    # Calculate averages manually for accuracy
     func_count = len(functions_info)
     avg_ccn = sum(f["ccn"] for f in functions_info) / func_count if func_count > 0 else 0.0
 
@@ -269,11 +253,23 @@ def compute_month_snapshot_metrics(repo_dir: str, sha: str) -> Dict[str, Any]:
         
         env = os.environ.copy()
         env["PYTHONIOENCODING"] = "utf-8"
-        cp = subprocess.run(["python", "-m", "lizard", temp_dir], capture_output=True, timeout=LIZARD_TIMEOUT, env=env, text=True)
         
-        metrics = parse_detailed_lizard(cp.stdout)
-        if "_error" not in metrics: metrics["files_analyzed"] = nfiles
-        return metrics
+        # --- TIMEOUT PROTECTION ADDED HERE ---
+        try:
+            cp = subprocess.run(
+                ["python", "-m", "lizard", temp_dir], 
+                capture_output=True, 
+                timeout=LIZARD_TIMEOUT, 
+                env=env, 
+                text=True
+            )
+            metrics = parse_detailed_lizard(cp.stdout)
+            if "_error" not in metrics: metrics["files_analyzed"] = nfiles
+            return metrics
+        except subprocess.TimeoutExpired:
+            print(f"      [!] Lizard timed out for SHA {sha} after {LIZARD_TIMEOUT}s. Skipping.")
+            return {"_error": "timeout", "files_analyzed": nfiles}
+        
     finally:
         if temp_dir: shutil.rmtree(temp_dir, ignore_errors=True)
 
@@ -316,12 +312,14 @@ def main():
             dt = get_commit_datetime(repo_dir, sha) or month_start
             period = "before" if dt < boundary else "after"
 
+            # Check cache: if it exists AND is not an error (or a previous timeout), use it
             if sha in sha_cache and not sha_cache[sha].get("_error"):
                 metrics = sha_cache[sha]
             else:
                 metrics = compute_month_snapshot_metrics(repo_dir, sha)
                 sha_cache[sha] = metrics
 
+            # If there was a timeout or other error, we skip this row in the final Parquet
             if metrics.get("_error"): continue
 
             row = {
@@ -339,7 +337,7 @@ def main():
                 "max_length": metrics.get("max_length", 0),
                 "function_count": metrics.get("function_count", 0),
                 "files_analyzed": metrics.get("files_analyzed", 0),
-                "functions_info": metrics.get("functions_info", []) # Stored as list of dicts
+                "functions_info": metrics.get("functions_info", [])
             }
             rows.append(row)
             existing_keys.add((repo_name, year_month))
