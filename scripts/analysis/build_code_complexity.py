@@ -166,18 +166,20 @@ _FUNCTION_PATTERN = re.compile(r"^\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(.+
 
 # Regex for the summary lines (Total or per-file summary)
 _SUMMARY_PATTERN = re.compile(r"^\s*(\d+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+(\d+)\s+(.+)$")
-
 def parse_detailed_lizard(stdout_text: str) -> Dict[str, Any]:
     functions_info = []
+    
+    # Track totals ourselves to avoid the "sticky" summary bug
+    running_total_nloc = 0
+    
     max_values = {
         "max_nloc": 0, "max_ccn": 0, "max_tokens": 0, 
         "max_params": 0, "max_length": 0
     }
-    summary_data = None
     
     lines = stdout_text.splitlines()
     for line in lines:
-        # 1. Try Function Match
+        # 1. Match Functions
         f_match = _FUNCTION_PATTERN.match(line)
         if f_match:
             nloc, ccn, tokens, params, length, loc = f_match.groups()
@@ -189,37 +191,39 @@ def parse_detailed_lizard(stdout_text: str) -> Dict[str, Any]:
             })
             
             # Update Maxes
-            if nloc > max_values["max_nloc"]: max_values["max_nloc"] = nloc
-            if ccn > max_values["max_ccn"]: max_values["max_ccn"] = ccn
-            if tokens > max_values["max_tokens"]: max_values["max_tokens"] = tokens
-            if params > max_values["max_params"]: max_values["max_params"] = params
-            if length > max_values["max_length"]: max_values["max_length"] = length
+            max_values["max_nloc"] = max(max_values["max_nloc"], nloc)
+            max_values["max_ccn"] = max(max_values["max_ccn"], ccn)
+            max_values["max_tokens"] = max(max_values["max_tokens"], tokens)
+            max_values["max_params"] = max(max_values["max_params"], params)
+            max_values["max_length"] = max(max_values["max_length"], length)
             continue
 
-        # 2. Try Summary/Total Match
+        # 2. Match File Summaries (to get Total NLOC, including code outside functions)
         s_match = _SUMMARY_PATTERN.match(line)
         if s_match:
-            # Skip if it looks like the header
-            if not any(c.isdigit() for c in s_match.group(1)): continue
+            # We use this to get the NLOC of the file
+            # Lizard summary row: NLOC, AvgNLOC, AvgCCN, AvgTokens, FunCount, FileName
+            file_nloc = int(s_match.group(1))
+            file_name = s_match.group(6).strip()
             
-            nloc, avg_nloc, avg_ccn, avg_tokens, func_count, name = s_match.groups()
-            
-            # We prioritize the row that says "Total" or is the very last summary row
-            if "total" in name.lower() or summary_data is None:
-                summary_data = {
-                    "total_nloc": int(nloc),
-                    "avg_nloc": float(avg_nloc),
-                    "avg_ccn": float(avg_ccn),
-                    "avg_tokens": float(avg_tokens),
-                    "function_count": int(func_count)
-                }
+            # Sum up NLOC from individual files, but skip the 'Total' row to avoid double counting
+            if file_name.lower() != "total":
+                running_total_nloc += file_nloc
 
-    if not summary_data and not functions_info:
+    if not functions_info and running_total_nloc == 0:
         return {"_error": "no_metrics_found"}
 
-    result = summary_data if summary_data else {}
+    # Calculate averages manually for accuracy
+    func_count = len(functions_info)
+    avg_ccn = sum(f["ccn"] for f in functions_info) / func_count if func_count > 0 else 0.0
+
+    result = {
+        "total_nloc": running_total_nloc,
+        "function_count": func_count,
+        "avg_ccn": round(avg_ccn, 2),
+        "functions_info": functions_info
+    }
     result.update(max_values)
-    result["functions_info"] = functions_info
     return result
 
 def get_tracked_files_with_sizes(repo_dir: str, sha: str) -> List[Tuple[str, int]]:
