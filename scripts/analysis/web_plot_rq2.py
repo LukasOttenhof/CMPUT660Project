@@ -100,11 +100,12 @@ def build_monthly_dev_ratios(data):
     # Returning both ratios and raw averages
     return before_ratios, after_ratios, before_avg_per_dev, after_avg_per_dev
 
-
 def plot_radar(before, after, title, filename):
-    labels = list(before.keys())
+    # 1. Clean labels
+    raw_labels = list(before.keys())
+    labels = [l.replace('_', ' ').title().replace('Prs', 'PRs') for l in raw_labels]
+    
     N = len(labels)
-
     values_before = list(before.values())
     values_after = list(after.values())
 
@@ -114,44 +115,50 @@ def plot_radar(before, after, title, filename):
     angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
     angles += angles[:1]
 
-    plt.figure(figsize=(8, 8))
-    ax = plt.subplot(111, polar=True)
+    # 2. Setup Figure
+    fig = plt.figure(figsize=(14, 14)) 
+    # Centering the plot area
+    ax = fig.add_axes([0.1, 0.15, 0.8, 0.7], polar=True)
 
-    # Apply sqrt scaling for visual balance (optional but often helps ratios)
-    values_before_scaled = values_before
-    values_after_scaled = values_after
-
-
-    # Clean red and blue
     color_before_line = "#E74C3C" 
     color_before_fill = "#F1948A"  
     color_after_line = "#3498DB"   
     color_after_fill = "#85C1E9"  
 
-    # Plot Before
-    ax.plot(angles, values_before_scaled, color=color_before_line, linewidth=2, label="Before Agents")
-    ax.fill(angles, values_before_scaled, color=color_before_fill, alpha=0.5)
+    ax.plot(angles, values_before, color=color_before_line, linewidth=4, label="Before Agents")
+    ax.fill(angles, values_before, color=color_before_fill, alpha=0.4)
 
-    # Plot After
-    ax.plot(angles, values_after_scaled, color=color_after_line, linewidth=2, label="After Agents")
-    ax.fill(angles, values_after_scaled, color=color_after_fill, alpha=0.5)
+    ax.plot(angles, values_after, color=color_after_line, linewidth=4, label="After Agents")
+    ax.fill(angles, values_after, color=color_after_fill, alpha=0.4)
 
-    # Labels and title
-    ax.set_thetagrids(np.degrees(angles[:-1]), labels, fontsize=12, fontweight='bold')
-    ax.set_title(title, size=18, pad=20, fontweight='bold')
-    ax.legend(loc="lower left", bbox_to_anchor=(-0.15, -0.1), fontsize=12)
+    # 3. Anchoring Labels to the Spokes
+    # Using 'va' and 'ha' here ensures they are centered on the coordinate
+    ax.set_thetagrids(
+        np.degrees(angles[:-1]), 
+        labels, 
+        fontsize=28, 
+        fontweight='bold',
+        ha='center', 
+        va='center'
+    )
+    
+    # 4. Uniform Padding
+    # This moves all labels out by a fixed amount of points from the edge
+    ax.tick_params(axis='x', which='major', pad=45) 
 
-    # Grid and ticks
-    ax.grid(True, linestyle='--', linewidth=0.8, alpha=0.7)
-    ax.set_rlabel_position(30)
-    ax.tick_params(axis='y', labelsize=10)
+    # Title & Legend
+    ax.set_title(title, size=32, pad=70, fontweight='bold')
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.25), fontsize=28, ncol=2)
+
+    # Radial grid cleanup
+    ax.grid(True, linestyle='--', linewidth=1.5, alpha=0.5)
+    ax.tick_params(axis='y', labelsize=18, labelcolor='gray')
 
     # Save
     outpath = PLOTS_DIR / filename
-    plt.savefig(outpath, dpi=300, bbox_inches="tight")
+    plt.savefig(outpath, dpi=300, bbox_inches="tight", pad_inches=1.0)
     plt.close()
-    print(f"[rq2] Saved radar chart -> {outpath}")
-
+    print(f"[rq2] Saved anchored radar chart -> {outpath}")
 
 def main():
     data = load_all()
@@ -178,8 +185,8 @@ def main():
 
     plot_radar(
         before_ratios, after_ratios,
-        "Developer Activity Before vs After Agents (Per Dev Per Month Ratios)",
-        "final.png"
+        "",
+        "permonth.png"
     )
 
     #Monthly averages
