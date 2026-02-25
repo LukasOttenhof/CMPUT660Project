@@ -78,6 +78,7 @@ def ensure_clone(full_name: str) -> str:
 # ==========================================================
 
 def main():
+    failed = []
     specs = parse_repo_list(REPO_LIST_TXT)
     print(f"📦 Found {len(specs)} repositories to clone.\n")
 
@@ -90,10 +91,16 @@ def main():
             ensure_clone(spec.full_name)
         except Exception as e:
             print(f"⚠ Failed to clone {spec.full_name}: {e}")
+            failed.append(spec.full_name)
 
     print("\n✅ Clone process complete.")
     print(f"Repositories are in ./{CLONE_DIR}/")
 
+    # print repo names failed to clone
+    if failed:
+        print(f"Failed to clone {len(failed)} repositories:")
+        for f in failed:
+            print(f"  - {f}")
 
 if __name__ == "__main__":
     main()

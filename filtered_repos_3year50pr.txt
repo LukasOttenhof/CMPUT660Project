@@ -1,4 +1,3 @@
-jwiedeman/BlueFrogAnalytics | https://api.github.com/repos/jwiedeman/BlueFrogAnalytics | 778 agent PRs | first agent PR: 2025-05-19 | repo creation: 2019-04-15
 supermarsx/whoisdigger | https://api.github.com/repos/supermarsx/whoisdigger | 582 agent PRs | first agent PR: 2025-06-22 | repo creation: 2018-12-06
 hmislk/hmis | https://api.github.com/repos/hmislk/hmis | 421 agent PRs | first agent PR: 2025-06-06 | repo creation: 2014-07-12
 bararchy/shainet | https://api.github.com/repos/bararchy/shainet | 372 agent PRs | first agent PR: 2025-06-22 | repo creation: 2019-11-03
@@ -9,7 +8,6 @@ patmmccann/Prebid.js | https://api.github.com/repos/patmmccann/Prebid.js | 238 a
 MrME-CodeSmith/QuoteSwift | https://api.github.com/repos/MrME-CodeSmith/QuoteSwift | 231 agent PRs | first agent PR: 2025-07-11 | repo creation: 2021-01-24
 jdereg/java-util | https://api.github.com/repos/jdereg/java-util | 228 agent PRs | first agent PR: 2025-05-21 | repo creation: 2013-09-07
 calcom/cal.com | https://api.github.com/repos/calcom/cal.com | 220 agent PRs | first agent PR: 2024-12-26 | repo creation: 2021-03-22
-airbytehq/airbyte | https://api.github.com/repos/airbytehq/airbyte | 218 agent PRs | first agent PR: 2025-01-21 | repo creation: 2020-07-27
 open4good/open4goods | https://api.github.com/repos/open4good/open4goods | 201 agent PRs | first agent PR: 2025-06-04 | repo creation: 2021-11-25
 microsoft/vscode | https://api.github.com/repos/microsoft/vscode | 198 agent PRs | first agent PR: 2025-05-20 | repo creation: 2015-09-03
 open-learning-exchange/myplanet | https://api.github.com/repos/open-learning-exchange/myplanet | 188 agent PRs | first agent PR: 2025-06-03 | repo creation: 2018-04-05
@@ -65,7 +63,6 @@ adriandarian/Resumier | https://api.github.com/repos/adriandarian/Resumier | 74 
 Rello/analytics | https://api.github.com/repos/Rello/analytics | 73 agent PRs | first agent PR: 2025-05-18 | repo creation: 2019-10-08
 nate-d-olson/hap.py | https://api.github.com/repos/nate-d-olson/hap.py | 73 agent PRs | first agent PR: 2025-06-05 | repo creation: 2021-03-10
 stanford-crfm/levanter | https://api.github.com/repos/stanford-crfm/levanter | 71 agent PRs | first agent PR: 2025-06-17 | repo creation: 2022-05-24
-DramlTex/Draml | https://api.github.com/repos/DramlTex/Draml | 70 agent PRs | first agent PR: 2025-05-17 | repo creation: 2020-04-12
 diegozea/MIToS.jl | https://api.github.com/repos/diegozea/MIToS.jl | 70 agent PRs | first agent PR: 2025-06-05 | repo creation: 2015-06-18
 OpenHFT/Chronicle-Test-Framework | https://api.github.com/repos/OpenHFT/Chronicle-Test-Framework | 69 agent PRs | first agent PR: 2025-05-25 | repo creation: 2021-10-27
 kartben/zephyr | https://api.github.com/repos/kartben/zephyr | 69 agent PRs | first agent PR: 2025-06-04 | repo creation: 2019-12-17
@@ -96,7 +93,6 @@ anirul/Frame | https://api.github.com/repos/anirul/Frame | 60 agent PRs | first 
 OWASP-BLT/BLT | https://api.github.com/repos/OWASP-BLT/BLT | 60 agent PRs | first agent PR: 2025-05-20 | repo creation: 2016-07-09
 bbuchsbaum/neurosurf | https://api.github.com/repos/bbuchsbaum/neurosurf | 59 agent PRs | first agent PR: 2025-05-28 | repo creation: 2017-01-03
 Cap-go/capgo | https://api.github.com/repos/Cap-go/capgo | 57 agent PRs | first agent PR: 2025-02-07 | repo creation: 2021-12-28
-Azure/azure-sdk-for-python | https://api.github.com/repos/Azure/azure-sdk-for-python | 57 agent PRs | first agent PR: 2025-05-20 | repo creation: 2012-04-24
 OneKeyHQ/app-monorepo | https://api.github.com/repos/OneKeyHQ/app-monorepo | 57 agent PRs | first agent PR: 2024-12-24 | repo creation: 2021-11-22
 remotion-dev/remotion | https://api.github.com/repos/remotion-dev/remotion | 57 agent PRs | first agent PR: 2025-06-15 | repo creation: 2020-06-23
 dann3wman/star_trader | https://api.github.com/repos/dann3wman/star_trader | 56 agent PRs | first agent PR: 2025-06-30 | repo creation: 2018-05-10
@@ -124,4 +120,3 @@ getsentry/sentry | https://api.github.com/repos/getsentry/sentry | 51 agent PRs 
 OpenHFT/Chronicle-Logger | https://api.github.com/repos/OpenHFT/Chronicle-Logger | 50 agent PRs | first agent PR: 2025-05-24 | repo creation: 2014-07-25
 zemn-me/monorepo | https://api.github.com/repos/zemn-me/monorepo | 50 agent PRs | first agent PR: 2025-05-28 | repo creation: 2020-06-27
 ZumitoTeam/zumito-bot | https://api.github.com/repos/ZumitoTeam/zumito-bot | 50 agent PRs | first agent PR: 2025-06-12 | repo creation: 2021-08-22
-dotnet/runtime | https://api.github.com/repos/dotnet/runtime | 50 agent PRs | first agent PR: 2025-05-19 | repo creation: 2019-09-24

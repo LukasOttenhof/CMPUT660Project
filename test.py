@@ -1,10 +1,10 @@
 import pandas as pd
-def test():
-    for x in range (0,10):
-        print(x)
 
-    print(x)
+# Use r'' for a raw string so Windows backslashes are handled correctly
+file_path = r"G:\CMPUT660Project\inputs\50prs\commits_before.parquet"
 
-def test2():
+# Load the file
+df = pd.read_parquet(file_path)
 
-    print('a')
+# Print the first 5 rows
+print(len(df))

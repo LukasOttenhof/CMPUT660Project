@@ -21,9 +21,9 @@ except Exception:
 from github import Github, Auth, GithubException
 from pydriller import Repository
 
-REPO_LIST_TXT = "filtered_repos_3year100star.txt"
-CLONE_DIR = "repos"
-OUTPUT_DIR = "inputs/processed"
+REPO_LIST_TXT = r"G:\CMPUT660Project\filtered_repos_3year50pr.txt"
+CLONE_DIR = r"G:\CMPUT660Project\repos"
+OUTPUT_DIR = r"inputs/50prs"
 
 START_DATE = datetime(1970, 1, 1, tzinfo=timezone.utc)
 END_DATE   = datetime(2025, 12, 31, tzinfo=timezone.utc)
@@ -109,7 +109,6 @@ def load_tokens_from_env() -> TokenPoolGithub:
     t2 = os.getenv("GITHUB_TOKEN_2", "").strip()
     t3 = os.getenv("GITHUB_TOKEN_3", "").strip()
     return TokenPoolGithub([t1, t2, t3])
-
 
 #Parse repo list
 @dataclass
@@ -698,189 +697,176 @@ def extract_discussions(
 # =============================================================================
 # MAIN
 # =============================================================================
-
 def main():
     tp = load_tokens_from_env()
     specs = parse_repo_list(REPO_LIST_TXT)
+    skipped = []
+    
+    # Setup directories
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    INC_DIR = os.path.join(OUTPUT_DIR, "incremental")
+    os.makedirs(INC_DIR, exist_ok=True)
 
     print(f"📦 Loaded {len(specs)} repos.\n")
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    # 20 parquet buckets
-    commits_before: List[Dict[str, Any]] = []
-    commits_after:  List[Dict[str, Any]] = []
-
-    prs_before: List[Dict[str, Any]] = []
-    prs_after:  List[Dict[str, Any]] = []
-
-    issues_before: List[Dict[str, Any]] = []
-    issues_after:  List[Dict[str, Any]] = []
-
-    reviews_before: List[Dict[str, Any]] = []
-    reviews_after:  List[Dict[str, Any]] = []
-
-    commit_msgs_before: List[Dict[str, Any]] = []
-    commit_msgs_after:  List[Dict[str, Any]] = []
-
-    pr_bodies_before: List[Dict[str, Any]] = []
-    pr_bodies_after:  List[Dict[str, Any]] = []
-
-    issue_bodies_before: List[Dict[str, Any]] = []
-    issue_bodies_after:  List[Dict[str, Any]] = []
-
-    review_comments_before: List[Dict[str, Any]] = []
-    review_comments_after:  List[Dict[str, Any]] = []
-
-    discussion_topics_before: List[Dict[str, Any]] = []
-    discussion_topics_after:  List[Dict[str, Any]] = []
-
-    discussion_comments_before: List[Dict[str, Any]] = []
-    discussion_comments_after:  List[Dict[str, Any]] = []
+    # Mapping of variable names to their final filenames
+    data_map = {
+        "commits_before": "commits_before.parquet",
+        "commits_after": "commits_after.parquet",
+        "prs_before": "pull_requests_before.parquet",
+        "prs_after": "pull_requests_after.parquet",
+        "issues_before": "issues_before.parquet",
+        "issues_after": "issues_after.parquet",
+        "reviews_before": "reviews_before.parquet",
+        "reviews_after": "reviews_after.parquet",
+        "commit_msgs_before": "commit_messages_before.parquet",
+        "commit_msgs_after": "commit_messages_after.parquet",
+        "pr_bodies_before": "pr_bodies_before.parquet",
+        "pr_bodies_after": "pr_bodies_after.parquet",
+        "issue_bodies_before": "issue_bodies_before.parquet",
+        "issue_bodies_after": "issue_bodies_after.parquet",
+        "review_comments_before": "review_comments_before.parquet",
+        "review_comments_after": "review_comments_after.parquet",
+        "discussion_topics_before": "discussion_topics_before.parquet",
+        "discussion_topics_after": "discussion_topics_after.parquet",
+        "discussion_comments_before": "discussion_comments_before.parquet",
+        "discussion_comments_after": "discussion_comments_after.parquet",
+    }
 
     for idx, spec in enumerate(specs, start=1):
         repo_name = spec.full_name
         boundary = spec.boundary_date
+        
+        # --- CRASH RECOVERY CHECK ---
+        # We create a small sentinel file to mark a repo as "done"
+        sentinel = os.path.join(INC_DIR, f"{repo_name.replace('/', '_')}.done")
+        if os.path.exists(sentinel):
+            print(f"⏩ Skipping {repo_name} (already processed).")
+            continue
 
         print("\n" + "="*80)
         print(f"[{idx}/{len(specs)}] 🔍 Processing {repo_name} | boundary = {boundary.date()}")
         print("="*80)
 
+        # Initialize temporary local buckets for THIS repo only
+        buckets = {key: [] for key in data_map.keys()}
+
         try:
             repo_dir = ensure_clone(repo_name)
-        except Exception as e:
-            print(f"⚠️ Skipping due to clone failure: {e}")
-            continue
-
-        try:
+            subprocess.run(["git", "config", "--global", "--add", "safe.directory", repo_dir.replace("\\", "/")], check=False)
             repo = tp.safe(tp.gh.get_repo, repo_name, label="get_repo")
-        except Exception as e:
-            print(f"⚠️ Skipping {repo_name} due to API repo failure: {e}")
-            continue
+            
+            # Size limits
+            commit_count = 0
+            try: commit_count = tp.safe(repo.get_commits, label="count_commits").totalCount
+            except: pass
+            
+            pr_count = 0
+            try: pr_count = tp.safe(repo.get_pulls, state="all", label="count_prs").totalCount
+            except: pass
 
-        # ===================================================================
-        # INSERT SIZE LIMITS HERE (right after repo = ...)
-        # ===================================================================
+            if (commit_count > 10000) or (pr_count > 1000):
+                print(f"⚠️ SKIPPING {repo_name}: too large.")
+                skipped.append(repo_name)
+                continue
 
-        # 1. Commit count
-        try:
-            commit_count = tp.safe(repo.get_commits, label="count_commits").totalCount
-        except Exception:
-            commit_count = None
-
-        if commit_count and commit_count > 5000:
-            print(f"⚠️ SKIPPING {repo_name}: too many commits ({commit_count} > 5000).")
-            continue
-
-        # 2. PR count
-        try:
-            pr_count = tp.safe(repo.get_pulls, state="all", label="count_prs").totalCount
-        except Exception:
-            pr_count = None
-
-        if pr_count and pr_count > 1200:
-            print(f"⚠️ SKIPPING {repo_name}: too many PRs ({pr_count} > 1000).")
-            continue
-
-        # ===================================================================
-        # END OF SIZE LIMIT BLOCK
-        # ===================================================================
-
-        try:
             top_users = get_top_contributors(tp, repo)
             tracked_users = build_tracked_users(tp, repo, top_users)
-        except Exception as e:
-            print(f"⚠️ Skipping {repo_name} due to contributor failure: {e}")
-            continue
 
-        try:
+            # --- EXTRACTION ---
             extract_commits_from_clone(
-                tp, repo,
-                repo_dir, repo_name, boundary, tracked_users,
-                commits_before, commits_after,
-                commit_msgs_before, commit_msgs_after,
+                tp, repo, repo_dir, repo_name, boundary, tracked_users,
+                buckets["commits_before"], buckets["commits_after"],
+                buckets["commit_msgs_before"], buckets["commit_msgs_after"]
             )
-        except Exception as e:
-            print(f"⚠️ Commit extraction failed for {repo_name}: {e}")
-
-        try:
             extract_prs_reviews_comments(
                 tp, repo, repo_name, boundary, tracked_users,
-                prs_before, prs_after,
-                reviews_before, reviews_after,
-                pr_bodies_before, pr_bodies_after,
-                review_comments_before, review_comments_after,
+                buckets["prs_before"], buckets["prs_after"],
+                buckets["reviews_before"], buckets["reviews_after"],
+                buckets["pr_bodies_before"], buckets["pr_bodies_after"],
+                buckets["review_comments_before"], buckets["review_comments_after"]
             )
-        except Exception as e:
-            print(f"⚠️ PR extraction failed for {repo_name}: {e}")
-
-        try:
             extract_issues_and_comments(
                 tp, repo, repo_name, boundary, tracked_users,
-                issues_before, issues_after,
-                issue_bodies_before, issue_bodies_after,
+                buckets["issues_before"], buckets["issues_after"],
+                buckets["issue_bodies_before"], buckets["issue_bodies_after"]
             )
+            try:
+                extract_discussions(
+                    tp, repo, repo_name, boundary, tracked_users,
+                    buckets["discussion_topics_before"], buckets["discussion_topics_after"],
+                    buckets["discussion_comments_before"], buckets["discussion_comments_after"]
+                )
+            except: pass
+
+            # --- INCREMENTAL SAVE ---
+            # Save this repo's data to a unique parquet file in the incremental folder
+            safe_name = repo_name.replace("/", "_")
+            for key, rows in buckets.items():
+                if rows:
+                    inc_path = os.path.join(INC_DIR, f"{safe_name}_{key}.parquet")
+                    pd.DataFrame(rows).to_parquet(inc_path, index=False)
+
+            # Create sentinel file
+            with open(sentinel, "w") as f: f.write("done")
+            print(f"✔ Finished and saved {repo_name}")
+
         except Exception as e:
-            print(f"⚠️ Issue extraction failed for {repo_name}: {e}")
+            print(f"💥 Failed processing {repo_name}: {e}")
+            continue
 
-        try:
-            extract_discussions(
-                tp, repo, repo_name, boundary, tracked_users,
-                discussion_topics_before, discussion_topics_after,
-                discussion_comments_before, discussion_comments_after,
-            )
-        except Exception:
-            pass
+    # ===================================================================
+    # FINAL CONSOLIDATION
+    # ===================================================================
+   # ===================================================================
+    # FINAL CONSOLIDATION
+    # ===================================================================
+    print("\n" + "="*30)
+    print("Consolidating all data into final Parquets…")
+    print("="*30)
 
-        print(f"✔ Finished {repo_name}")
-
-
-    #write parquets
-    def to_parquet(rows: List[Dict[str, Any]], path: str):
-        df = pd.DataFrame(rows)
-        if len(df) == 0:
+    def finalize_parquet(key, final_filename):
+        all_dfs = []
+        files = [f for f in os.listdir(INC_DIR) if f.endswith(f"_{key}.parquet")]
+        
+        for file in files:
+            file_path = os.path.join(INC_DIR, file)
+            tmp_df = None
+            
+            # ATTEMPT 1: Default (PyArrow)
+            try:
+                tmp_df = pd.read_parquet(file_path, engine='pyarrow')
+            except Exception:
+                # ATTEMPT 2: Rescue with fastparquet if pyarrow fails on 'fixed' timezone
+                try:
+                    tmp_df = pd.read_parquet(file_path, engine='fastparquet')
+                except Exception as e:
+                    print(f"❌ Critical Failure: Could not read {file} with any engine. Error: {e}")
+                    continue
+            
+            # If we successfully got a dataframe, normalize it
+            if tmp_df is not None:
+                for col in tmp_df.columns:
+                    if "date" in col or "at" in col:
+                        tmp_df[col] = pd.to_datetime(tmp_df[col], utc=True, errors="coerce")
+                all_dfs.append(tmp_df)
+        
+        if not all_dfs:
             df = pd.DataFrame(columns=["repo", "author", "date"])
-        if "date" in df.columns:
-            df["date"] = pd.to_datetime(df["date"], utc=True, errors="coerce")
-            df = df.dropna(subset=["date"])
-            df = df.sort_values("date")
-        df.to_parquet(path, index=False)
+        else:
+            df = pd.concat(all_dfs, ignore_index=True)
 
-    print("\n==============================")
-    print("Writing 20 parquet outputs…")
-    print("==============================")
+        if "date" in df.columns and not df.empty:
+            df = df.dropna(subset=["date"]).sort_values("date")
+        
+        output_path = os.path.join(OUTPUT_DIR, final_filename)
+        # We save using the default engine (pyarrow) which is now safe because we normalized everything
+        df.to_parquet(output_path, index=False)
+        print(f"✅ Saved {final_filename} ({len(df)} rows)")
 
-    to_parquet(commits_before, os.path.join(OUTPUT_DIR, "commits_before.parquet"))
-    to_parquet(commits_after,  os.path.join(OUTPUT_DIR, "commits_after.parquet"))
+    for key, filename in data_map.items():
+        finalize_parquet(key, filename)
 
-    to_parquet(prs_before, os.path.join(OUTPUT_DIR, "pull_requests_before.parquet"))
-    to_parquet(prs_after,  os.path.join(OUTPUT_DIR, "pull_requests_after.parquet"))
-
-    to_parquet(issues_before, os.path.join(OUTPUT_DIR, "issues_before.parquet"))
-    to_parquet(issues_after,  os.path.join(OUTPUT_DIR, "issues_after.parquet"))
-
-    to_parquet(reviews_before, os.path.join(OUTPUT_DIR, "reviews_before.parquet"))
-    to_parquet(reviews_after,  os.path.join(OUTPUT_DIR, "reviews_after.parquet"))
-
-    to_parquet(commit_msgs_before, os.path.join(OUTPUT_DIR, "commit_messages_before.parquet"))
-    to_parquet(commit_msgs_after,  os.path.join(OUTPUT_DIR, "commit_messages_after.parquet"))
-
-    to_parquet(pr_bodies_before, os.path.join(OUTPUT_DIR, "pr_bodies_before.parquet"))
-    to_parquet(pr_bodies_after,  os.path.join(OUTPUT_DIR, "pr_bodies_after.parquet"))
-
-    to_parquet(issue_bodies_before, os.path.join(OUTPUT_DIR, "issue_bodies_before.parquet"))
-    to_parquet(issue_bodies_after,  os.path.join(OUTPUT_DIR, "issue_bodies_after.parquet"))
-
-    to_parquet(review_comments_before, os.path.join(OUTPUT_DIR, "review_comments_before.parquet"))
-    to_parquet(review_comments_after,  os.path.join(OUTPUT_DIR, "review_comments_after.parquet"))
-
-    to_parquet(discussion_topics_before, os.path.join(OUTPUT_DIR, "discussion_topics_before.parquet"))
-    to_parquet(discussion_topics_after,  os.path.join(OUTPUT_DIR, "discussion_topics_after.parquet"))
-
-    to_parquet(discussion_comments_before, os.path.join(OUTPUT_DIR, "discussion_comments_before.parquet"))
-    to_parquet(discussion_comments_after,  os.path.join(OUTPUT_DIR, "discussion_comments_after.parquet"))
-
-    print("Parquets are in ./inputs/processed/")
-
-
+    print(f"\nProcessing complete. Skipped: {skipped}")
 if __name__ == "__main__":
     main()
