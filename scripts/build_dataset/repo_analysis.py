@@ -868,5 +868,6 @@ def main():
         finalize_parquet(key, filename)
 
     print(f"\nProcessing complete. Skipped: {skipped}")
+    print(len(skipped))
 if __name__ == "__main__":
     main()

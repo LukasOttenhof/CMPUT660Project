@@ -7,7 +7,7 @@ from scipy import stats
 import matplotlib.ticker as ticker
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUT_DIR = Path("inputs/processed")
+INPUT_DIR = Path(r"G:\CMPUT660Project\inputs\50prs")
 PLOTS_DIR = ROOT / "outputs" / "rq12_final"
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -60,9 +60,24 @@ def main():
         y="Time to Merge (Hours)",
         data=plot_data,
         showfliers=False,
-        palette=["#E74C3C", "#3498DB"]
+        palette=["#FFDE21", "#3498DB"]
     )
+    def summarize(series):
+        return [
+            len(series),
+            series.mean(),
+            series.median(),
+            series.std(),
+            series.min(),
+            series.max()
+        ]
 
+    df_stats = pd.DataFrame({
+        "Metric": ["Count", "Mean (h)", "Median (h)", "Std Dev", "Min", "Max"],
+        "Before": summarize(time_b),
+        "After": summarize(time_a)
+    })
+    print(df_stats.to_string(index=False))
     ax.set_yscale("log")
     ax.yaxis.set_major_formatter(ticker.ScalarFormatter())
     ax.yaxis.get_major_formatter().set_scientific(False)

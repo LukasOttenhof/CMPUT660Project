@@ -1,10 +1,8 @@
 from pathlib import Path
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from data_loader import load_all
-import seaborn as sns
-from scipy.stats import chi2_contingency
+from scipy.stats import wilcoxon, chi2_contingency
 
 pd.options.mode.chained_assignment = None
 
@@ -33,11 +31,7 @@ METRIC_MAP = {
 }
 
 
-def build_monthly_dev_counts(data):
-    """
-    Calculate total counts of activities per metric for before and after periods.
-    Returns two dicts: before_counts, after_counts
-    """
+def build_total_counts(data):
     before_counts = {}
     after_counts = {}
 
@@ -50,68 +44,93 @@ def build_monthly_dev_counts(data):
             df_b = df_b[df_b["activity_type"] == subtype]
             df_a = df_a[df_a["activity_type"] == subtype]
 
-        if 'author' not in df_b.columns or 'author' not in df_a.columns:
-            print(f"Warning: Skipping {metric} - 'author' column not found.")
-            continue
-
         before_counts[metric] = len(df_b)
         after_counts[metric] = len(df_a)
 
     return before_counts, after_counts
 
 
-def run_chi_square_test(before_counts, after_counts):
-    """
-    Runs Chi-square test of independence on a 2x7 table of counts.
-    """
+def run_wilcoxon_tests(before_counts, after_counts):
     metrics = list(before_counts.keys())
 
-    before_list = [before_counts[m] for m in metrics]
-    after_list = [after_counts[m] for m in metrics]
+    before = np.array([before_counts[m] for m in metrics])
+    after = np.array([after_counts[m] for m in metrics])
 
-    contingency = np.array([before_list, after_list])
+    # -------- Full test --------
+    stat_all, p_all = wilcoxon(before, after)
+    d_all = cohens_d_paired(before, after)
 
-    chi2, p, dof, expected = chi2_contingency(contingency)
+    # -------- Reduced test --------
+    exclude = {"commits", "prs_created", "prs_merged"}
+    reduced_metrics = [m for m in metrics if m not in exclude]
 
-    print("\n================ CHI-SQUARED TEST ON COUNTS ================\n")
+    before_r = np.array([before_counts[m] for m in reduced_metrics])
+    after_r = np.array([after_counts[m] for m in reduced_metrics])
+
+    stat_r, p_r = wilcoxon(before_r, after_r)
+    d_r = cohens_d_paired(before_r, after_r)
+
+    print("\n================ WILCOXON SIGNED-RANK TEST ================\n")
+
+    print("All metrics:")
+    print(f"  Statistic = {stat_all}")
+    print(f"  P-value   = {p_all:.4f}")
+    print(f"  Cohen's d = {d_all:.3f}")
+
+    print("\nExcluding commits + PRs:")
+    print(f"  Statistic = {stat_r}")
+    print(f"  P-value   = {p_r:.4f}")
+    print(f"  Cohen's d = {d_r:.3f}")
+
+    return (p_all, d_all), (p_r, d_r)
+
+
+def demonstrate_chi_square_underflow(before_counts, after_counts):
+    metrics = list(before_counts.keys())
+    contingency = np.array([
+        [before_counts[m] for m in metrics],
+        [after_counts[m] for m in metrics],
+    ])
+
+    chi2, p, _, _ = chi2_contingency(contingency)
+
+    print("\n================ CHI-SQUARE (UNDERFLOW DEMO) ================\n")
     print(f"Chi2 Statistic: {chi2}")
-    print(f"P-value: {p}")
-    print(f"Degrees of Freedom: {dof}")
-    print("Expected counts:")
-    print(pd.DataFrame(expected, columns=metrics, index=["Before", "After"]))
-
-    return chi2, p, dof, expected
+    print(f"P-value (rounded): {p}")
 
 
 def main():
     data = load_all()
 
-    # Apply 3-year filter for 'before' datasets
+    # Apply 3-year cutoff to before period
     for key in data:
-        if key.endswith("_before"):
+        if key.endswith("_before") and "date" in data[key].columns:
             df = data[key]
-            if df.empty or "date" not in df.columns:
-                continue
             df["date"] = pd.to_datetime(df["date"])
-            before_end = df["date"].max()
-            cutoff_date = before_end - pd.DateOffset(years=3)
-            data[key] = df[df["date"] >= cutoff_date]
+            cutoff = df["date"].max() - pd.DateOffset(years=3)
+            data[key] = df[df["date"] >= cutoff]
 
-    # Get raw counts
-    before_counts, after_counts = build_monthly_dev_counts(data)
+    before_counts, after_counts = build_total_counts(data)
 
-    # Print counts
-    print("\n================ RAW ACTIVITY COUNTS ================\n")
-    count_df = pd.DataFrame({
-        "Metric": list(before_counts.keys()),
-        "Before Count": list(before_counts.values()),
-        "After Count": list(after_counts.values())
-    })
-    print(count_df.to_string(index=False))
+    print("\n================ RAW COUNTS ================\n")
+    print(pd.DataFrame({
+        "Metric": METRICS,
+        "Before": [before_counts[m] for m in METRICS],
+        "After": [after_counts[m] for m in METRICS],
+    }).to_string(index=False))
 
-    # Run Chi-square test
-    run_chi_square_test(before_counts, after_counts)
+    run_wilcoxon_tests(before_counts, after_counts)
+    demonstrate_chi_square_underflow(before_counts, after_counts)
 
+
+def cohens_d_paired(before, after):
+    """
+    Cohen's d for paired samples.
+    """
+    diff = after - before
+    mean_diff = np.mean(diff)
+    std_diff = np.std(diff, ddof=1)
+    return mean_diff / std_diff if std_diff > 0 else 0
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,6 @@
+codecrafters-io/build-your-own-x | https://github.com/codecrafters-io/build-your-own-x | 0 agent PRs | first agent PR: 2025-06-02 | repo creation: 2018-05-09
+sindresorhus/awesome | https://github.com/sindresorhus/awesome | 0 agent PRs | first agent PR: 2025-06-02 | repo creation: 2014-07-11
+kamranahmedse/developer-roadmap | https://github.com/kamranahmedse/developer-roadmap | 0 agent PRs | first agent PR: 2025-06-02 | repo creation: 2017-03-15
+jwasham/coding-interview-university | https://github.com/jwasham/coding-interview-university | 0 agent PRs | first agent PR: 2025-06-02 | repo creation: 2016-06-06
+vinta/awesome-python | https://github.com/vinta/awesome-python | 0 agent PRs | first agent PR: 2025-06-02 | repo creation: 2014-06-27
+996icu/996.ICU | https://github.com/996icu/996.ICU | 0 agent PRs | first agent PR: 2025-06-02 | repo creation: 2019-03-26

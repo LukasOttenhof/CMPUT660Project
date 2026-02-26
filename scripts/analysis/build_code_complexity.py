@@ -14,8 +14,8 @@ import pandas as pd
 # CONFIG
 # ==========================================================
 
-REPO_LIST_TXT = "/home/lottenho/660_pro/CMPUT660Project/filtered_repos_3year100star.txt"
-CLONE_DIR = "/home/lottenho/660_pro/CMPUT660Project/scripts/build_dataset/repos"
+REPO_LIST_TXT = "/home/lottenho/660_pro/CMPUT660Project/filtered_repos_3year50pr.txt"
+CLONE_DIR = "/home/lottenho/660_pro/CMPUT660Project/scripts/build_dataset/50prs"
 OUTPUT_DIR = "/home/lottenho/660_pro/CMPUT660Project/inputs/processed"
 
 OUT_PARQUET = os.path.join(OUTPUT_DIR, "repo_month_complexity_detailed.parquet")

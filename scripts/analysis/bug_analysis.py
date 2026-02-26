@@ -6,7 +6,7 @@ from scipy import stats
 import numpy as np
 
 
-BASE = Path("inputs/processed")
+BASE = Path(r"G:\CMPUT660Project\inputs\50prs")
 PLOTS_DIR = BASE.parent / "outputs" / "pokemon" / "plots"
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -134,7 +134,7 @@ def analyze_fixes():
         y="Ratio", 
         hue="Period", 
         data=df_plot, 
-        palette=["#E74C3C", "#3498DB"]
+        palette=["#FFDE21", "#3498DB"]
     )
     ymax = max([bar.get_height() for container in ax.containers for bar in container])
     ax.set_ylim(0, ymax * 1.08) 

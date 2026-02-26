@@ -5,7 +5,7 @@ import numpy as np
 # ==========================================
 # ⚙️ CONFIGURATION
 # ==========================================
-BASE = Path("inputs/processed")
+BASE = Path("/Volumes/T7-Shield/CMPUT660Project/inputs/50prs")
 
 # Map friendly names to file prefixes
 DATASETS = {
@@ -57,6 +57,7 @@ def analyze_pair(name, file_before, file_after, apply_filter=True):
         if auth_col_a:
             stats["After (Authors)"] = df_a[auth_col_a].nunique()
     else:
+        print(f"⚠️ Missing file: {file_after}")
         df_a = pd.DataFrame()
 
     # --- 2. Load and Filter Before Data ---

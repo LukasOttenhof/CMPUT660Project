@@ -106,22 +106,21 @@ def plot_radar(before, after, title, filename):
     labels = [l.replace('_', ' ').title().replace('Prs', 'PRs') for l in raw_labels]
     
     N = len(labels)
-    values_before = list(before.values())
-    values_after = list(after.values())
-
+    values_before = [v * 100 for v in before.values()]  # <-- convert to %
+    values_after  = [v * 100 for v in after.values()]   # <-- convert to %
+    
     # Close the loop
     values_before += values_before[:1]
-    values_after += values_after[:1]
+    values_after  += values_after[:1]
     angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
     angles += angles[:1]
 
     # 2. Setup Figure
     fig = plt.figure(figsize=(14, 14)) 
-    # Centering the plot area
     ax = fig.add_axes([0.1, 0.15, 0.8, 0.7], polar=True)
 
-    color_before_line = "#E74C3C" 
-    color_before_fill = "#F1948A"  
+    color_before_line = "#FFDE21" 
+    color_before_fill = "#FDEE9A"  
     color_after_line = "#3498DB"   
     color_after_fill = "#85C1E9"  
 
@@ -132,25 +131,18 @@ def plot_radar(before, after, title, filename):
     ax.fill(angles, values_after, color=color_after_fill, alpha=0.4)
 
     # 3. Anchoring Labels to the Spokes
-    # Using 'va' and 'ha' here ensures they are centered on the coordinate
-    ax.set_thetagrids(
-        np.degrees(angles[:-1]), 
-        labels, 
-        fontsize=28, 
-        fontweight='bold',
-        ha='center', 
-        va='center'
-    )
-    
-    # 4. Uniform Padding
-    # This moves all labels out by a fixed amount of points from the edge
+    ax.set_thetagrids(np.degrees(angles[:-1]), labels, fontsize=28, fontweight='bold', ha='center', va='center')
     ax.tick_params(axis='x', which='major', pad=45) 
+
+    # 4. Radial grid formatting: show percentages
+    ax.set_yticks(np.linspace(0, max(max(values_before), max(values_after)), 5))  # adjust number of rings
+    ax.set_yticklabels([f"{int(tick)}%" for tick in ax.get_yticks()])  # <-- show as percentages
 
     # Title & Legend
     ax.set_title(title, size=32, pad=70, fontweight='bold')
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.25), fontsize=28, ncol=2)
 
-    # Radial grid cleanup
+    # Grid style
     ax.grid(True, linestyle='--', linewidth=1.5, alpha=0.5)
     ax.tick_params(axis='y', labelsize=18, labelcolor='gray')
 

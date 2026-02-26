@@ -29,7 +29,7 @@ PLOT_DIR.mkdir(parents=True, exist_ok=True)
 
 SENTIMENTS = ["negative", "neutral", "positive"]
 
-BASE_BEFORE = "#E74C3C"
+BASE_BEFORE = "#FFDE21"
 BASE_AFTER  = "#3498DB"
 
 def adjust_lightness(color, amount: float):
