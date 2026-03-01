@@ -6,8 +6,8 @@ from dataclasses import dataclass
 from typing import List
 
 
-REPO_LIST_TXT = r"G:\CMPUT660Project\scripts\build_dataset\true_human_baseline.txt"
-CLONE_DIR = "repos_human"
+REPO_LIST_TXT = r"G:\CMPUT660Project\scripts\build_dataset\true_human_baseline_con.txt"
+CLONE_DIR = "repos_human_2"
 
 
 # ==========================================================
@@ -104,3 +104,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+# failed to clone spring-projects/spring-boot

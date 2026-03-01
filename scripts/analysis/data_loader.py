@@ -8,7 +8,7 @@ import pandas as pd
 import requests
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = ROOT / "inputs" / "50prs"
+INPUTS = ROOT / "inputs" / "human_2"
 LANG_CACHE = INPUTS / "repo_languages.csv"
 
 

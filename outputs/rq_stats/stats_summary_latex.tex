@@ -26,10 +26,10 @@ ALL_COMBINED & 3607.291 & 0.000e+00 & 0.279\\
 \toprule
 Text Type & $\chi^2$ & p-value & Cramer's V\\
 \midrule
-commit_messages & 237.470 & 2.717e-52 & 0.084\\
-issue_bodies & 95.630 & 1.714e-21 & 0.231\\
-pr_bodies & 967.653 & 7.531e-211 & 0.299\\
-review_comments & 27.954 & 8.509e-07 & 0.131\\
+commit_messages & 985.686 & 9.142e-215 & 0.113\\
+issue_bodies & 154.796 & 2.435e-34 & 0.140\\
+pr_bodies & 1827.314 & 0.000e+00 & 0.303\\
+review_comments & 37.509 & 7.163e-09 & 0.074\\
 \bottomrule
 \end{tabular}
 
@@ -38,7 +38,7 @@ review_comments & 27.954 & 8.509e-07 & 0.131\\
 \toprule
 Text Type & $\chi^2$ & p-value & Cramer's V\\
 \midrule
-ALL_COMBINED & 2012.475 & 0.000e+00 & 0.205\\
+ALL_COMBINED & 5633.505 & 0.000e+00 & 0.224\\
 \bottomrule
 \end{tabular}
 
@@ -103,14 +103,6 @@ UI / UX & 251.345 & 5.275e-55 & 0.246\\
 \toprule
 Topic & Before & After & $\Delta$ & p(FDR) & d\\
 \midrule
-Feature Development & 0.114 & 0.118 & 0.004 & 3.793e-45 & 0.135\\
-UI / UX & 0.109 & 0.114 & 0.005 & 1.361e-60 & 0.149\\
-Bug Fixing & Debugging & 0.129 & 0.120 & -0.009 & 3.795e-170 & -0.287\\
-Testing & CI & 0.132 & 0.138 & 0.006 & 1.356e-52 & 0.147\\
-Refactoring & Cleanup & 0.124 & 0.119 & -0.005 & 2.309e-79 & -0.198\\
-Documentation & Communication & 0.131 & 0.133 & 0.002 & 8.934e-12 & 0.068\\
-Deployment & 0.139 & 0.131 & -0.008 & 5.524e-142 & -0.276\\
-Code Review & Collaboration & 0.122 & 0.127 & 0.005 & 2.822e-129 & 0.224\\
 \bottomrule
 \end{tabular}
 
@@ -119,38 +111,6 @@ Code Review & Collaboration & 0.122 & 0.127 & 0.005 & 2.822e-129 & 0.224\\
 \toprule
 Topic & Text Type & Before & After & $\Delta$ & p(FDR) & d\\
 \midrule
-Feature Development & commit_messages & 0.113 & 0.118 & 0.005 & 8.743e-51 & 0.167\\
-UI / UX & commit_messages & 0.109 & 0.114 & 0.005 & 1.228e-46 & 0.154\\
-Bug Fixing & Debugging & commit_messages & 0.126 & 0.119 & -0.007 & 1.690e-96 & -0.244\\
-Testing & CI & commit_messages & 0.131 & 0.127 & -0.004 & 7.013e-18 & -0.099\\
-Refactoring & Cleanup & commit_messages & 0.124 & 0.122 & -0.002 & 5.044e-12 & -0.083\\
-Documentation & Communication & commit_messages & 0.133 & 0.134 & 0.002 & 6.507e-06 & 0.053\\
-Deployment & commit_messages & 0.141 & 0.133 & -0.008 & 2.938e-94 & -0.250\\
-Code Review & Collaboration & commit_messages & 0.122 & 0.132 & 0.010 & 0.000e+00 & 0.421\\
-Feature Development & pr_bodies & 0.111 & 0.116 & 0.005 & 5.432e-11 & 0.170\\
-UI / UX & pr_bodies & 0.105 & 0.113 & 0.008 & 1.882e-21 & 0.214\\
-Bug Fixing & Debugging & pr_bodies & 0.138 & 0.121 & -0.017 & 2.178e-79 & -0.611\\
-Testing & CI & pr_bodies & 0.143 & 0.164 & 0.021 & 1.658e-67 & 0.498\\
-Refactoring & Cleanup & pr_bodies & 0.124 & 0.111 & -0.013 & 1.728e-80 & -0.596\\
-Documentation & Communication & pr_bodies & 0.125 & 0.132 & 0.007 & 2.866e-29 & 0.280\\
-Deployment & pr_bodies & 0.132 & 0.126 & -0.006 & 1.222e-14 & -0.256\\
-Code Review & Collaboration & pr_bodies & 0.122 & 0.116 & -0.005 & 2.678e-27 & -0.318\\
-Feature Development & issue_bodies & 0.121 & 0.125 & 0.004 & 1.677e-02 & 0.157\\
-UI / UX & issue_bodies & 0.111 & 0.118 & 0.007 & 8.583e-06 & 0.263\\
-Bug Fixing & Debugging & issue_bodies & 0.141 & 0.149 & 0.008 & 9.146e-04 & 0.219\\
-Testing & CI & issue_bodies & 0.131 & 0.124 & -0.006 & 3.537e-04 & -0.190\\
-Refactoring & Cleanup & issue_bodies & 0.119 & 0.120 & 0.000 & 8.025e-01 & 0.015\\
-Documentation & Communication & issue_bodies & 0.128 & 0.121 & -0.006 & 5.603e-08 & -0.302\\
-Deployment & issue_bodies & 0.128 & 0.120 & -0.008 & 1.424e-10 & -0.370\\
-Code Review & Collaboration & issue_bodies & 0.122 & 0.123 & 0.001 & 6.207e-01 & 0.039\\
-Feature Development & review_comments & 0.115 & 0.116 & 0.001 & 8.346e-01 & 0.031\\
-UI / UX & review_comments & 0.111 & 0.107 & -0.005 & 2.745e-01 & -0.181\\
-Bug Fixing & Debugging & review_comments & 0.135 & 0.138 & 0.002 & 7.094e-01 & 0.073\\
-Testing & CI & review_comments & 0.130 & 0.134 & 0.004 & 6.671e-01 & 0.085\\
-Refactoring & Cleanup & review_comments & 0.122 & 0.124 & 0.002 & 7.094e-01 & 0.077\\
-Documentation & Communication & review_comments & 0.125 & 0.127 & 0.002 & 6.501e-01 & 0.086\\
-Deployment & review_comments & 0.118 & 0.117 & -0.001 & 8.025e-01 & -0.042\\
-Code Review & Collaboration & review_comments & 0.142 & 0.137 & -0.005 & 3.951e-01 & -0.160\\
 \bottomrule
 \end{tabular}
 
