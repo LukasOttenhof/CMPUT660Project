@@ -1,4 +1,6 @@
+from __future__ import annotations
 from pathlib import Path
+import sys
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -6,90 +8,114 @@ import seaborn as sns
 from scipy import stats
 import matplotlib.ticker as ticker
 
+# Ensure local imports work
+THIS_DIR = Path(__file__).resolve().parent
+if str(THIS_DIR) not in sys.path:
+    sys.path.append(str(THIS_DIR))
+
+from data_loader import load_all
+
 ROOT = Path(__file__).resolve().parents[2]
-INPUT_DIR = Path(r"G:\CMPUT660Project\inputs\50prs")
 PLOTS_DIR = ROOT / "outputs" / "rq12_final"
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
-def load_and_process(period):
-    file_name = f"pull_requests_{period}.parquet"
-    fpath = INPUT_DIR / file_name
-    if not fpath.exists():
-        print(f"Missing file: {file_name}")
-        return pd.DataFrame()
-
-    df = pd.read_parquet(fpath)
-    date_col = 'date' if 'date' in df.columns else 'created_at'
-    if date_col in df.columns:
-        df["date"] = pd.to_datetime(df[date_col])
+def process_before_with_cutoff(df):
+    """Applies the 3-year cutoff and cleans the merge time metric."""
+    if df.empty:
+        return pd.Series(dtype=float)
     
-    return df
+    # 1. Date processing and Cutoff
+    df = df.copy()
+    df["date"] = pd.to_datetime(df["date"], utc=True)
+    cutoff = df["date"].max() - pd.DateOffset(years=3)
+    df = df[df["date"] >= cutoff]
+    
+    # 2. Metric cleaning
+    if "time_to_merge_hours" not in df.columns:
+        return pd.Series(dtype=float)
+    
+    series = df["time_to_merge_hours"].dropna()
+    return series[series > 0]
+
+def get_clean_time_series(df):
+    """Basic cleaning for 'After' groups (no cutoff needed)."""
+    if df.empty or "time_to_merge_hours" not in df.columns:
+        return pd.Series(dtype=float)
+    
+    series = df["time_to_merge_hours"].dropna()
+    return series[series > 0]
+
+def summarize(series):
+    """Returns a list of summary statistics."""
+    if series.empty:
+        return [0, 0, 0, 0, 0, 0]
+    return [
+        len(series),
+        series.mean(),
+        series.median(),
+        series.std(),
+        series.min(),
+        series.max()
+    ]
 
 def main():
-    df_before = load_and_process("before")
-    df_after = load_and_process("after")
-    if df_before.empty or df_after.empty:
+    # 1. Load data
+    data = load_all()
+
+    # 2. Extract and clean time series with the specific logic for each group
+    time_b = process_before_with_cutoff(data["pull_requests_before"])
+    time_h = get_clean_time_series(data["pull_requests_after_human"])
+    time_a = get_clean_time_series(data["pull_requests_after_agent"])
+
+    if all(t.empty for t in [time_b, time_h, time_a]):
+        print("No merge time data found.")
         return
 
-    if "date" in df_before.columns:
-        before_end = df_before["date"].max()
-        cutoff_date = before_end - pd.DateOffset(years=3)
-        df_before = df_before[df_before["date"] >= cutoff_date]
+    # 3. Create long-form DataFrame for plotting
+    plot_data = pd.concat([
+        pd.DataFrame({"Hours": time_b, "Period": "Before (Last 3y)"}),
+        pd.DataFrame({"Hours": time_h, "Period": "After (Human)"}),
+        pd.DataFrame({"Hours": time_a, "Period": "After (Agent)"})
+    ], ignore_index=True)
 
-    time_b = df_before["time_to_merge_hours"].dropna()
-    time_b = time_b[time_b > 0]
-    time_a = df_after["time_to_merge_hours"].dropna()
-    time_a = time_a[time_a > 0]
-
-    #Statistical test
-    u_stat, p_value = stats.mannwhitneyu(time_a, time_b, alternative='two-sided')
-    n1, n2 = len(time_b), len(time_a)
-    var1, var2 = np.var(time_b, ddof=1), np.var(time_a, ddof=1)
-    pooled_se = np.sqrt(((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2))
-    cohens_d = (time_a.mean() - time_b.mean()) / pooled_se if pooled_se > 0 else 0
-
-    #Boxplot
-    plot_data = pd.DataFrame({
-        "Time to Merge (Hours)": np.concatenate([time_b, time_a]),
-        "Period": ["Before (Last 3y)"] * len(time_b) + ["After Agents"] * len(time_a)
-    })
-
-    plt.figure(figsize=(14, 8))
-    ax = sns.boxplot(
-        x="Period",
-        y="Time to Merge (Hours)",
-        data=plot_data,
-        showfliers=False,
-        palette=["#FFDE21", "#3498DB"]
-    )
-    def summarize(series):
-        return [
-            len(series),
-            series.mean(),
-            series.median(),
-            series.std(),
-            series.min(),
-            series.max()
-        ]
-
+    # 4. Summary Statistics Table
     df_stats = pd.DataFrame({
         "Metric": ["Count", "Mean (h)", "Median (h)", "Std Dev", "Min", "Max"],
-        "Before": summarize(time_b),
-        "After": summarize(time_a)
+        "Before (3y)": summarize(time_b),
+        "After Human": summarize(time_h),
+        "After Agent": summarize(time_a)
     })
+    print("\n" + "="*20 + " MERGE TIME STATISTICS (3Y CUTOFF) " + "="*20)
     print(df_stats.to_string(index=False))
+
+    # 5. Plotting
+    plt.figure(figsize=(14, 8))
+    palette = ["#FFDE21", "#3498DB", "#2ECC71"] # Gold, Blue, Green
+    
+    ax = sns.boxplot(
+        x="Period",
+        y="Hours",
+        data=plot_data,
+        showfliers=False,
+        palette=palette
+    )
+
+    # Set to Log Scale for visualization
     ax.set_yscale("log")
     ax.yaxis.set_major_formatter(ticker.ScalarFormatter())
     ax.yaxis.get_major_formatter().set_scientific(False)
 
+    # Labels and Styling
     plt.ylabel("Hours to Merge (Log Scale)", fontsize=24)
     plt.xlabel("Period", fontsize=24)
-    ax.tick_params(axis='x', labelsize=22)
-    ax.tick_params(axis='y', labelsize=22)
+    ax.tick_params(axis='x', labelsize=20)
+    ax.tick_params(axis='y', labelsize=20)
     plt.grid(True, axis='y', linestyle='--', alpha=0.5, which="major")
 
-    outpath = PLOTS_DIR / "rq2_boxplot_time_to_merge_log.png"
+    # Save
+    outpath = PLOTS_DIR / "rq2_boxplot_merge_time_3groups_3y_cutoff.png"
     plt.savefig(outpath, dpi=300, bbox_inches="tight")
+    print(f"\n[rq2] Plot saved to: {outpath}")
     plt.show()
 
 if __name__ == "__main__":

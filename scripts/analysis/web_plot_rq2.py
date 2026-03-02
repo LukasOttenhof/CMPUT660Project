@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from data_loader import load_all
 import seaborn as sns
+import matplotlib.ticker as ticker
 
 pd.options.mode.chained_assignment = None
 
@@ -31,174 +32,127 @@ METRIC_MAP = {
     "issues_closed": ("issues", "issue_closed"),
 }
 
-def build_monthly_dev_ratios(data):
-    before_avg_per_dev = {}
-    after_avg_per_dev = {}
+def calculate_avg_per_dev(df):
+    """Calculates the average activity per developer per month for a given dataframe."""
+    if df.empty or 'author' not in df.columns:
+        return 0
+    
+    df = df.copy()
+    df['date'] = pd.to_datetime(df['date']).dt.tz_localize(None) 
+    df['month'] = df['date'].dt.to_period('M')
+    
+    monthly_data = df.groupby('month').agg(
+        activity_count=('author', 'size'),
+        dev_count=('author', 'nunique')
+    ).reset_index()
+
+    monthly_data['activity_per_dev'] = np.where(
+        monthly_data['dev_count'] > 0,
+        monthly_data['activity_count'] / monthly_data['dev_count'],
+        0
+    )
+
+    return monthly_data['activity_per_dev'].mean()
+
+def build_three_way_ratios(data):
+    results = {
+        "before": {},
+        "after_h": {},
+        "after_a": {}
+    }
 
     for metric in METRICS:
         key, subtype = METRIC_MAP[metric]
+        
         df_b = data[f"{key}_before"].copy()
-        df_a = data[f"{key}_after"].copy()
+        df_h = data[f"{key}_after_human"].copy()
+        df_a = data[f"{key}_after_agent"].copy()
 
         if subtype:
             df_b = df_b[df_b["activity_type"] == subtype]
+            df_h = df_h[df_h["activity_type"] == subtype]
             df_a = df_a[df_a["activity_type"] == subtype]
-            
-        # Ensure 'author' column exists for developer count
-        if 'author' not in df_b.columns or 'author' not in df_a.columns:
-             print(f"Warning: Skipping {metric} - 'author' column not found.")
-             continue
-        
-        # --- Helper function for one period (Before or After) ---
-        def calculate_avg_per_dev(df, period_label):
-            df = df.copy()
-            
-            # 1. Group by Month
-            # Explicitly remove timezone info to avoid UserWarning when using .to_period('M')
-            df['date'] = pd.to_datetime(df['date']).dt.tz_localize(None) 
-            df['month'] = df['date'].dt.to_period('M')
-            
-            # Group by month to get total activity and unique dev count
-            monthly_data = df.groupby('month').agg(
-                activity_count=('author', 'size'),
-                dev_count=('author', 'nunique')
-            ).reset_index()
-        
-            # 2. Calculate Activity Per Developer Per Month
-            # Safety check: avoid division by zero
-            monthly_data['activity_per_dev'] = np.where(
-                monthly_data['dev_count'] > 0,
-                monthly_data['activity_count'] / monthly_data['dev_count'],
-                0
-            )
 
-            # 3. Average across all months in the period
-            avg_activity = monthly_data['activity_per_dev'].mean()
-            return avg_activity
+        results["before"][metric] = calculate_avg_per_dev(df_b)
+        results["after_h"][metric] = calculate_avg_per_dev(df_h)
+        results["after_a"][metric] = calculate_avg_per_dev(df_a)
 
-        # Calculate averages for both periods
-        avg_b = calculate_avg_per_dev(df_b, "Before")
-        avg_a = calculate_avg_per_dev(df_a, "After")
+    ratios = {}
+    for group in results:
+        total_val = sum(results[group].values())
+        # Convert to percentage (0-100)
+        ratios[group] = {k: (v / total_val * 100 if total_val > 0 else 0) for k, v in results[group].items()}
 
-        before_avg_per_dev[metric] = avg_b
-        after_avg_per_dev[metric] = avg_a
-        
-        # Original print statement (now clean)
-        print(f"[rq2] Metric: {metric} | Before Avg/Dev/Month: {avg_b:.4f} | After Avg/Dev/Month: {avg_a:.4f}")
+    return ratios, results
 
-    # --- Normalize to Ratios ---
-    sum_b = sum(before_avg_per_dev.values())
-    sum_a = sum(after_avg_per_dev.values())
-
-    before_ratios = {}
-    after_ratios = {}
-
-    for k in before_avg_per_dev:
-        before_ratios[k] = before_avg_per_dev[k] / (sum_b if sum_b > 0 else 1)
-        after_ratios[k]  = after_avg_per_dev[k]  / (sum_a if sum_a > 0 else 1)
-
-    # Returning both ratios and raw averages
-    return before_ratios, after_ratios, before_avg_per_dev, after_avg_per_dev
-
-def plot_radar(before, after, title, filename):
-    # 1. Clean labels
-    raw_labels = list(before.keys())
+def plot_radar_three_way(ratios, title, filename):
+    raw_labels = list(ratios["before"].keys())
     labels = [l.replace('_', ' ').title().replace('Prs', 'PRs') for l in raw_labels]
     
     N = len(labels)
-    values_before = [v * 100 for v in before.values()]  # <-- convert to %
-    values_after  = [v * 100 for v in after.values()]   # <-- convert to %
-    
-    # Close the loop
-    values_before += values_before[:1]
-    values_after  += values_after[:1]
     angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
     angles += angles[:1]
 
-    # 2. Setup Figure
-    fig = plt.figure(figsize=(14, 14)) 
+    fig = plt.figure(figsize=(16, 16)) 
     ax = fig.add_axes([0.1, 0.15, 0.8, 0.7], polar=True)
 
-    color_before_line = "#FFDE21" 
-    color_before_fill = "#FDEE9A"  
-    color_after_line = "#3498DB"   
-    color_after_fill = "#85C1E9"  
+    groups = [
+        ("before", "Before (Full)", "#FFDE21", "#FDEE9A"), 
+        ("after_h", "After (Human)", "#3498DB", "#85C1E9"), 
+        ("after_a", "After (Agent)", "#2ECC71", "#A9DFBF"), 
+    ]
 
-    ax.plot(angles, values_before, color=color_before_line, linewidth=4, label="Before Agents")
-    ax.fill(angles, values_before, color=color_before_fill, alpha=0.4)
+    max_val = 0
+    for key, label, l_color, f_color in groups:
+        values = list(ratios[key].values())
+        max_val = max(max_val, max(values))
+        values += values[:1]
+        
+        ax.plot(angles, values, color=l_color, linewidth=4, label=label)
+        ax.fill(angles, values, color=f_color, alpha=0.3)
 
-    ax.plot(angles, values_after, color=color_after_line, linewidth=4, label="After Agents")
-    ax.fill(angles, values_after, color=color_after_fill, alpha=0.4)
+    ax.set_thetagrids(np.degrees(angles[:-1]), labels, fontsize=22, fontweight='bold')
+    ax.tick_params(axis='x', which='major', pad=35) 
 
-    # 3. Anchoring Labels to the Spokes
-    ax.set_thetagrids(np.degrees(angles[:-1]), labels, fontsize=28, fontweight='bold', ha='center', va='center')
-    ax.tick_params(axis='x', which='major', pad=45) 
+    ax.set_yticks(np.linspace(0, max_val, 5))
+    ax.set_yticklabels([f"{int(tick)}%" for tick in ax.get_yticks()], fontsize=14)
 
-    # 4. Radial grid formatting: show percentages
-    ax.set_yticks(np.linspace(0, max(max(values_before), max(values_after)), 5))  # adjust number of rings
-    ax.set_yticklabels([f"{int(tick)}%" for tick in ax.get_yticks()])  # <-- show as percentages
-
-    # Title & Legend
     ax.set_title(title, size=32, pad=70, fontweight='bold')
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.25), fontsize=28, ncol=2)
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.20), fontsize=22, ncol=3)
+    ax.grid(True, linestyle='--', alpha=0.6)
 
-    # Grid style
-    ax.grid(True, linestyle='--', linewidth=1.5, alpha=0.5)
-    ax.tick_params(axis='y', labelsize=18, labelcolor='gray')
-
-    # Save
     outpath = PLOTS_DIR / filename
-    plt.savefig(outpath, dpi=300, bbox_inches="tight", pad_inches=1.0)
+    plt.savefig(outpath, dpi=300, bbox_inches="tight")
     plt.close()
-    print(f"[rq2] Saved anchored radar chart -> {outpath}")
+    print(f"[rq2] Saved 3-way radar chart -> {outpath}")
 
 def main():
     data = load_all()
+    ratios, raw_avgs = build_three_way_ratios(data)
 
-    #Time slicing
-    print("Applying 3-year filter to 'Before' datasets...")
-    
-    for key in data:
-        if key.endswith("_before"):
-            df = data[key]
-            
-            if df.empty or "date" not in df.columns:
-                continue
+    plot_radar_three_way(ratios, "", "permonth.png")
 
-            df["date"] = pd.to_datetime(df["date"])
-            before_end = df["date"].max()
-            cutoff_date = before_end - pd.DateOffset(years=3)
-
-            data[key] = df[df["date"] >= cutoff_date]
-    
-    # =========================================================
-
-    before_ratios, after_ratios, before_avg, after_avg = build_monthly_dev_ratios(data)
-
-    plot_radar(
-        before_ratios, after_ratios,
-        "",
-        "permonth.png"
-    )
-
-    #Monthly averages
-    avg_df = pd.DataFrame({
-        "Metric": list(before_avg.keys()),
-        "Before (Avg/Dev/Month)": [f"{v:.2f}" for v in before_avg.values()],
-        "After (Avg/Dev/Month)":  [f"{v:.2f}" for v in after_avg.values()]
+    # 1. Raw Averages Table
+    summary_df = pd.DataFrame({
+        "Metric": METRICS,
+        "Before": [f"{raw_avgs['before'][m]:.2f}" for m in METRICS],
+        "After Human": [f"{raw_avgs['after_h'][m]:.2f}" for m in METRICS],
+        "After Agent": [f"{raw_avgs['after_a'][m]:.2f}" for m in METRICS],
     })
-    print("\n================ RAW ACTIVITY PER DEVELOPER PER MONTH ================\n")
-    print(avg_df.to_string(index=False))
+    
+    print("\n" + "="*20 + " RAW AVG ACTIVITY PER DEV PER MONTH " + "="*20)
+    print(summary_df.to_string(index=False))
 
-    #Ratios as table
-    ratio_df = pd.DataFrame({
-        "Metric": list(before_ratios.keys()),
-        "Before (Ratio)": [f"{v:.3f}" for v in before_ratios.values()],
-        "After (Ratio)":  [f"{v:.3f}" for v in after_ratios.values()]
+    # 2. Ratios (Percentages) Table
+    percent_df = pd.DataFrame({
+        "Metric": METRICS,
+        "Before (%)": [f"{ratios['before'][m]:.2f}%" for m in METRICS],
+        "After Human (%)": [f"{ratios['after_h'][m]:.2f}%" for m in METRICS],
+        "After Agent (%)": [f"{ratios['after_a'][m]:.2f}%" for m in METRICS],
     })
-    print("\n================ NORMALIZED ACTIVITY RATIOS (FOR RADAR) ================\n")
-    print(ratio_df.to_string(index=False))
 
+    print("\n" + "="*20 + " ACTIVITY PERCENTAGE DISTRIBUTION " + "="*20)
+    print(percent_df.to_string(index=False))
 
 if __name__ == "__main__":
     main()

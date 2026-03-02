@@ -1,7 +1,8 @@
 from __future__ import annotations
-
 from pathlib import Path
 import sys
+import pandas as pd
+import numpy as np
 
 THIS_DIR = Path(__file__).resolve().parent
 if str(THIS_DIR) not in sys.path:
@@ -15,213 +16,149 @@ from data_loader import load_all
 from table_utils import summarize_before_after, save_table
 from plot_utils import monthly_or_quarterly_boxplot, stacked_activity_share_bar
 
+# ===============================
+# DATA PROCESSING HELPERS
+# ===============================
+
+def process_and_combine(data, key_base):
+    """
+    Loads 'before', 'after_human', and 'after_agent'.
+    Combines 'after' sets into one and keeps 'before' in its entirety.
+    """
+    df_b = data[f"{key_base}_before"].copy()
+    df_h = data[f"{key_base}_after_human"].copy()
+    df_a = data[f"{key_base}_after_agent"].copy()
+
+    # Combine Human and Agent periods into a single "After" group
+    df_after_total = pd.concat([df_h, df_a], ignore_index=True)
+
+    # Standardize dates for both dataframes
+    for df in [df_b, df_after_total]:
+        if not df.empty and "date" in df.columns:
+            df["date"] = pd.to_datetime(df["date"], utc=True)
+
+    return df_b, df_after_total
+
+# ===============================
+# METRIC AGGREGATIONS
+# ===============================
 
 def commits_per_repo(df):
-    if df.empty:
-        return df.groupby("repo").size()
-    return df.groupby("repo").size()
-
+    return df.groupby("repo").size() if not df.empty else pd.Series(dtype=int)
 
 def prs_per_repo(df_bodies):
-    if df_bodies.empty:
-        return df_bodies.groupby("repo")["pr_number"].nunique()
-    return df_bodies.groupby("repo")["pr_number"].nunique()
-
+    return df_bodies.groupby("repo")["pr_number"].nunique() if not df_bodies.empty else pd.Series(dtype=int)
 
 def reviews_per_pr(df_reviews):
-    if df_reviews.empty:
-        return df_reviews.groupby(["repo", "pr_number"]).size()
-    return df_reviews.groupby(["repo", "pr_number"]).size()
-
+    return df_reviews.groupby(["repo", "pr_number"]).size() if not df_reviews.empty else pd.Series(dtype=int)
 
 def issues_per_repo(df_issues):
     if df_issues.empty:
-        return df_issues.groupby("repo")["issue_number"].nunique()
+        return pd.Series(dtype=int)
     opened = df_issues[df_issues["activity_type"] == "issue_opened"]
-    if opened.empty:
-        return opened.groupby("repo")["issue_number"].nunique()
     return opened.groupby("repo")["issue_number"].nunique()
-
 
 def main():
     data = load_all()
-
-    commits_b = data["commits_before"]
-    commits_a = data["commits_after"]
-    prs_bodies_b = data["pr_bodies_before"]
-    prs_bodies_a = data["pr_bodies_after"]
-    prs_events_b = data["pull_requests_before"]
-    prs_events_a = data["pull_requests_after"]
-    reviews_b = data["reviews_before"]
-    reviews_a = data["reviews_after"]
-    issues_b = data["issues_before"]
-    issues_a = data["issues_after"]
-    issue_bodies_b = data["issue_bodies_before"]
-    issue_bodies_a = data["issue_bodies_after"]
+    
+    # 1. Load and process all data pairs (Full totals for 'Before')
+    commits_b, commits_a = process_and_combine(data, "commits")
+    prs_bodies_b, prs_bodies_a = process_and_combine(data, "pr_bodies")
+    prs_events_b, prs_events_a = process_and_combine(data, "pull_requests")
+    reviews_b, reviews_a = process_and_combine(data, "reviews")
+    issues_b, issues_a = process_and_combine(data, "issues")
+    issue_bodies_b, issue_bodies_a = process_and_combine(data, "issue_bodies")
 
     TABLES_DIR.mkdir(parents=True, exist_ok=True)
     PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    #PR body by length
+    # --- Table: PR body length ---
     pr_text_len_b = prs_bodies_b["text"].fillna("").astype(str).str.split().str.len()
     pr_text_len_a = prs_bodies_a["text"].fillna("").astype(str).str.split().str.len()
-    pr_text_table = summarize_before_after(pr_text_len_b, pr_text_len_a)
-    save_table(pr_text_table, "rq1_pr_text_length", TABLES_DIR)
+    save_table(summarize_before_after(pr_text_len_b, pr_text_len_a), "rq1_pr_text_length", TABLES_DIR)
 
-    #Issue body text length
-    def issue_text_len(df):
-        if df.empty or "text" not in df.columns:
-            return []
-        return df["text"].fillna("").astype(str).str.split().str.len()
+    # --- Table: Issue body length ---
+    def get_text_len(df):
+        return df["text"].fillna("").astype(str).str.split().str.len() if not df.empty else []
+    
+    save_table(summarize_before_after(get_text_len(issue_bodies_b), get_text_len(issue_bodies_a)), 
+               "rq1_issue_text_length", TABLES_DIR)
 
-    issue_text_len_b = issue_text_len(issue_bodies_b)
-    issue_text_len_a = issue_text_len(issue_bodies_a)
-    issue_text_table = summarize_before_after(issue_text_len_b, issue_text_len_a)
-    save_table(issue_text_table, "rq1_issue_text_length", TABLES_DIR)
+    # --- Tables: Metrics per repo ---
+    save_table(summarize_before_after(commits_per_repo(commits_b), commits_per_repo(commits_a)), 
+               "rq1_commits_per_repo", TABLES_DIR)
+    
+    save_table(summarize_before_after(prs_per_repo(prs_bodies_b), prs_per_repo(prs_bodies_a)), 
+               "rq1_prs_per_repo", TABLES_DIR)
+    
+    save_table(summarize_before_after(reviews_per_pr(reviews_b), reviews_per_pr(reviews_a)), 
+               "rq1_reviews_per_pr", TABLES_DIR)
+    
+    save_table(summarize_before_after(issues_per_repo(issues_b), issues_per_repo(issues_a)), 
+               "rq1_issues_per_repo", TABLES_DIR)
 
-    #Metrics per repo
-    commits_per_repo_b = commits_per_repo(commits_b)
-    commits_per_repo_a = commits_per_repo(commits_a)
-    save_table(
-        summarize_before_after(commits_per_repo_b, commits_per_repo_a),
-        "rq1_commits_per_repo",
-        TABLES_DIR,
-    )
+    # --- Raw Repo-level CSV ---
+    commits_pb, commits_pa = commits_per_repo(commits_b), commits_per_repo(commits_a)
+    prs_pb, prs_pa = prs_per_repo(prs_bodies_b), prs_per_repo(prs_bodies_a)
+    issues_pb, issues_pa = issues_per_repo(issues_b), issues_per_repo(issues_a)
 
-    prs_per_repo_b = prs_per_repo(prs_bodies_b)
-    prs_per_repo_a = prs_per_repo(prs_bodies_a)
-    save_table(
-        summarize_before_after(prs_per_repo_b, prs_per_repo_a),
-        "rq1_prs_per_repo",
-        TABLES_DIR,
-    )
-
-    reviews_per_pr_b = reviews_per_pr(reviews_b)
-    reviews_per_pr_a = reviews_per_pr(reviews_a)
-    save_table(
-        summarize_before_after(reviews_per_pr_b, reviews_per_pr_a),
-        "rq1_reviews_per_pr",
-        TABLES_DIR,
-    )
-
-    issues_per_repo_b = issues_per_repo(issues_b)
-    issues_per_repo_a = issues_per_repo(issues_a)
-    save_table(
-        summarize_before_after(issues_per_repo_b, issues_per_repo_a),
-        "rq1_issues_per_repo",
-        TABLES_DIR,
-    )
-
-    all_repos = sorted(
-        set(commits_per_repo_b.index)
-        | set(commits_per_repo_a.index)
-        | set(prs_per_repo_b.index)
-        | set(prs_per_repo_a.index)
-        | set(issues_per_repo_b.index)
-        | set(issues_per_repo_a.index)
-    )
+    all_repos = sorted(set(commits_pb.index) | set(commits_pa.index) | 
+                       set(prs_pb.index) | set(prs_pa.index) | 
+                       set(issues_pb.index) | set(issues_pa.index))
+    
     per_repo_df = pd.DataFrame({"repo": all_repos})
-    per_repo_df["commits_before"] = per_repo_df["repo"].map(commits_per_repo_b).fillna(0).astype(int)
-    per_repo_df["commits_after"] = per_repo_df["repo"].map(commits_per_repo_a).fillna(0).astype(int)
-    per_repo_df["prs_before"] = per_repo_df["repo"].map(prs_per_repo_b).fillna(0).astype(int)
-    per_repo_df["prs_after"] = per_repo_df["repo"].map(prs_per_repo_a).fillna(0).astype(int)
-    per_repo_df["issues_before"] = per_repo_df["repo"].map(issues_per_repo_b).fillna(0).astype(int)
-    per_repo_df["issues_after"] = per_repo_df["repo"].map(issues_per_repo_a).fillna(0).astype(int)
+    mapping = {
+        "commits_before": commits_pb, "commits_after": commits_pa,
+        "prs_before": prs_pb, "prs_after": prs_pa,
+        "issues_before": issues_pb, "issues_after": issues_pa
+    }
+    for col, source in mapping.items():
+        per_repo_df[col] = per_repo_df["repo"].map(source).fillna(0).astype(int)
+    
     per_repo_df.to_csv(TABLES_DIR / "rq1_repo_level_counts_raw.csv", index=False)
-    print("[rq1] Saved repo-level raw counts.")
 
-    #Boxplots over time
+    # --- Boxplots ---
+    plot_configs = [
+        (commits_b, commits_a, "Commits", "rq1_commits"),
+        (prs_bodies_b, prs_bodies_a, "PRs", "rq1_prs"),
+        (reviews_b, reviews_a, "Reviews", "rq1_reviews"),
+        (issues_b, issues_a, "Issue events", "rq1_issues"),
+    ]
+
     for freq, tag in [("M", "monthly"), ("Q", "quarterly")]:
-        monthly_or_quarterly_boxplot(
-            commits_b,
-            commits_a,
-            date_col="date",
-            group_col="repo",
-            title=f"Commits per repository per {tag} (before vs. after agents)",
-            outdir=PLOTS_DIR,
-            filename=f"rq1_commits_{tag}_boxplot.png",
-            freq=freq,
-        )
+        for df_b, df_a, label, fname in plot_configs:
+            monthly_or_quarterly_boxplot(
+                df_b, df_a, date_col="date", group_col="repo",
+                title=f"{label} per repository per {tag} (Full Before vs. Total After)",
+                outdir=PLOTS_DIR, filename=f"{fname}_{tag}_boxplot.png", freq=freq,
+            )
 
-        monthly_or_quarterly_boxplot(
-            prs_bodies_b,
-            prs_bodies_a,
-            date_col="date",
-            group_col="repo",
-            title=f"PRs per repository per {tag} (before vs. after agents)",
-            outdir=PLOTS_DIR,
-            filename=f"rq1_prs_{tag}_boxplot.png",
-            freq=freq,
-        )
-
-        monthly_or_quarterly_boxplot(
-            reviews_b,
-            reviews_a,
-            date_col="date",
-            group_col="repo",
-            title=f"Reviews per repository per {tag} (before vs. after agents)",
-            outdir=PLOTS_DIR,
-            filename=f"rq1_reviews_{tag}_boxplot.png",
-            freq=freq,
-        )
-
-        monthly_or_quarterly_boxplot(
-            issues_b,
-            issues_a,
-            date_col="date",
-            group_col="repo",
-            title=f"Issue events per repository per {tag} (before vs. after agents)",
-            outdir=PLOTS_DIR,
-            filename=f"rq1_issues_{tag}_boxplot.png",
-            freq=freq,
-        )
-
-    #Activit share stacked bars
-    def count_commits(df):
+    # --- Activity Share ---
+    def count_type(df, subtype=None):
+        if df.empty: return 0
+        if subtype:
+            return len(df[df["activity_type"] == subtype])
         return len(df)
-
-    def count_pr_creations(df):
-        if df.empty:
-            return 0
-        created = df[df["activity_type"] == "pr_created"]
-        return len(created)
-
-    def count_reviews(df):
-        return len(df)
-
-    def count_issue_openings(df):
-        if df.empty:
-            return 0
-        opened = df[df["activity_type"] == "issue_opened"]
-        return len(opened)
 
     counts_before = {
-        "commits": count_commits(commits_b),
-        "pull_requests": count_pr_creations(prs_events_b),
-        "reviews": count_reviews(reviews_b),
-        "issues": count_issue_openings(issues_b),
+        "commits": count_type(commits_b),
+        "pull_requests": count_type(prs_events_b, "pr_created"),
+        "reviews": count_type(reviews_b),
+        "issues": count_type(issues_b, "issue_opened"),
     }
     counts_after = {
-        "commits": count_commits(commits_a),
-        "pull_requests": count_pr_creations(prs_events_a),
-        "reviews": count_reviews(reviews_a),
-        "issues": count_issue_openings(issues_a),
+        "commits": count_type(commits_a),
+        "pull_requests": count_type(prs_events_a, "pr_created"),
+        "reviews": count_type(reviews_a),
+        "issues": count_type(issues_a, "issue_opened"),
     }
 
     stacked_activity_share_bar(
-        counts_before,
-        counts_after,
-        outdir=PLOTS_DIR,
-        filename="rq1_activity_share.png",
-        title="Activity Share Before/After"
+        counts_before, counts_after, outdir=PLOTS_DIR,
+        filename="rq1_activity_share.png", title="Activity Share (Full Totals)"
     )
 
-
-
-    print("[rq1] Analysis complete.")
-
+    print("[rq1] Summary statistics generated using total historical data.")
 
 if __name__ == "__main__":
-    import pandas as pd
-
     main()

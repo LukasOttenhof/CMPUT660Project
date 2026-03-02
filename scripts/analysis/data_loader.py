@@ -8,58 +8,71 @@ import pandas as pd
 import requests
 
 ROOT = Path(__file__).resolve().parents[2]
-INPUTS = ROOT / "inputs" / "human_2"
-LANG_CACHE = INPUTS / "repo_languages.csv"
+INPUTS_A = ROOT / "inputs" / "50prs"
+LANG_CACHE = INPUTS_A / "repo_languages.csv"
+INPUTS_H = ROOT / "inputs" / "human_2"
+LANG_CACHE_H = INPUTS_H / "repo_languages.csv"
 
-
-def load_parquet(name: str) -> pd.DataFrame:
-    path = INPUTS / name
+def load_parquet(base: Path, name: str) -> pd.DataFrame:
+    path = base / name
     if not path.exists():
-        print(f"[data_loader] Missing parquet: {name}")
+        print(f"[data_loader] Missing parquet: {path}")
         return pd.DataFrame()
     return pd.read_parquet(path)
 
-
 def load_all() -> Dict[str, pd.DataFrame]:
     files = {
-        "commit_messages_before": "commit_messages_before.parquet",
-        "commit_messages_after": "commit_messages_after.parquet",
-        "commits_before": "commits_before.parquet",
-        "commits_after": "commits_after.parquet",
-        "discussion_comments_before": "discussion_comments_before.parquet",
-        "discussion_comments_after": "discussion_comments_after.parquet",
-        "discussion_topics_before": "discussion_topics_before.parquet",
-        "discussion_topics_after": "discussion_topics_after.parquet",
-        "issue_bodies_before": "issue_bodies_before.parquet",
-        "issue_bodies_after": "issue_bodies_after.parquet",
-        "issues_before": "issues_before.parquet",
-        "issues_after": "issues_after.parquet",
-        "pr_bodies_before": "pr_bodies_before.parquet",
-        "pr_bodies_after": "pr_bodies_after.parquet",
-        "pull_requests_before": "pull_requests_before.parquet",
-        "pull_requests_after": "pull_requests_after.parquet",
-        "review_comments_before": "review_comments_before.parquet",
-        "review_comments_after": "review_comments_after.parquet",
-        "reviews_before": "reviews_before.parquet",
-        "reviews_after": "reviews_after.parquet",
+        "commit_messages": ("commit_messages_before.parquet", "commit_messages_after.parquet"),
+        "commits": ("commits_before.parquet", "commits_after.parquet"),
+        "discussion_comments": ("discussion_comments_before.parquet", "discussion_comments_after.parquet"),
+        "discussion_topics": ("discussion_topics_before.parquet", "discussion_topics_after.parquet"),
+        "issue_bodies": ("issue_bodies_before.parquet", "issue_bodies_after.parquet"),
+        "issues": ("issues_before.parquet", "issues_after.parquet"),
+        "pr_bodies": ("pr_bodies_before.parquet", "pr_bodies_after.parquet"),
+        "pull_requests": ("pull_requests_before.parquet", "pull_requests_after.parquet"),
+        "review_comments": ("review_comments_before.parquet", "review_comments_after.parquet"),
+        "reviews": ("reviews_before.parquet", "reviews_after.parquet"),
     }
 
     data: Dict[str, pd.DataFrame] = {}
     repos = set()
 
-    for key, fname in files.items():
-        df = load_parquet(fname)
+    for key, (before_file, after_file) in files.items():
 
-        if not df.empty:
-            if "date" in df.columns:
-                df["date"] = pd.to_datetime(df["date"], utc=True)
+        # ----- LOAD BEFORE FROM BOTH -----
+        before_h = load_parquet(INPUTS_H, before_file)
+        before_a = load_parquet(INPUTS_A, before_file)
 
-            if "repo" in df.columns:
-                repos.update(df["repo"].dropna().unique())
+        before = pd.concat([before_h, before_a], ignore_index=True)
 
-        data[key] = df
+        if "date" in before.columns:
+            before["date"] = pd.to_datetime(before["date"], utc=True)
 
-    # 🔑 ADD THIS BLOCK
+        if "repo" in before.columns:
+            repos.update(before["repo"].dropna().unique())
+
+        data[f"{key}_before"] = before
+
+        # ----- LOAD AFTER SEPARATELY -----
+        after_h = load_parquet(INPUTS_H, after_file)
+        after_a = load_parquet(INPUTS_A, after_file)
+
+        if "date" in after_h.columns:
+            after_h["date"] = pd.to_datetime(after_h["date"], utc=True)
+
+        if "date" in after_a.columns:
+            after_a["date"] = pd.to_datetime(after_a["date"], utc=True)
+
+        if "repo" in after_h.columns:
+            repos.update(after_h["repo"].dropna().unique())
+
+        if "repo" in after_a.columns:
+            repos.update(after_a["repo"].dropna().unique())
+
+        data[f"{key}_after_human"] = after_h
+        data[f"{key}_after_agent"] = after_a
+
+    # Language mapping
     data["repo_languages"] = get_repo_language_mapping(repos)
 
     return data

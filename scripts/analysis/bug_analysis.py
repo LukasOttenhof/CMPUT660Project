@@ -1,169 +1,87 @@
 import pandas as pd
 from pathlib import Path
-import matplotlib.pyplot as plt
-import seaborn as sns
-from scipy import stats
+import sys
 import numpy as np
 
+# Ensure local imports work
+THIS_DIR = Path(__file__).resolve().parent
+if str(THIS_DIR) not in sys.path:
+    sys.path.append(str(THIS_DIR))
 
-BASE = Path(r"G:\CMPUT660Project\inputs\50prs")
-PLOTS_DIR = BASE.parent / "outputs" / "pokemon" / "plots"
-PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+from data_loader import load_all
 
-# Define categories and their keywords
+# Configuration
 CATEGORIES = {
-    "Bug": ["bug", "bugs", "fix", "fixed", "fixes", "fixing", "resolves", "issue", "issues", "bugfix", "bugfixes", "closes", "hotfix", "hotfixes", "fixed", "fixes", "typo", "typos", "correct", "correction", "incorrect"]
-,
+    "Bug": [
+        "bug", "bugs", "fix", "fixed", "fixes", "fixing", "resolves", "issue", 
+        "issues", "bugfix", "bugfixes", "closes", "hotfix", "hotfixes", "typo", 
+        "typos", "correct", "correction", "incorrect"
+    ],
     "Refactor": [
-        "refactor", "clean", "structure", "style", 
-        "rename", "move", "format", "lint", "tidy", "simplify", "optimize"
+        "refactor", "clean", "structure", "style", "rename", "move", 
+        "format", "lint", "tidy", "simplify", "optimize"
     ],
     "Revert": [
         "revert", "rollback", "undo"
     ]
 }
 
-def load_and_filter(file_type, period):
-    """
-    Loads a specific file type (commit_messages or pr_bodies) for a period.
-    Does NOT apply any 3-year filtering (uses full history).
-    """
-    fpath = BASE / f"{file_type}_{period}.parquet"
-    if not fpath.exists():
-        print(f"⚠️ Missing {fpath}")
-        return pd.DataFrame()
+def get_stats(df, keywords):
+    """Returns (ratio_string, count, total)"""
+    if df is None or df.empty or "text" not in df.columns:
+        return "0.00% (0/0)", 0, 0
     
-    df = pd.read_parquet(fpath)
-    
-    # 1. Normalize Date Column
-    date_col = 'date' if 'date' in df.columns else 'created_at'
-    if date_col in df.columns:
-        df["date"] = pd.to_datetime(df[date_col])
-    else:
-        return pd.DataFrame()
-
-    # 2. Normalize Text Column
-    if "text" not in df.columns:
-        return pd.DataFrame()
-        
-    return df[["text"]].copy() 
-
-def get_category_stats(df, keywords):
-    """Helper to calculate counts and ratios for a specific keyword list."""
-    if df.empty:
-        return 0, 0, 0.0
-    
-    # Use non-capturing group (?:...) to silence UserWarning about match groups
     pattern = r"\b(?:" + "|".join(keywords) + r")\b"
     is_match = df["text"].str.contains(pattern, case=False, na=False)
     count = is_match.sum()
     total = len(df)
-    ratio = count / total if total > 0 else 0.0
-    return count, total, ratio
+    ratio = (count / total * 100) if total > 0 else 0.0
+    return f"{ratio:.2f}% ({count:,}/{total:,})", count, total
 
-def analyze_fixes():
-    print("Loading and analyzing Text Artifacts (Commits + PR Bodies)...")
+def main():
+    data = load_all()
     
-    # 1. Load Data
-    commits_b = load_and_filter("commit_messages", "before")
-    commits_a = load_and_filter("commit_messages", "after")
-    
-    prs_b = load_and_filter("pr_bodies", "before")
-    prs_a = load_and_filter("pr_bodies", "after")
-    
-    # 2. Combine Data Sources
-    df_b = pd.concat([commits_b, prs_b])
-    df_a = pd.concat([commits_a, prs_a])
-    
-    # Totals for denominators
-    tot_cb = len(commits_b)
-    tot_ca = len(commits_a)
-    tot_pb = len(prs_b)
-    tot_pa = len(prs_a)
-    total_b = len(df_b)
-    total_a = len(df_a)
-    
-    print(f"Total Artifacts (Before): {total_b:,}")
-    print(f"Total Artifacts (After Agents): {total_a:,}")
+    # Organize data by period
+    periods = {
+        "Before": {
+            "commits": data["commit_messages_before"],
+            "prs": data["pr_bodies_before"]
+        },
+        "After (Human)": {
+            "commits": data["commit_messages_after_human"],
+            "prs": data["pr_bodies_after_human"]
+        },
+        "After (Agent)": {
+            "commits": data["commit_messages_after_agent"],
+            "prs": data["pr_bodies_after_agent"]
+        }
+    }
 
-    if df_b.empty or df_a.empty:
-        print("❌ Error: Insufficient data after loading/filtering.")
-        return
-
-    # 3. Analyze Categories
-    plot_data = []
-    
-    print("\n================ MAINTENANCE TYPE ANALYSIS (RQ3) ================")
-    print(f"{'Category / Source':<35} | {'Before':<25} | {'After (Agents)':<25}")
-    print("-" * 90)
+    print(f"{'Text Source':<20} | {'Before':<25} | {'After (Human)':<25} | {'After (Agent)':<25}")
+    print("-" * 105)
 
     for cat_name, keywords in CATEGORIES.items():
-        # --- Commits ---
-        cb_cnt, _, cb_ratio = get_category_stats(commits_b, keywords)
-        ca_cnt, _, ca_ratio = get_category_stats(commits_a, keywords)
+        print(f" {cat_name.upper()}")
         
-        # --- PRs ---
-        pb_cnt, _, pb_ratio = get_category_stats(prs_b, keywords)
-        pa_cnt, _, pa_ratio = get_category_stats(prs_a, keywords)
+        row_data = {"commits": [], "prs": [], "combined": []}
         
-        # --- Combined ---
-        b_count, _, b_ratio = get_category_stats(df_b, keywords)
-        a_count, _, a_ratio = get_category_stats(df_a, keywords)
-        
-        # Print Group Header
-        print(f"🔹 {cat_name}")
-        
-        # Print Rows
-        print(f"   {'Commits Only':<32} | {cb_ratio:.2%} ({cb_cnt}/{tot_cb})    | {ca_ratio:.2%} ({ca_cnt}/{tot_ca})")
-        print(f"   {'PR Bodies Only':<32} | {pb_ratio:.2%} ({pb_cnt}/{tot_pb})    | {pa_ratio:.2%} ({pa_cnt}/{tot_pa})")
-        print(f"   {'COMBINED':<32} | {b_ratio:.2%} ({b_count}/{total_b})    | {a_ratio:.2%} ({a_count}/{total_a})")
-        print("-" * 90)
-        
-        # Store Combined for plotting
-        plot_data.append({"Period": "Before Agents", "Category": cat_name, "Ratio": b_ratio})
-        plot_data.append({"Period": "After Agents", "Category": cat_name, "Ratio": a_ratio})
+        for p_label, datasets in periods.items():
+            c_df = datasets["commits"]
+            p_df = datasets["prs"]
+            comb_df = pd.concat([c_df, p_df], ignore_index=True)
+            
+            c_str, _, _ = get_stats(c_df, keywords)
+            p_str, _, _ = get_stats(p_df, keywords)
+            comb_str, _, _ = get_stats(comb_df, keywords)
+            
+            row_data["commits"].append(c_str)
+            row_data["prs"].append(p_str)
+            row_data["combined"].append(comb_str)
 
-    # 4. Plot Grouped Bar Chart
-    df_plot = pd.DataFrame(plot_data)
-    
-    plt.figure(figsize=(12, 8)) # Bigger figure
-
-    # Create grouped bar chart
-    ax = sns.barplot(
-        x="Category", 
-        y="Ratio", 
-        hue="Period", 
-        data=df_plot, 
-        palette=["#FFDE21", "#3498DB"]
-    )
-    ymax = max([bar.get_height() for container in ax.containers for bar in container])
-    ax.set_ylim(0, ymax * 1.08) 
-    # Title and axis labels
-   #ft in Maintenance Activity Types (Commits + PRs)", fontsize=28, fontweight='bold', pad=25)
-    plt.ylabel("Proportion of Text Artifacts", fontsize=24)
-    plt.xlabel("Category", fontsize=24)
-
-    # Tick labels
-    ax.tick_params(axis='x', labelsize=22)
-    ax.tick_params(axis='y', labelsize=22)
-
-    # Legend font
-    plt.legend(title="Time Period", fontsize=20, title_fontsize=20)
-
-    # Add percentage labels above bars
-    for container in ax.containers:
-        if hasattr(container, 'datavalues'):
-            labels = [f'{val:.1%}' for val in container.datavalues]
-        else:
-            labels = [f'{bar.get_height():.1%}' for bar in container]
-        ax.bar_label(container, labels=labels, padding=7, fontsize=20, label_type='edge')  # Bigger labels, above bars
-
-    # Save and show
-    outpath = PLOTS_DIR / "rq3_maintenance_types_combined.png"
-    plt.savefig(outpath, dpi=300, bbox_inches="tight")
-    plt.show()
-
-
+        print(f"  Commits only    | {row_data['commits'][0]:<25} | {row_data['commits'][1]:<25} | {row_data['commits'][2]:<25}")
+        print(f"  PR bodies only  | {row_data['prs'][0]:<25} | {row_data['prs'][1]:<25} | {row_data['prs'][2]:<25}")
+        print(f"  Combined        | {row_data['combined'][0]:<25} | {row_data['combined'][1]:<25} | {row_data['combined'][2]:<25}")
+        print("-" * 105)
 
 if __name__ == "__main__":
-    analyze_fixes()
+    main()
