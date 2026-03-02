@@ -148,6 +148,37 @@ def plot_sentiment_per_dataset():
 
     full_tidy = pd.concat(dfs, ignore_index=True)
 
+    # compute and print chi-square stats for each dataset and overall
+    from scipy.stats import chi2_contingency
+
+    def compute_and_print_stats(subdf, label):
+        # pivot to contingency table (groups x sentiments) using the pre-computed 'count' values
+        table_df = (
+            subdf.pivot_table(
+                index='group',
+                columns='sentiment_cat',
+                values='count',
+                aggfunc='sum',
+                fill_value=0
+            )
+            .reindex(index=GROUPS, columns=SENTIMENTS, fill_value=0)
+        )
+        table = table_df.values
+        chi2, p, _, _ = chi2_contingency(table)
+        n = table.sum()
+        # Cramer's V effect size
+        v = np.sqrt(chi2 / (n * (min(table.shape[0]-1, table.shape[1]-1))))
+        print(f"[{label}] chi2={chi2:.3f}, p={p:.3e}, Cramer's V={v:.3f}, n={n}")
+
+    # per-dataset stats
+    print("[STATS] Individual datasets:")
+    for ds_name in full_tidy['dataset'].unique():
+        compute_and_print_stats(full_tidy[full_tidy['dataset'] == ds_name], ds_name)
+
+    # combined stats across all datasets
+    print("[STATS] Combined across datasets:")
+    compute_and_print_stats(full_tidy, "Combined")
+
     plot_stacked_3way(
         full_tidy,
         "dataset",

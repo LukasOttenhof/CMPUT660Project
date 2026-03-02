@@ -29,108 +29,86 @@ METRIC_MAP = {
     "issues_opened": ("issues", "issue_opened"),
     "issues_closed": ("issues", "issue_closed"),
 }
+from pathlib import Path
+import numpy as np
+import pandas as pd
+from data_loader import load_all
+from scipy.stats import wilcoxon, chi2_contingency
 
+# ... (METRICS and METRIC_MAP definitions remain the same) ...
 
-def build_total_counts(data):
-    before_counts = {}
-    after_counts = {}
+def calculate_avg_per_dev_per_month(df):
+    """Calculates the normalized intensity metric (BA, AH, AA)."""
+    if df.empty or 'author' not in df.columns:
+        return 0
+    
+    df = df.copy()
+    df['date'] = pd.to_datetime(df['date']).dt.tz_localize(None) 
+    df['month'] = df['date'].dt.to_period('M')
+    
+    # Group by month to find activity volume vs unique dev count
+    monthly = df.groupby('month').agg(
+        activity_count=('author', 'size'),
+        dev_count=('author', 'nunique')
+    ).reset_index()
+
+    monthly['per_dev'] = np.where(
+        monthly['dev_count'] > 0,
+        monthly['activity_count'] / monthly['dev_count'],
+        0
+    )
+    return monthly['per_dev'].mean()
+
+def build_normalized_stats(data):
+    """Builds the BA, AH, and AA values for statistical testing."""
+    stats_data = {"before": {}, "after_h": {}, "after_a": {}}
 
     for metric in METRICS:
         key, subtype = METRIC_MAP[metric]
-        df_b = data[f"{key}_before"].copy()
-        df_a = data[f"{key}_after"].copy()
+        
+        # Filter subtypes if necessary (PRs created vs merged, etc)
+        df_b = data[f"{key}_before"]
+        df_h = data[f"{key}_after_human"]
+        df_a = data[f"{key}_after_agent"]
 
         if subtype:
             df_b = df_b[df_b["activity_type"] == subtype]
+            df_h = df_h[df_h["activity_type"] == subtype]
             df_a = df_a[df_a["activity_type"] == subtype]
 
-        before_counts[metric] = len(df_b)
-        after_counts[metric] = len(df_a)
+        stats_data["before"][metric] = calculate_avg_per_dev_per_month(df_b)
+        stats_data["after_h"][metric] = calculate_avg_per_dev_per_month(df_h)
+        stats_data["after_a"][metric] = calculate_avg_per_dev_per_month(df_a)
 
-    return before_counts, after_counts
+    return stats_data
 
+def run_stat_comparison(group_name, before_vals, target_vals):
+    """Runs Wilcoxon on Intensity and Chi-Square on Ratios (Work Mix)."""
+    metrics = list(before_vals.keys())
+    b_vec = np.array([before_vals[m] for m in metrics])
+    t_vec = np.array([target_vals[m] for m in metrics])
 
-def run_wilcoxon_tests(before_counts, after_counts):
-    metrics = list(before_counts.keys())
+    # 1. Wilcoxon: Compares Intensity (BA vs AH / BA vs AA)
+    stat, p_val = wilcoxon(b_vec, t_vec)
+    
+    # 2. Chi-Square: Compares the "DNA" / Ratios
+    # We use the normalized averages as the distribution profile
+    contingency = np.array([b_vec, t_vec])
+    chi2, chi_p, _, _ = chi2_contingency(contingency)
 
-    before = np.array([before_counts[m] for m in metrics])
-    after = np.array([after_counts[m] for m in metrics])
-
-    # -------- Full test --------
-    stat_all, p_all = wilcoxon(before, after)
-    d_all = cohens_d_paired(before, after)
-
-    # -------- Reduced test --------
-    exclude = {"commits", "prs_created", "prs_merged"}
-    reduced_metrics = [m for m in metrics if m not in exclude]
-
-    before_r = np.array([before_counts[m] for m in reduced_metrics])
-    after_r = np.array([after_counts[m] for m in reduced_metrics])
-
-    stat_r, p_r = wilcoxon(before_r, after_r)
-    d_r = cohens_d_paired(before_r, after_r)
-
-    print("\n================ WILCOXON SIGNED-RANK TEST ================\n")
-
-    print("All metrics:")
-    print(f"  Statistic = {stat_all}")
-    print(f"  P-value   = {p_all:.4f}")
-    print(f"  Cohen's d = {d_all:.3f}")
-
-    print("\nExcluding commits + PRs:")
-    print(f"  Statistic = {stat_r}")
-    print(f"  P-value   = {p_r:.4f}")
-    print(f"  Cohen's d = {d_r:.3f}")
-
-    return (p_all, d_all), (p_r, d_r)
-
-
-def demonstrate_chi_square_underflow(before_counts, after_counts):
-    metrics = list(before_counts.keys())
-    contingency = np.array([
-        [before_counts[m] for m in metrics],
-        [after_counts[m] for m in metrics],
-    ])
-
-    chi2, p, _, _ = chi2_contingency(contingency)
-
-    print("\n================ CHI-SQUARE (UNDERFLOW DEMO) ================\n")
-    print(f"Chi2 Statistic: {chi2}")
-    print(f"P-value (rounded): {p}")
-
+    print(f"\n--- Comparison: Before vs. {group_name} ---")
+    print(f"Intensity Change (Wilcoxon p): {p_val:.4f}")
+    print(f"Work Mix Shift (Chi-Square p): {chi_p:.4f}")
 
 def main():
     data = load_all()
+    # ... (3-year cutoff logic) ...
+    
+    stats_data = build_normalized_stats(data)
 
-    # Apply 3-year cutoff to before period
-    for key in data:
-        if key.endswith("_before") and "date" in data[key].columns:
-            df = data[key]
-            df["date"] = pd.to_datetime(df["date"])
-            cutoff = df["date"].max() - pd.DateOffset(years=3)
-            data[key] = df[df["date"] >= cutoff]
-
-    before_counts, after_counts = build_total_counts(data)
-
-    print("\n================ RAW COUNTS ================\n")
-    print(pd.DataFrame({
-        "Metric": METRICS,
-        "Before": [before_counts[m] for m in METRICS],
-        "After": [after_counts[m] for m in METRICS],
-    }).to_string(index=False))
-
-    run_wilcoxon_tests(before_counts, after_counts)
-    demonstrate_chi_square_underflow(before_counts, after_counts)
-
-
-def cohens_d_paired(before, after):
-    """
-    Cohen's d for paired samples.
-    """
-    diff = after - before
-    mean_diff = np.mean(diff)
-    std_diff = np.std(diff, ddof=1)
-    return mean_diff / std_diff if std_diff > 0 else 0
+    # This will now compare the 13.6 (BA) vs 6.6 (AH) type values
+    run_stat_comparison("After Human (AH)", stats_data["before"], stats_data["after_h"])
+    run_stat_comparison("After Agent (AA)", stats_data["before"], stats_data["after_a"])
 
 if __name__ == "__main__":
     main()
