@@ -735,87 +735,87 @@ def main():
         "discussion_comments_after": "discussion_comments_after.parquet",
     }
 
-    # for idx, spec in enumerate(specs, start=1):
-    #     repo_name = spec.full_name
-    #     boundary = spec.boundary_date
+    for idx, spec in enumerate(specs, start=1):
+        repo_name = spec.full_name
+        boundary = spec.boundary_date
         
-    #     # --- CRASH RECOVERY CHECK ---
-    #     # We create a small sentinel file to mark a repo as "done"
-    #     sentinel = os.path.join(INC_DIR, f"{repo_name.replace('/', '_')}.done")
-    #     if os.path.exists(sentinel):
-    #         print(f"⏩ Skipping {repo_name} (already processed).")
-    #         continue
+        # --- CRASH RECOVERY CHECK ---
+        # We create a small sentinel file to mark a repo as "done"
+        sentinel = os.path.join(INC_DIR, f"{repo_name.replace('/', '_')}.done")
+        if os.path.exists(sentinel):
+            print(f"⏩ Skipping {repo_name} (already processed).")
+            continue
 
-    #     print("\n" + "="*80)
-    #     print(f"[{idx}/{len(specs)}] 🔍 Processing {repo_name} | boundary = {boundary.date()}")
-    #     print("="*80)
+        print("\n" + "="*80)
+        print(f"[{idx}/{len(specs)}] 🔍 Processing {repo_name} | boundary = {boundary.date()}")
+        print("="*80)
 
-    #     # Initialize temporary local buckets for THIS repo only
-    #     buckets = {key: [] for key in data_map.keys()}
+        # Initialize temporary local buckets for THIS repo only
+        buckets = {key: [] for key in data_map.keys()}
 
-    #     try:
-    #         repo_dir = ensure_clone(repo_name)
-    #         subprocess.run(["git", "config", "--global", "--add", "safe.directory", repo_dir.replace("\\", "/")], check=False)
-    #         repo = tp.safe(tp.gh.get_repo, repo_name, label="get_repo")
+        try:
+            repo_dir = ensure_clone(repo_name)
+            subprocess.run(["git", "config", "--global", "--add", "safe.directory", repo_dir.replace("\\", "/")], check=False)
+            repo = tp.safe(tp.gh.get_repo, repo_name, label="get_repo")
             
-    #         # Size limits
-    #         commit_count = 0
-    #         try: commit_count = tp.safe(repo.get_commits, label="count_commits").totalCount
-    #         except: pass
+            # Size limits
+            commit_count = 0
+            try: commit_count = tp.safe(repo.get_commits, label="count_commits").totalCount
+            except: pass
             
-    #         pr_count = 0
-    #         try: pr_count = tp.safe(repo.get_pulls, state="all", label="count_prs").totalCount
-    #         except: pass
+            pr_count = 0
+            try: pr_count = tp.safe(repo.get_pulls, state="all", label="count_prs").totalCount
+            except: pass
 
-    #         if (commit_count > 10000) or (pr_count > 1000):
-    #             print(f"⚠️ SKIPPING {repo_name}: too large.")
-    #             skipped.append(repo_name)
-    #             continue
+            if (commit_count > 10000) or (pr_count > 1000):
+                print(f"⚠️ SKIPPING {repo_name}: too large.")
+                skipped.append(repo_name)
+                continue
 
-    #         top_users = get_top_contributors(tp, repo)
-    #         tracked_users = build_tracked_users(tp, repo, top_users)
+            top_users = get_top_contributors(tp, repo)
+            tracked_users = build_tracked_users(tp, repo, top_users)
 
-    #         # --- EXTRACTION ---
-    #         extract_commits_from_clone(
-    #             tp, repo, repo_dir, repo_name, boundary, tracked_users,
-    #             buckets["commits_before"], buckets["commits_after"],
-    #             buckets["commit_msgs_before"], buckets["commit_msgs_after"]
-    #         )
-    #         extract_prs_reviews_comments(
-    #             tp, repo, repo_name, boundary, tracked_users,
-    #             buckets["prs_before"], buckets["prs_after"],
-    #             buckets["reviews_before"], buckets["reviews_after"],
-    #             buckets["pr_bodies_before"], buckets["pr_bodies_after"],
-    #             buckets["review_comments_before"], buckets["review_comments_after"]
-    #         )
-    #         extract_issues_and_comments(
-    #             tp, repo, repo_name, boundary, tracked_users,
-    #             buckets["issues_before"], buckets["issues_after"],
-    #             buckets["issue_bodies_before"], buckets["issue_bodies_after"]
-    #         )
-    #         try:
-    #             extract_discussions(
-    #                 tp, repo, repo_name, boundary, tracked_users,
-    #                 buckets["discussion_topics_before"], buckets["discussion_topics_after"],
-    #                 buckets["discussion_comments_before"], buckets["discussion_comments_after"]
-    #             )
-    #         except: pass
+            # --- EXTRACTION ---
+            extract_commits_from_clone(
+                tp, repo, repo_dir, repo_name, boundary, tracked_users,
+                buckets["commits_before"], buckets["commits_after"],
+                buckets["commit_msgs_before"], buckets["commit_msgs_after"]
+            )
+            extract_prs_reviews_comments(
+                tp, repo, repo_name, boundary, tracked_users,
+                buckets["prs_before"], buckets["prs_after"],
+                buckets["reviews_before"], buckets["reviews_after"],
+                buckets["pr_bodies_before"], buckets["pr_bodies_after"],
+                buckets["review_comments_before"], buckets["review_comments_after"]
+            )
+            extract_issues_and_comments(
+                tp, repo, repo_name, boundary, tracked_users,
+                buckets["issues_before"], buckets["issues_after"],
+                buckets["issue_bodies_before"], buckets["issue_bodies_after"]
+            )
+            try:
+                extract_discussions(
+                    tp, repo, repo_name, boundary, tracked_users,
+                    buckets["discussion_topics_before"], buckets["discussion_topics_after"],
+                    buckets["discussion_comments_before"], buckets["discussion_comments_after"]
+                )
+            except: pass
 
-    #         # --- INCREMENTAL SAVE ---
-    #         # Save this repo's data to a unique parquet file in the incremental folder
-    #         safe_name = repo_name.replace("/", "_")
-    #         for key, rows in buckets.items():
-    #             if rows:
-    #                 inc_path = os.path.join(INC_DIR, f"{safe_name}_{key}.parquet")
-    #                 pd.DataFrame(rows).to_parquet(inc_path, index=False)
+            # --- INCREMENTAL SAVE ---
+            # Save this repo's data to a unique parquet file in the incremental folder
+            safe_name = repo_name.replace("/", "_")
+            for key, rows in buckets.items():
+                if rows:
+                    inc_path = os.path.join(INC_DIR, f"{safe_name}_{key}.parquet")
+                    pd.DataFrame(rows).to_parquet(inc_path, index=False)
 
-    #         # Create sentinel file
-    #         with open(sentinel, "w") as f: f.write("done")
-    #         print(f"✔ Finished and saved {repo_name}")
+            # Create sentinel file
+            with open(sentinel, "w") as f: f.write("done")
+            print(f"✔ Finished and saved {repo_name}")
 
-    #     except Exception as e:
-    #         print(f"💥 Failed processing {repo_name}: {e}")
-    #         continue
+        except Exception as e:
+            print(f"💥 Failed processing {repo_name}: {e}")
+            continue
 
     # ===================================================================
     # FINAL CONSOLIDATION
