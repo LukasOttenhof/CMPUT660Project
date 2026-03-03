@@ -1,0 +1,31 @@
+topic_id,category
+1,Feature Development
+5,Feature Development
+
+4,User Interface
+22,User Interface
+23,User Interface
+
+7,Documentation
+24,Documentation
+
+9,Testing
+10,Testing
+11,Testing
+
+12,Deployment_Config_Build
+16,Deployment_Config_Build
+25,Deployment_Config_Build
+26,Deployment_Config_Build
+
+32,Security
+
+15,Repository Management
+
+17,Optimization
+
+19,Fixes
+20,Fixes
+
+27,Refactoring
+28,Refactoring
