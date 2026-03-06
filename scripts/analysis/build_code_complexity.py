@@ -6,6 +6,7 @@ import json
 import shutil
 import tempfile
 import subprocess
+from pathlib import Path
 from typing import Dict, Any, List, Tuple, Optional
 
 import pandas as pd
@@ -14,9 +15,11 @@ import pandas as pd
 # CONFIG
 # ==========================================================
 
-REPO_LIST_TXT = "/home/lottenho/660_pro/CMPUT660Project/filtered_repos_3year50pr.txt"
-CLONE_DIR = "/home/lottenho/660_pro/CMPUT660Project/scripts/build_dataset/50prs"
-OUTPUT_DIR = "/home/lottenho/660_pro/CMPUT660Project/inputs/processed"
+ROOT = Path(__file__).resolve().parents[2]
+
+REPO_LIST_TXT = ROOT / "filtered_repos_3year50pr.txt"
+CLONE_DIR = ROOT / "scripts" / "build_dataset" / "50prs"
+OUTPUT_DIR = ROOT / "inputs" / "processed"
 
 OUT_PARQUET = os.path.join(OUTPUT_DIR, "repo_month_complexity_detailed.parquet")
 CACHE_DIR = os.path.join(OUTPUT_DIR, "repo_month_complexity_cache")

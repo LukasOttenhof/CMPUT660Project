@@ -5,7 +5,7 @@ import numpy as np
 # ==========================================
 # ⚙️ CONFIGURATION
 # ==========================================
-BASE = Path("/Volumes/T7-Shield/CMPUT660Project/inputs/50prs")
+BASE = Path("inputs/50prs")
 
 # Map friendly names to file prefixes
 DATASETS = {

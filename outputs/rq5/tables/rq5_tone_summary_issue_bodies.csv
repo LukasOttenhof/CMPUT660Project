@@ -1,7 +1,0 @@
-group,sentiment_cat,count
-after,negative,335
-after,neutral,525
-after,positive,925
-before,negative,1166
-before,neutral,2710
-before,positive,2239

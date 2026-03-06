@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 TABLES = ROOT / "outputs" / "rq5" / "tables"
 PLOTS = ROOT / "outputs" / "rq5" / "plots"
 LATEX = ROOT / "outputs" / "rq5" / "latex"
-STATS = ROOT / "outputs" / "rq_stats"
+STATS = ROOT / "outputs" / "rq5" / "stats"
 
 PLOTS.mkdir(parents=True, exist_ok=True)
 LATEX.mkdir(parents=True, exist_ok=True)
