@@ -21,10 +21,8 @@ except Exception:
 from github import Github, Auth, GithubException
 from pydriller import Repository
 
-# REPO_LIST_TXT = r"G:\CMPUT660Project\filtered_repos_3year50pr.txt"
-# REPO_LIST_TXT = r"G:\CMPUT660Project\scripts\build_dataset\true_human_baseline.txt"
-REPO_LIST_TXT = r"G:\CMPUT660Project\scripts\build_dataset\true_human_baseline_con_reformatted.txt"
-CLONE_DIR = r"G:\CMPUT660Project\repos_human_2"
+REPO_LIST_TXT = r"\scripts\build_dataset\true_human_baseline_con_reformatted.txt"
+CLONE_DIR = r"repos_human_2"
 OUTPUT_DIR = r"inputs/human_2"
 
 START_DATE = datetime(1970, 1, 1, tzinfo=timezone.utc)

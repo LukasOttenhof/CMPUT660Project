@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 import numpy as np
 
-BASE = Path("inputs/processed")
+BASE = Path("inputs/agentic")
 
 PARQUET_FILES = [
     "commit_messages_before.parquet",

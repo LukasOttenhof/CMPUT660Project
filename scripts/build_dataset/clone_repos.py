@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import List
 
 
-REPO_LIST_TXT = r"G:\CMPUT660Project\scripts\build_dataset\true_human_baseline_con.txt"
+REPO_LIST_TXT = r"scripts\build_dataset\true_human_baseline_con.txt"
 CLONE_DIR = "repos_human_2"
 
 
