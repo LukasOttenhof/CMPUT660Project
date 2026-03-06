@@ -5,7 +5,7 @@ import numpy as np
 # ==========================================
 # ⚙️ CONFIGURATION
 # ==========================================
-BASE = Path("inputs/50prs")
+BASE = Path("inputs/agentic")
 
 # Map friendly names to file prefixes
 DATASETS = {

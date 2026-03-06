@@ -7,7 +7,7 @@ from scipy.stats import wilcoxon, chi2_contingency
 pd.options.mode.chained_assignment = None
 
 ROOT = Path(__file__).resolve().parents[2]
-PLOTS_DIR = ROOT / "outputs" / "pokemon" / "plots"
+PLOTS_DIR = ROOT / "outputs" / "RQ2" / "plots"
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
 METRICS = [

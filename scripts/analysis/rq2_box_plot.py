@@ -16,7 +16,7 @@ if str(THIS_DIR) not in sys.path:
 from data_loader import load_all
 
 ROOT = Path(__file__).resolve().parents[2]
-PLOTS_DIR = ROOT / "outputs" / "rq2"
+PLOTS_DIR = ROOT / "outputs" / "rq12_final"
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
 def process_before_with_cutoff(df):
@@ -73,24 +73,23 @@ def main():
 
     # 3. Create long-form DataFrame for plotting
     plot_data = pd.concat([
-        pd.DataFrame({"Hours": time_b, "Period": "Before (Last 3y)"}),
-        pd.DataFrame({"Hours": time_h, "Period": "After (Human)"}),
-        pd.DataFrame({"Hours": time_a, "Period": "After (Agent)"})
+        pd.DataFrame({"Hours": time_b, "Period": "Pre-agent"}),
+        pd.DataFrame({"Hours": time_h, "Period": "Post-agent Human"}),
+        pd.DataFrame({"Hours": time_a, "Period": "Post-agent Agent"})
     ], ignore_index=True)
 
     # 4. Summary Statistics Table
     df_stats = pd.DataFrame({
         "Metric": ["Count", "Mean (h)", "Median (h)", "Std Dev", "Min", "Max"],
-        "Before (3y)": summarize(time_b),
+        "pre-": summarize(time_b),
         "After Human": summarize(time_h),
         "After Agent": summarize(time_a)
     })
     print("\n" + "="*20 + " MERGE TIME STATISTICS (3Y CUTOFF) " + "="*20)
     print(df_stats.to_string(index=False))
-
-    # 5. Plotting
+# 5. Plotting
     plt.figure(figsize=(14, 8))
-    palette = ["#FFDE21", "#3498DB", "#2ECC71"] # Gold, Blue, Green
+    palette = ["#FFDE21", "#3498DB", "#2ECC71"] 
     
     ax = sns.boxplot(
         x="Period",
@@ -102,8 +101,9 @@ def main():
 
     # Set to Log Scale for visualization
     ax.set_yscale("log")
-    ax.yaxis.set_major_formatter(ticker.ScalarFormatter())
-    ax.yaxis.get_major_formatter().set_scientific(False)
+    
+ 
+    ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda y, _: '{:g}'.format(y)))
 
     # Labels and Styling
     plt.ylabel("Hours to Merge (Log Scale)", fontsize=24)

@@ -18,7 +18,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 
 REPO_LIST_TXT = ROOT / "filtered_repos_3year50pr.txt"
-CLONE_DIR = ROOT / "scripts" / "build_dataset" / "50prs"
+CLONE_DIR = ROOT / "scripts" / "build_dataset" / "agentic"
 OUTPUT_DIR = ROOT / "inputs" / "processed"
 
 OUT_PARQUET = os.path.join(OUTPUT_DIR, "repo_month_complexity_detailed.parquet")

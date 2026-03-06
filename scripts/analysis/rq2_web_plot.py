@@ -5,11 +5,12 @@ import pandas as pd
 from data_loader import load_all
 import seaborn as sns
 import matplotlib.ticker as ticker
+from scipy.stats import chi2_contingency
 
 pd.options.mode.chained_assignment = None
 
 ROOT = Path(__file__).resolve().parents[2]
-PLOTS_DIR = ROOT / "outputs" / "pokemon" / "plots"
+PLOTS_DIR = ROOT / "outputs" / "RQ2" / "plots"
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
 METRICS = [
@@ -38,8 +39,9 @@ def calculate_avg_per_dev(df):
         return 0
     
     df = df.copy()
-    df['date'] = pd.to_datetime(df['date']).dt.tz_localize(None) 
-    df['month'] = df['date'].dt.to_period('M')
+    if 'date' in df.columns:
+        df['date'] = pd.to_datetime(df['date']).dt.tz_localize(None) 
+        df['month'] = df['date'].dt.to_period('M')
     
     monthly_data = df.groupby('month').agg(
         activity_count=('author', 'size'),
@@ -80,10 +82,38 @@ def build_three_way_ratios(data):
     ratios = {}
     for group in results:
         total_val = sum(results[group].values())
-        # Convert to percentage (0-100)
         ratios[group] = {k: (v / total_val * 100 if total_val > 0 else 0) for k, v in results[group].items()}
 
     return ratios, results
+
+def calculate_cramers_v(chi2, n, shape):
+    """Calculates Cramer's V for a contingency table."""
+    phi2 = chi2 / n
+    r, k = shape
+    return np.sqrt(phi2 / min(k - 1, r - 1))
+
+def perform_stat_analysis(raw_avgs, group1, group2, label):
+    """Performs Chi-Square and Cramer's V on the distribution of activities."""
+    # Create contingency table from raw average counts
+    obs1 = [raw_avgs[group1][m] for m in METRICS]
+    obs2 = [raw_avgs[group2][m] for m in METRICS]
+    
+    contingency_table = np.array([obs1, obs2])
+    
+    # chi2_contingency handles the expected frequencies automatically
+    chi2, p, dof, expected = chi2_contingency(contingency_table)
+    
+    # N is the sum of all observations in the table
+    n = np.sum(contingency_table)
+    v = calculate_cramers_v(chi2, n, contingency_table.shape)
+    
+    return {
+        "Comparison": label,
+        "Chi2": f"{chi2:.4f}",
+        "p-value": f"{p:.4e}",
+        "Cramer's V": f"{v:.4f}",
+        "Significant": "Yes" if p < 0.05 else "No"
+    }
 
 def plot_radar_three_way(ratios, title, filename):
     raw_labels = list(ratios["before"].keys())
@@ -143,7 +173,17 @@ def main():
     print("\n" + "="*20 + " RAW AVG ACTIVITY PER DEV PER MONTH " + "="*20)
     print(summary_df.to_string(index=False))
 
-    # 2. Ratios (Percentages) Table
+    # 2. Statistical Analysis (Chi-Square + Cramer's V)
+    stats_results = []
+    stats_results.append(perform_stat_analysis(raw_avgs, "before", "after_a", "Before vs After Agent"))
+    stats_results.append(perform_stat_analysis(raw_avgs, "before", "after_h", "Before vs After Human"))
+    stats_results.append(perform_stat_analysis(raw_avgs, "after_h", "after_a", "After Human vs After Agent"))
+    
+    stats_df = pd.DataFrame(stats_results)
+    print("\n" + "="*20 + " STATISTICAL SIGNIFICANCE (RATIO SHIFTS) " + "="*20)
+    print(stats_df.to_string(index=False))
+
+    # 3. Ratios (Percentages) Table
     percent_df = pd.DataFrame({
         "Metric": METRICS,
         "Before (%)": [f"{ratios['before'][m]:.2f}%" for m in METRICS],
