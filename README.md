@@ -1,4 +1,4 @@
-# An Empirical Study of Activity Change in Agent-Assisted Repositories
+# 
 
 A guide to the supplementary materials used in this paper.
 
